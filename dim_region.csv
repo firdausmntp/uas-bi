@@ -1,0 +1,601 @@
+sk_region,region,country,state,city,region_key
+1,South,United States,Kentucky,Henderson,South-Kentucky-Henderson
+2,West,United States,California,Los Angeles,West-California-Los Angeles
+3,South,United States,Florida,Fort Lauderdale,South-Florida-Fort Lauderdale
+4,South,United States,North Carolina,Concord,South-North Carolina-Concord
+5,West,United States,Washington,Seattle,West-Washington-Seattle
+6,Central,United States,Texas,Fort Worth,Central-Texas-Fort Worth
+7,Central,United States,Wisconsin,Madison,Central-Wisconsin-Madison
+8,West,United States,Utah,West Jordan,West-Utah-West Jordan
+9,West,United States,California,San Francisco,West-California-San Francisco
+10,Central,United States,Nebraska,Fremont,Central-Nebraska-Fremont
+11,East,United States,Pennsylvania,Philadelphia,East-Pennsylvania-Philadelphia
+12,West,United States,Utah,Orem,West-Utah-Orem
+13,Central,United States,Texas,Houston,Central-Texas-Houston
+14,Central,United States,Texas,Richardson,Central-Texas-Richardson
+15,Central,United States,Illinois,Naperville,Central-Illinois-Naperville
+16,South,United States,Florida,Melbourne,South-Florida-Melbourne
+17,Central,United States,Minnesota,Eagan,Central-Minnesota-Eagan
+18,Central,United States,Michigan,Westland,Central-Michigan-Westland
+19,East,United States,Delaware,Dover,East-Delaware-Dover
+20,Central,United States,Indiana,New Albany,Central-Indiana-New Albany
+21,East,United States,New York,New York City,East-New York-New York City
+22,East,United States,New York,Troy,East-New York-Troy
+23,Central,United States,Illinois,Chicago,Central-Illinois-Chicago
+24,West,United States,Arizona,Gilbert,West-Arizona-Gilbert
+25,South,United States,Virginia,Springfield,South-Virginia-Springfield
+26,Central,United States,Michigan,Jackson,Central-Michigan-Jackson
+27,South,United States,Tennessee,Memphis,South-Tennessee-Memphis
+28,South,United States,Alabama,Decatur,South-Alabama-Decatur
+29,South,United States,North Carolina,Durham,South-North Carolina-Durham
+30,South,United States,South Carolina,Columbia,South-South Carolina-Columbia
+31,Central,United States,Minnesota,Rochester,Central-Minnesota-Rochester
+32,Central,United States,Minnesota,Minneapolis,Central-Minnesota-Minneapolis
+33,West,United States,Oregon,Portland,West-Oregon-Portland
+34,Central,United States,Minnesota,Saint Paul,Central-Minnesota-Saint Paul
+35,West,United States,Colorado,Aurora,West-Colorado-Aurora
+36,South,United States,North Carolina,Charlotte,South-North Carolina-Charlotte
+37,Central,United States,Illinois,Orland Park,Central-Illinois-Orland Park
+38,Central,United States,Iowa,Urbandale,Central-Iowa-Urbandale
+39,East,United States,Ohio,Columbus,East-Ohio-Columbus
+40,South,United States,Tennessee,Bristol,South-Tennessee-Bristol
+41,East,United States,Delaware,Wilmington,East-Delaware-Wilmington
+42,Central,United States,Illinois,Bloomington,Central-Illinois-Bloomington
+43,West,United States,Arizona,Phoenix,West-Arizona-Phoenix
+44,West,United States,California,Roseville,West-California-Roseville
+45,Central,United States,Missouri,Independence,Central-Missouri-Independence
+46,West,United States,California,Pasadena,West-California-Pasadena
+47,East,United States,Ohio,Newark,East-Ohio-Newark
+48,Central,United States,Wisconsin,Franklin,Central-Wisconsin-Franklin
+49,West,United States,Arizona,Scottsdale,West-Arizona-Scottsdale
+50,West,United States,California,San Jose,West-California-San Jose
+51,Central,United States,Oklahoma,Edmond,Central-Oklahoma-Edmond
+52,West,United States,New Mexico,Carlsbad,West-New Mexico-Carlsbad
+53,Central,United States,Texas,San Antonio,Central-Texas-San Antonio
+54,Central,United States,Illinois,Decatur,Central-Illinois-Decatur
+55,South,United States,Louisiana,Monroe,South-Louisiana-Monroe
+56,East,United States,Connecticut,Fairfield,East-Connecticut-Fairfield
+57,Central,United States,Texas,Grand Prairie,Central-Texas-Grand Prairie
+58,West,United States,California,Redlands,West-California-Redlands
+59,East,United States,Ohio,Hamilton,East-Ohio-Hamilton
+60,East,United States,New Jersey,Westfield,East-New Jersey-Westfield
+61,East,United States,Ohio,Akron,East-Ohio-Akron
+62,West,United States,Colorado,Denver,West-Colorado-Denver
+63,Central,United States,Texas,Dallas,Central-Texas-Dallas
+64,South,United States,Tennessee,Franklin,South-Tennessee-Franklin
+65,West,United States,California,Whittier,West-California-Whittier
+66,Central,United States,Michigan,Saginaw,Central-Michigan-Saginaw
+67,East,United States,Ohio,Medina,East-Ohio-Medina
+68,East,United States,Ohio,Dublin,East-Ohio-Dublin
+69,Central,United States,Michigan,Detroit,Central-Michigan-Detroit
+70,South,United States,Tennessee,Columbia,South-Tennessee-Columbia
+71,South,United States,Florida,Tampa,South-Florida-Tampa
+72,West,United States,California,Santa Clara,West-California-Santa Clara
+73,Central,United States,Minnesota,Lakeville,Central-Minnesota-Lakeville
+74,West,United States,California,San Diego,West-California-San Diego
+75,Central,United States,Texas,Pasadena,Central-Texas-Pasadena
+76,West,United States,California,Brentwood,West-California-Brentwood
+77,South,United States,North Carolina,Chapel Hill,South-North Carolina-Chapel Hill
+78,East,United States,New Jersey,Morristown,East-New Jersey-Morristown
+79,East,United States,Ohio,Cincinnati,East-Ohio-Cincinnati
+80,West,United States,California,Inglewood,West-California-Inglewood
+81,South,United States,Florida,Tamarac,South-Florida-Tamarac
+82,West,United States,Colorado,Colorado Springs,West-Colorado-Colorado Springs
+83,East,United States,New Jersey,Belleville,East-New Jersey-Belleville
+84,Central,United States,Michigan,Taylor,Central-Michigan-Taylor
+85,East,United States,New Jersey,Lakewood,East-New Jersey-Lakewood
+86,South,United States,Virginia,Arlington,South-Virginia-Arlington
+87,West,United States,Colorado,Arvada,West-Colorado-Arvada
+88,East,United States,New Jersey,Hackensack,East-New Jersey-Hackensack
+89,South,United States,Florida,Saint Petersburg,South-Florida-Saint Petersburg
+90,West,United States,California,Long Beach,West-California-Long Beach
+91,West,United States,California,Hesperia,West-California-Hesperia
+92,South,United States,Tennessee,Murfreesboro,South-Tennessee-Murfreesboro
+93,West,United States,Utah,Layton,West-Utah-Layton
+94,Central,United States,Texas,Austin,Central-Texas-Austin
+95,East,United States,Massachusetts,Lowell,East-Massachusetts-Lowell
+96,South,United States,Georgia,Columbus,South-Georgia-Columbus
+97,East,United States,Connecticut,Manchester,East-Connecticut-Manchester
+98,Central,United States,Texas,Harlingen,Central-Texas-Harlingen
+99,West,United States,Arizona,Tucson,West-Arizona-Tucson
+100,Central,United States,Illinois,Quincy,Central-Illinois-Quincy
+101,East,United States,Massachusetts,Franklin,East-Massachusetts-Franklin
+102,South,United States,Florida,Pembroke Pines,South-Florida-Pembroke Pines
+103,West,United States,Washington,Des Moines,West-Washington-Des Moines
+104,Central,United States,Illinois,Peoria,Central-Illinois-Peoria
+105,West,United States,Nevada,Las Vegas,West-Nevada-Las Vegas
+106,East,United States,Rhode Island,Warwick,East-Rhode Island-Warwick
+107,South,United States,Florida,Miami,South-Florida-Miami
+108,South,United States,North Carolina,Wilmington,South-North Carolina-Wilmington
+109,West,United States,California,Huntington Beach,West-California-Huntington Beach
+110,South,United States,Kentucky,Richmond,South-Kentucky-Richmond
+111,West,United States,Colorado,Louisville,West-Colorado-Louisville
+112,East,United States,Massachusetts,Lawrence,East-Massachusetts-Lawrence
+113,South,United States,Mississippi,Jackson,South-Mississippi-Jackson
+114,Central,United States,Michigan,Canton,Central-Michigan-Canton
+115,East,United States,New York,New Rochelle,East-New York-New Rochelle
+116,South,United States,North Carolina,Gastonia,South-North Carolina-Gastonia
+117,South,United States,Florida,Jacksonville,South-Florida-Jacksonville
+118,Central,United States,Indiana,Columbus,Central-Indiana-Columbus
+119,East,United States,New York,Auburn,East-New York-Auburn
+120,Central,United States,Oklahoma,Norman,Central-Oklahoma-Norman
+121,West,United States,California,Concord,West-California-Concord
+122,Central,United States,Illinois,Park Ridge,Central-Illinois-Park Ridge
+123,Central,United States,Texas,Amarillo,Central-Texas-Amarillo
+124,East,United States,New York,Lindenhurst,East-New York-Lindenhurst
+125,Central,United States,Texas,Huntsville,Central-Texas-Huntsville
+126,East,United States,New York,Rochester,East-New York-Rochester
+127,South,United States,Arkansas,Fayetteville,South-Arkansas-Fayetteville
+128,West,United States,California,Costa Mesa,West-California-Costa Mesa
+129,West,United States,Colorado,Parker,West-Colorado-Parker
+130,South,United States,Georgia,Atlanta,South-Georgia-Atlanta
+131,Central,United States,Missouri,Gladstone,Central-Missouri-Gladstone
+132,West,United States,Montana,Great Falls,West-Montana-Great Falls
+133,South,United States,Florida,Lakeland,South-Florida-Lakeland
+134,South,United States,Alabama,Montgomery,South-Alabama-Montgomery
+135,West,United States,Arizona,Mesa,West-Arizona-Mesa
+136,Central,United States,Wisconsin,Green Bay,Central-Wisconsin-Green Bay
+137,East,United States,Ohio,Springfield,East-Ohio-Springfield
+138,West,United States,California,Anaheim,West-California-Anaheim
+139,West,United States,Washington,Marysville,West-Washington-Marysville
+140,West,United States,Oregon,Salem,West-Oregon-Salem
+141,Central,United States,Texas,Laredo,Central-Texas-Laredo
+142,East,United States,Ohio,Grove City,East-Ohio-Grove City
+143,Central,United States,Michigan,Dearborn,Central-Michigan-Dearborn
+144,South,United States,Georgia,Warner Robins,South-Georgia-Warner Robins
+145,West,United States,California,Vallejo,West-California-Vallejo
+146,West,United States,California,Mission Viejo,West-California-Mission Viejo
+147,Central,United States,Michigan,Rochester Hills,Central-Michigan-Rochester Hills
+148,East,United States,New Jersey,Plainfield,East-New Jersey-Plainfield
+149,West,United States,Arizona,Sierra Vista,West-Arizona-Sierra Vista
+150,West,United States,Washington,Vancouver,West-Washington-Vancouver
+151,Central,United States,Illinois,Aurora,Central-Illinois-Aurora
+152,Central,United States,Texas,Arlington,Central-Texas-Arlington
+153,South,United States,Kentucky,Louisville,South-Kentucky-Louisville
+154,East,United States,Ohio,Cleveland,East-Ohio-Cleveland
+155,Central,United States,Texas,Tyler,Central-Texas-Tyler
+156,South,United States,North Carolina,Burlington,South-North Carolina-Burlington
+157,South,United States,Virginia,Waynesboro,South-Virginia-Waynesboro
+158,East,United States,Pennsylvania,Chester,East-Pennsylvania-Chester
+159,South,United States,North Carolina,Cary,South-North Carolina-Cary
+160,South,United States,Florida,Palm Coast,South-Florida-Palm Coast
+161,East,United States,New York,Mount Vernon,East-New York-Mount Vernon
+162,South,United States,Florida,Hialeah,South-Florida-Hialeah
+163,East,United States,New York,Oceanside,East-New York-Oceanside
+164,Central,United States,Illinois,Evanston,Central-Illinois-Evanston
+165,Central,United States,Michigan,Trenton,Central-Michigan-Trenton
+166,Central,United States,Minnesota,Cottage Grove,Central-Minnesota-Cottage Grove
+167,South,United States,Louisiana,Bossier City,South-Louisiana-Bossier City
+168,Central,United States,Iowa,Des Moines,Central-Iowa-Des Moines
+169,West,United States,California,Lancaster,West-California-Lancaster
+170,South,United States,Virginia,Richmond,South-Virginia-Richmond
+171,South,United States,North Carolina,Asheville,South-North Carolina-Asheville
+172,West,United States,California,Lake Elsinore,West-California-Lake Elsinore
+173,Central,United States,Nebraska,Omaha,Central-Nebraska-Omaha
+174,West,United States,Washington,Edmonds,West-Washington-Edmonds
+175,West,United States,California,Santa Ana,West-California-Santa Ana
+176,Central,United States,Wisconsin,Milwaukee,Central-Wisconsin-Milwaukee
+177,South,United States,Kentucky,Florence,South-Kentucky-Florence
+178,East,United States,Ohio,Lorain,East-Ohio-Lorain
+179,East,United States,New Jersey,Linden,East-New Jersey-Linden
+180,West,United States,California,Salinas,West-California-Salinas
+181,East,United States,New Jersey,New Brunswick,East-New Jersey-New Brunswick
+182,East,United States,Pennsylvania,Lancaster,East-Pennsylvania-Lancaster
+183,East,United States,New Hampshire,Concord,East-New Hampshire-Concord
+184,East,United States,Maryland,Columbia,East-Maryland-Columbia
+185,Central,United States,Texas,Garland,Central-Texas-Garland
+186,East,United States,Connecticut,Norwich,East-Connecticut-Norwich
+187,South,United States,Virginia,Alexandria,South-Virginia-Alexandria
+188,East,United States,Ohio,Toledo,East-Ohio-Toledo
+189,West,United States,New Mexico,Farmington,West-New Mexico-Farmington
+190,West,United States,California,Riverside,West-California-Riverside
+191,West,United States,California,Torrance,West-California-Torrance
+192,Central,United States,Texas,Round Rock,Central-Texas-Round Rock
+193,West,United States,California,Oceanside,West-California-Oceanside
+194,South,United States,Florida,Boca Raton,South-Florida-Boca Raton
+195,South,United States,Virginia,Virginia Beach,South-Virginia-Virginia Beach
+196,West,United States,California,Murrieta,West-California-Murrieta
+197,South,United States,North Carolina,Jacksonville,South-North Carolina-Jacksonville
+198,Central,United States,Iowa,Burlington,Central-Iowa-Burlington
+199,West,United States,Washington,Olympia,West-Washington-Olympia
+200,East,United States,District of Columbia,Washington,East-District of Columbia-Washington
+201,Central,United States,Missouri,Jefferson City,Central-Missouri-Jefferson City
+202,Central,United States,Missouri,Saint Peters,Central-Missouri-Saint Peters
+203,Central,United States,Illinois,Rockford,Central-Illinois-Rockford
+204,Central,United States,Texas,Brownsville,Central-Texas-Brownsville
+205,East,United States,New York,Yonkers,East-New York-Yonkers
+206,West,United States,California,Oakland,West-California-Oakland
+207,South,United States,North Carolina,Monroe,South-North Carolina-Monroe
+208,East,United States,Maryland,Clinton,East-Maryland-Clinton
+209,West,United States,California,Encinitas,West-California-Encinitas
+210,South,United States,Georgia,Roswell,South-Georgia-Roswell
+211,South,United States,Arkansas,Jonesboro,South-Arkansas-Jonesboro
+212,Central,United States,Indiana,Richmond,Central-Indiana-Richmond
+213,West,United States,California,Antioch,West-California-Antioch
+214,South,United States,Florida,Homestead,South-Florida-Homestead
+215,Central,United States,Indiana,La Porte,Central-Indiana-La Porte
+216,Central,United States,Michigan,Lansing,Central-Michigan-Lansing
+217,East,United States,Ohio,Cuyahoga Falls,East-Ohio-Cuyahoga Falls
+218,West,United States,Nevada,Reno,West-Nevada-Reno
+219,South,United States,Virginia,Harrisonburg,South-Virginia-Harrisonburg
+220,West,United States,California,Escondido,West-California-Escondido
+221,Central,United States,Michigan,Royal Oak,Central-Michigan-Royal Oak
+222,East,United States,Maryland,Rockville,East-Maryland-Rockville
+223,South,United States,Florida,Coral Springs,South-Florida-Coral Springs
+224,East,United States,New York,Buffalo,East-New York-Buffalo
+225,South,United States,Florida,Boynton Beach,South-Florida-Boynton Beach
+226,South,United States,Mississippi,Gulfport,South-Mississippi-Gulfport
+227,West,United States,California,Fresno,West-California-Fresno
+228,South,United States,North Carolina,Greenville,South-North Carolina-Greenville
+229,East,United States,New York,Long Beach,East-New York-Long Beach
+230,South,United States,Alabama,Florence,South-Alabama-Florence
+231,South,United States,Georgia,Macon,South-Georgia-Macon
+232,Central,United States,Iowa,Cedar Rapids,Central-Iowa-Cedar Rapids
+233,East,United States,Rhode Island,Providence,East-Rhode Island-Providence
+234,West,United States,Colorado,Pueblo,West-Colorado-Pueblo
+235,West,United States,California,Fairfield,West-California-Fairfield
+236,South,United States,Florida,Deltona,South-Florida-Deltona
+237,South,United States,Kentucky,Murray,South-Kentucky-Murray
+238,East,United States,Connecticut,Middletown,East-Connecticut-Middletown
+239,East,United States,New York,Freeport,East-New York-Freeport
+240,West,United States,California,Pico Rivera,West-California-Pico Rivera
+241,West,United States,Utah,Provo,West-Utah-Provo
+242,West,United States,Utah,Pleasant Grove,West-Utah-Pleasant Grove
+243,South,United States,Georgia,Smyrna,South-Georgia-Smyrna
+244,South,United States,Virginia,Salem,South-Virginia-Salem
+245,East,United States,Ohio,Parma,East-Ohio-Parma
+246,South,United States,Alabama,Mobile,South-Alabama-Mobile
+247,East,United States,Massachusetts,New Bedford,East-Massachusetts-New Bedford
+248,Central,United States,Texas,Irving,Central-Texas-Irving
+249,East,United States,New Jersey,Vineland,East-New Jersey-Vineland
+250,West,United States,Arizona,Glendale,West-Arizona-Glendale
+251,East,United States,New York,Niagara Falls,East-New York-Niagara Falls
+252,South,United States,North Carolina,Thomasville,South-North Carolina-Thomasville
+253,West,United States,California,Westminster,West-California-Westminster
+254,South,United States,Tennessee,Jackson,South-Tennessee-Jackson
+255,Central,United States,Texas,Coppell,Central-Texas-Coppell
+256,West,United States,California,Pomona,West-California-Pomona
+257,West,United States,Nevada,North Las Vegas,West-Nevada-North Las Vegas
+258,East,United States,Pennsylvania,Allentown,East-Pennsylvania-Allentown
+259,East,United States,Delaware,Newark,East-Delaware-Newark
+260,West,United States,Arizona,Tempe,West-Arizona-Tempe
+261,West,United States,California,Laguna Niguel,West-California-Laguna Niguel
+262,East,United States,New Jersey,Bridgeton,East-New Jersey-Bridgeton
+263,East,United States,Massachusetts,Everett,East-Massachusetts-Everett
+264,East,United States,New York,Watertown,East-New York-Watertown
+265,Central,United States,Wisconsin,Appleton,Central-Wisconsin-Appleton
+266,West,United States,Washington,Bellevue,West-Washington-Bellevue
+267,Central,United States,Texas,Allen,Central-Texas-Allen
+268,Central,United States,Texas,El Paso,Central-Texas-El Paso
+269,Central,United States,Texas,Grapevine,Central-Texas-Grapevine
+270,Central,United States,Texas,Carrollton,Central-Texas-Carrollton
+271,South,United States,Tennessee,Smyrna,South-Tennessee-Smyrna
+272,West,United States,Washington,Kent,West-Washington-Kent
+273,South,United States,Louisiana,Lafayette,South-Louisiana-Lafayette
+274,West,United States,Oregon,Tigard,West-Oregon-Tigard
+275,Central,United States,Illinois,Skokie,Central-Illinois-Skokie
+276,Central,United States,Texas,Plano,Central-Texas-Plano
+277,South,United States,Virginia,Suffolk,South-Virginia-Suffolk
+278,Central,United States,Indiana,Indianapolis,Central-Indiana-Indianapolis
+279,East,United States,New Jersey,Bayonne,East-New Jersey-Bayonne
+280,South,United States,North Carolina,Fayetteville,South-North Carolina-Fayetteville
+281,South,United States,North Carolina,Greensboro,South-North Carolina-Greensboro
+282,East,United States,Maryland,Baltimore,East-Maryland-Baltimore
+283,Central,United States,Wisconsin,Kenosha,Central-Wisconsin-Kenosha
+284,Central,United States,Kansas,Olathe,Central-Kansas-Olathe
+285,West,United States,Washington,Auburn,West-Washington-Auburn
+286,Central,United States,Oklahoma,Tulsa,Central-Oklahoma-Tulsa
+287,West,United States,Oregon,Redmond,West-Oregon-Redmond
+288,South,United States,North Carolina,Raleigh,South-North Carolina-Raleigh
+289,Central,United States,Oklahoma,Muskogee,Central-Oklahoma-Muskogee
+290,East,United States,Connecticut,Meriden,East-Connecticut-Meriden
+291,South,United States,Kentucky,Bowling Green,South-Kentucky-Bowling Green
+292,Central,United States,Indiana,South Bend,Central-Indiana-South Bend
+293,East,United States,Connecticut,Bristol,East-Connecticut-Bristol
+294,West,United States,Nevada,Henderson,West-Nevada-Henderson
+295,West,United States,Washington,Spokane,West-Washington-Spokane
+296,Central,United States,Texas,Keller,Central-Texas-Keller
+297,East,United States,Ohio,Fairfield,East-Ohio-Fairfield
+298,South,United States,Florida,Port Orange,South-Florida-Port Orange
+299,West,United States,Oregon,Medford,West-Oregon-Medford
+300,South,United States,Virginia,Charlottesville,South-Virginia-Charlottesville
+301,West,United States,Montana,Missoula,West-Montana-Missoula
+302,South,United States,South Carolina,Florence,South-South Carolina-Florence
+303,West,United States,Oregon,Springfield,West-Oregon-Springfield
+304,South,United States,Florida,Apopka,South-Florida-Apopka
+305,East,United States,Pennsylvania,Reading,East-Pennsylvania-Reading
+306,West,United States,Colorado,Broomfield,West-Colorado-Broomfield
+307,Central,United States,Missouri,Springfield,Central-Missouri-Springfield
+308,East,United States,New Jersey,Paterson,East-New Jersey-Paterson
+309,Central,United States,Oklahoma,Oklahoma City,Central-Oklahoma-Oklahoma City
+310,South,United States,Virginia,Chesapeake,South-Virginia-Chesapeake
+311,Central,United States,Texas,Lubbock,Central-Texas-Lubbock
+312,Central,United States,Missouri,Columbia,Central-Missouri-Columbia
+313,South,United States,Tennessee,Johnson City,South-Tennessee-Johnson City
+314,South,United States,Alabama,Auburn,South-Alabama-Auburn
+315,West,United States,California,San Bernardino,West-California-San Bernardino
+316,East,United States,Massachusetts,Leominster,East-Massachusetts-Leominster
+317,West,United States,Montana,Bozeman,West-Montana-Bozeman
+318,West,United States,Arizona,Peoria,West-Arizona-Peoria
+319,East,United States,Ohio,Lakewood,East-Ohio-Lakewood
+320,East,United States,New Jersey,Perth Amboy,East-New Jersey-Perth Amboy
+321,West,United States,California,Ontario,West-California-Ontario
+322,West,United States,California,Rancho Cucamonga,West-California-Rancho Cucamonga
+323,Central,United States,Minnesota,Moorhead,Central-Minnesota-Moorhead
+324,Central,United States,Texas,Mesquite,Central-Texas-Mesquite
+325,West,United States,California,Stockton,West-California-Stockton
+326,South,United States,Florida,Ormond Beach,South-Florida-Ormond Beach
+327,West,United States,California,Sunnyvale,West-California-Sunnyvale
+328,East,United States,New Hampshire,Dover,East-New Hampshire-Dover
+329,East,United States,Pennsylvania,York,East-Pennsylvania-York
+330,Central,United States,Texas,College Station,Central-Texas-College Station
+331,Central,United States,Missouri,Saint Louis,Central-Missouri-Saint Louis
+332,East,United States,Massachusetts,Quincy,East-Massachusetts-Quincy
+333,West,United States,California,Manteca,West-California-Manteca
+334,East,United States,Ohio,Kent,East-Ohio-Kent
+335,Central,United States,Texas,San Angelo,Central-Texas-San Angelo
+336,West,United States,Utah,Salt Lake City,West-Utah-Salt Lake City
+337,South,United States,Alabama,Huntsville,South-Alabama-Huntsville
+338,South,United States,Tennessee,Knoxville,South-Tennessee-Knoxville
+339,South,United States,Arkansas,Little Rock,South-Arkansas-Little Rock
+340,Central,United States,Michigan,Lincoln Park,Central-Michigan-Lincoln Park
+341,East,United States,Ohio,Marion,East-Ohio-Marion
+342,West,United States,Colorado,Littleton,West-Colorado-Littleton
+343,East,United States,Vermont,Burlington,East-Vermont-Burlington
+344,East,United States,Maine,Bangor,East-Maine-Bangor
+345,South,United States,Mississippi,Southaven,South-Mississippi-Southaven
+346,Central,United States,Indiana,New Castle,Central-Indiana-New Castle
+347,Central,United States,Michigan,Midland,Central-Michigan-Midland
+348,Central,United States,South Dakota,Sioux Falls,Central-South Dakota-Sioux Falls
+349,West,United States,Colorado,Fort Collins,West-Colorado-Fort Collins
+350,Central,United States,Indiana,Lafayette,Central-Indiana-Lafayette
+351,South,United States,Tennessee,Clarksville,South-Tennessee-Clarksville
+352,West,United States,California,Sacramento,West-California-Sacramento
+353,West,United States,California,Thousand Oaks,West-California-Thousand Oaks
+354,East,United States,Massachusetts,Malden,East-Massachusetts-Malden
+355,East,United States,Massachusetts,Holyoke,East-Massachusetts-Holyoke
+356,West,United States,New Mexico,Albuquerque,West-New Mexico-Albuquerque
+357,West,United States,Nevada,Sparks,West-Nevada-Sparks
+358,West,United States,California,Coachella,West-California-Coachella
+359,Central,United States,Illinois,Elmhurst,Central-Illinois-Elmhurst
+360,East,United States,New Jersey,Passaic,East-New Jersey-Passaic
+361,South,United States,South Carolina,North Charleston,South-South Carolina-North Charleston
+362,South,United States,Virginia,Newport News,South-Virginia-Newport News
+363,East,United States,New York,Jamestown,East-New York-Jamestown
+364,Central,United States,Indiana,Mishawaka,Central-Indiana-Mishawaka
+365,East,United States,Ohio,Bowling Green,East-Ohio-Bowling Green
+366,West,United States,California,La Quinta,West-California-La Quinta
+367,South,United States,Florida,Tallahassee,South-Florida-Tallahassee
+368,South,United States,Tennessee,Nashville,South-Tennessee-Nashville
+369,West,United States,Washington,Bellingham,West-Washington-Bellingham
+370,Central,United States,Illinois,Woodstock,Central-Illinois-Woodstock
+371,Central,United States,Texas,Haltom City,Central-Texas-Haltom City
+372,Central,United States,Illinois,Wheeling,Central-Illinois-Wheeling
+373,South,United States,South Carolina,Summerville,South-South Carolina-Summerville
+374,South,United States,Arkansas,Hot Springs,South-Arkansas-Hot Springs
+375,West,United States,Colorado,Englewood,West-Colorado-Englewood
+376,East,United States,Ohio,Lancaster,East-Ohio-Lancaster
+377,West,United States,New Mexico,Las Cruces,West-New Mexico-Las Cruces
+378,South,United States,Alabama,Hoover,South-Alabama-Hoover
+379,Central,United States,Texas,Frisco,Central-Texas-Frisco
+380,West,United States,California,Vacaville,West-California-Vacaville
+381,West,United States,Utah,Murray,West-Utah-Murray
+382,Central,United States,Wisconsin,Waukesha,Central-Wisconsin-Waukesha
+383,West,United States,California,Bakersfield,West-California-Bakersfield
+384,South,United States,Florida,Pompano Beach,South-Florida-Pompano Beach
+385,East,United States,Ohio,Troy,East-Ohio-Troy
+386,Central,United States,Texas,Corpus Christi,Central-Texas-Corpus Christi
+387,West,United States,California,Redondo Beach,West-California-Redondo Beach
+388,South,United States,Florida,Orlando,South-Florida-Orlando
+389,East,United States,New Jersey,Orange,East-New Jersey-Orange
+390,South,United States,Louisiana,Lake Charles,South-Louisiana-Lake Charles
+391,Central,United States,Illinois,Highland Park,Central-Illinois-Highland Park
+392,East,United States,New York,Hempstead,East-New York-Hempstead
+393,Central,United States,Indiana,Noblesville,Central-Indiana-Noblesville
+394,Central,United States,Minnesota,Apple Valley,Central-Minnesota-Apple Valley
+395,South,United States,South Carolina,Mount Pleasant,South-South Carolina-Mount Pleasant
+396,Central,United States,Michigan,Sterling Heights,Central-Michigan-Sterling Heights
+397,Central,United States,Wisconsin,Eau Claire,Central-Wisconsin-Eau Claire
+398,Central,United States,Texas,Pharr,Central-Texas-Pharr
+399,West,United States,Montana,Billings,West-Montana-Billings
+400,West,United States,Oregon,Gresham,West-Oregon-Gresham
+401,South,United States,Tennessee,Chattanooga,South-Tennessee-Chattanooga
+402,West,United States,Idaho,Meridian,West-Idaho-Meridian
+403,West,United States,California,Apple Valley,West-California-Apple Valley
+404,Central,United States,Illinois,Bolingbrook,Central-Illinois-Bolingbrook
+405,Central,United States,Minnesota,Maple Grove,Central-Minnesota-Maple Grove
+406,West,United States,California,Woodland,West-California-Woodland
+407,Central,United States,Texas,Missouri City,Central-Texas-Missouri City
+408,Central,United States,Texas,Pearland,Central-Texas-Pearland
+409,West,United States,California,San Mateo,West-California-San Mateo
+410,Central,United States,Michigan,Grand Rapids,Central-Michigan-Grand Rapids
+411,West,United States,California,Visalia,West-California-Visalia
+412,Central,United States,Kansas,Overland Park,Central-Kansas-Overland Park
+413,West,United States,California,Temecula,West-California-Temecula
+414,West,United States,California,Yucaipa,West-California-Yucaipa
+415,East,United States,Massachusetts,Revere,East-Massachusetts-Revere
+416,Central,United States,Texas,Conroe,Central-Texas-Conroe
+417,Central,United States,Illinois,Tinley Park,Central-Illinois-Tinley Park
+418,Central,United States,Iowa,Dubuque,Central-Iowa-Dubuque
+419,Central,United States,Michigan,Dearborn Heights,Central-Michigan-Dearborn Heights
+420,West,United States,New Mexico,Santa Fe,West-New Mexico-Santa Fe
+421,South,United States,North Carolina,Hickory,South-North Carolina-Hickory
+422,Central,United States,Illinois,Carol Stream,Central-Illinois-Carol Stream
+423,Central,United States,Minnesota,Saint Cloud,Central-Minnesota-Saint Cloud
+424,South,United States,Florida,North Miami,South-Florida-North Miami
+425,Central,United States,Indiana,Lawrence,Central-Indiana-Lawrence
+426,South,United States,Florida,Plantation,South-Florida-Plantation
+427,South,United States,Florida,Port Saint Lucie,South-Florida-Port Saint Lucie
+428,South,United States,South Carolina,Rock Hill,South-South Carolina-Rock Hill
+429,Central,United States,Texas,Odessa,Central-Texas-Odessa
+430,Central,United States,Wisconsin,West Allis,Central-Wisconsin-West Allis
+431,West,United States,California,Chula Vista,West-California-Chula Vista
+432,Central,United States,Kansas,Manhattan,Central-Kansas-Manhattan
+433,East,United States,Pennsylvania,Altoona,East-Pennsylvania-Altoona
+434,West,United States,Colorado,Thornton,West-Colorado-Thornton
+435,Central,United States,Illinois,Champaign,Central-Illinois-Champaign
+436,Central,United States,Indiana,Bloomington,Central-Indiana-Bloomington
+437,South,United States,Arkansas,Texarkana,South-Arkansas-Texarkana
+438,Central,United States,Texas,Edinburg,Central-Texas-Edinburg
+439,Central,United States,Texas,Baytown,Central-Texas-Baytown
+440,Central,United States,Indiana,Greenwood,Central-Indiana-Greenwood
+441,West,United States,California,Lakewood,West-California-Lakewood
+442,East,United States,Rhode Island,Woonsocket,East-Rhode Island-Woonsocket
+443,Central,United States,Wisconsin,Superior,Central-Wisconsin-Superior
+444,Central,United States,Texas,Bedford,Central-Texas-Bedford
+445,West,United States,Washington,Covington,West-Washington-Covington
+446,Central,United States,Oklahoma,Broken Arrow,Central-Oklahoma-Broken Arrow
+447,South,United States,Florida,Miramar,South-Florida-Miramar
+448,South,United States,Florida,Hollywood,South-Florida-Hollywood
+449,Central,United States,Texas,Deer Park,Central-Texas-Deer Park
+450,Central,United States,Kansas,Wichita,Central-Kansas-Wichita
+451,Central,United States,Texas,Mcallen,Central-Texas-Mcallen
+452,Central,United States,Iowa,Iowa City,Central-Iowa-Iowa City
+453,West,United States,Idaho,Boise,West-Idaho-Boise
+454,East,United States,Rhode Island,Cranston,East-Rhode Island-Cranston
+455,Central,United States,Illinois,Freeport,Central-Illinois-Freeport
+456,Central,United States,Texas,Port Arthur,Central-Texas-Port Arthur
+457,West,United States,California,Citrus Heights,West-California-Citrus Heights
+458,Central,United States,Texas,The Colony,Central-Texas-The Colony
+459,West,United States,Washington,Redmond,West-Washington-Redmond
+460,South,United States,Florida,Daytona Beach,South-Florida-Daytona Beach
+461,West,United States,Arizona,Bullhead City,West-Arizona-Bullhead City
+462,Central,United States,Indiana,Portage,Central-Indiana-Portage
+463,Central,United States,North Dakota,Fargo,Central-North Dakota-Fargo
+464,Central,United States,Indiana,Elkhart,Central-Indiana-Elkhart
+465,West,United States,California,San Gabriel,West-California-San Gabriel
+466,South,United States,Florida,Margate,South-Florida-Margate
+467,South,United States,Georgia,Sandy Springs,South-Georgia-Sandy Springs
+468,East,United States,Ohio,Mentor,East-Ohio-Mentor
+469,Central,United States,Oklahoma,Lawton,Central-Oklahoma-Lawton
+470,South,United States,Virginia,Hampton,South-Virginia-Hampton
+471,East,United States,New York,Rome,East-New York-Rome
+472,Central,United States,Wisconsin,La Crosse,Central-Wisconsin-La Crosse
+473,West,United States,Idaho,Lewiston,West-Idaho-Lewiston
+474,South,United States,Mississippi,Hattiesburg,South-Mississippi-Hattiesburg
+475,West,United States,California,Danville,West-California-Danville
+476,Central,United States,Michigan,Mount Pleasant,Central-Michigan-Mount Pleasant
+477,West,United States,Utah,Logan,West-Utah-Logan
+478,East,United States,Connecticut,Waterbury,East-Connecticut-Waterbury
+479,South,United States,Georgia,Athens,South-Georgia-Athens
+480,East,United States,Maine,Lewiston,East-Maine-Lewiston
+481,Central,United States,Illinois,Danville,Central-Illinois-Danville
+482,West,United States,Arizona,Avondale,West-Arizona-Avondale
+483,South,United States,Georgia,Marietta,South-Georgia-Marietta
+484,West,United States,Arizona,Yuma,West-Arizona-Yuma
+485,Central,United States,Wisconsin,Wausau,Central-Wisconsin-Wausau
+486,West,United States,Washington,Pasco,West-Washington-Pasco
+487,Central,United States,Illinois,Oak Park,Central-Illinois-Oak Park
+488,South,United States,Florida,Pensacola,South-Florida-Pensacola
+489,Central,United States,Texas,League City,Central-Texas-League City
+490,East,United States,Maryland,Gaithersburg,East-Maryland-Gaithersburg
+491,West,United States,Utah,Lehi,West-Utah-Lehi
+492,South,United States,Alabama,Tuscaloosa,South-Alabama-Tuscaloosa
+493,West,United States,California,Moreno Valley,West-California-Moreno Valley
+494,South,United States,Kentucky,Georgetown,South-Kentucky-Georgetown
+495,West,United States,Colorado,Loveland,West-Colorado-Loveland
+496,West,United States,Arizona,Chandler,West-Arizona-Chandler
+497,West,United States,Montana,Helena,West-Montana-Helena
+498,Central,United States,Missouri,Kirkwood,Central-Missouri-Kirkwood
+499,Central,United States,Texas,Waco,Central-Texas-Waco
+500,Central,United States,Michigan,Roseville,Central-Michigan-Roseville
+501,Central,United States,Illinois,Frankfort,Central-Illinois-Frankfort
+502,East,United States,Pennsylvania,Bethlehem,East-Pennsylvania-Bethlehem
+503,Central,United States,Minnesota,Roseville,Central-Minnesota-Roseville
+504,Central,United States,Nebraska,Grand Island,Central-Nebraska-Grand Island
+505,Central,United States,Minnesota,Woodbury,Central-Minnesota-Woodbury
+506,Central,United States,Michigan,Oak Park,Central-Michigan-Oak Park
+507,South,United States,Arkansas,Rogers,South-Arkansas-Rogers
+508,West,United States,New Mexico,Clovis,West-New Mexico-Clovis
+509,South,United States,Florida,Jupiter,South-Florida-Jupiter
+510,West,United States,California,Santa Barbara,West-California-Santa Barbara
+511,Central,United States,Texas,Cedar Hill,Central-Texas-Cedar Hill
+512,Central,United States,Nebraska,Norfolk,Central-Nebraska-Norfolk
+513,West,United States,Utah,Draper,West-Utah-Draper
+514,Central,United States,Michigan,Ann Arbor,Central-Michigan-Ann Arbor
+515,West,United States,California,La Mesa,West-California-La Mesa
+516,West,United States,Idaho,Pocatello,West-Idaho-Pocatello
+517,Central,United States,Michigan,Holland,Central-Michigan-Holland
+518,East,United States,Connecticut,Milford,East-Connecticut-Milford
+519,Central,United States,Illinois,Buffalo Grove,Central-Illinois-Buffalo Grove
+520,West,United States,California,Lake Forest,West-California-Lake Forest
+521,West,United States,California,Redding,West-California-Redding
+522,West,United States,California,Chico,West-California-Chico
+523,East,United States,New York,Utica,East-New York-Utica
+524,South,United States,Arkansas,Conway,South-Arkansas-Conway
+525,West,United States,Wyoming,Cheyenne,West-Wyoming-Cheyenne
+526,South,United States,Kentucky,Owensboro,South-Kentucky-Owensboro
+527,West,United States,Idaho,Caldwell,West-Idaho-Caldwell
+528,South,United States,Louisiana,Kenner,South-Louisiana-Kenner
+529,East,United States,New Hampshire,Nashua,East-New Hampshire-Nashua
+530,South,United States,Tennessee,Bartlett,South-Tennessee-Bartlett
+531,West,United States,California,Redwood City,West-California-Redwood City
+532,South,United States,Tennessee,Lebanon,South-Tennessee-Lebanon
+533,West,United States,California,Santa Maria,West-California-Santa Maria
+534,Central,United States,Illinois,Des Plaines,Central-Illinois-Des Plaines
+535,West,United States,Washington,Longview,West-Washington-Longview
+536,South,United States,Tennessee,Hendersonville,South-Tennessee-Hendersonville
+537,Central,United States,Iowa,Waterloo,Central-Iowa-Waterloo
+538,East,United States,Massachusetts,Cambridge,East-Massachusetts-Cambridge
+539,Central,United States,Illinois,Palatine,Central-Illinois-Palatine
+540,East,United States,Massachusetts,Beverly,East-Massachusetts-Beverly
+541,West,United States,Oregon,Eugene,West-Oregon-Eugene
+542,West,United States,California,Oxnard,West-California-Oxnard
+543,West,United States,Washington,Renton,West-Washington-Renton
+544,Central,United States,Illinois,Glenview,Central-Illinois-Glenview
+545,South,United States,Florida,Delray Beach,South-Florida-Delray Beach
+546,West,United States,Colorado,Commerce City,West-Colorado-Commerce City
+547,Central,United States,Texas,Texas City,Central-Texas-Texas City
+548,South,United States,North Carolina,Wilson,South-North Carolina-Wilson
+549,West,United States,New Mexico,Rio Rancho,West-New Mexico-Rio Rancho
+550,South,United States,North Carolina,Goldsboro,South-North Carolina-Goldsboro
+551,West,United States,Washington,Everett,West-Washington-Everett
+552,West,United States,California,Montebello,West-California-Montebello
+553,West,United States,California,El Cajon,West-California-El Cajon
+554,Central,United States,Texas,Beaumont,Central-Texas-Beaumont
+555,South,United States,Florida,West Palm Beach,South-Florida-West Palm Beach
+556,Central,United States,Texas,Abilene,Central-Texas-Abilene
+557,Central,United States,Illinois,Normal,Central-Illinois-Normal
+558,Central,United States,Missouri,Saint Charles,Central-Missouri-Saint Charles
+559,Central,United States,Illinois,Saint Charles,Central-Illinois-Saint Charles
+560,West,United States,California,Camarillo,West-California-Camarillo
+561,West,United States,Oregon,Hillsboro,West-Oregon-Hillsboro
+562,West,United States,California,Burbank,West-California-Burbank
+563,West,United States,California,Modesto,West-California-Modesto
+564,Central,United States,Kansas,Garden City,Central-Kansas-Garden City
+565,East,United States,New Jersey,Atlantic City,East-New Jersey-Atlantic City
+566,West,United States,Colorado,Longmont,West-Colorado-Longmont
+567,West,United States,California,Davis,West-California-Davis
+568,East,United States,West Virginia,Wheeling,East-West Virginia-Wheeling
+569,West,United States,California,Morgan Hill,West-California-Morgan Hill
+570,East,United States,New Jersey,Clifton,East-New Jersey-Clifton
+571,Central,United States,Wisconsin,Sheboygan,Central-Wisconsin-Sheboygan
+572,South,United States,Georgia,East Point,South-Georgia-East Point
+573,Central,United States,South Dakota,Rapid City,Central-South Dakota-Rapid City
+574,East,United States,Massachusetts,Andover,East-Massachusetts-Andover
+575,South,United States,Florida,Kissimmee,South-Florida-Kissimmee
+576,East,United States,Connecticut,Shelton,East-Connecticut-Shelton
+577,East,United States,Connecticut,Danbury,East-Connecticut-Danbury
+578,Central,United States,Iowa,Marion,Central-Iowa-Marion
+579,South,United States,Florida,Sanford,South-Florida-Sanford
+580,Central,United States,Texas,San Marcos,Central-Texas-San Marcos
+581,West,United States,Colorado,Greeley,West-Colorado-Greeley
+582,Central,United States,Texas,Mansfield,Central-Texas-Mansfield
+583,East,United States,Ohio,Elyria,East-Ohio-Elyria
+584,West,United States,Idaho,Twin Falls,West-Idaho-Twin Falls
+585,South,United States,Florida,Coral Gables,South-Florida-Coral Gables
+586,Central,United States,Illinois,Romeoville,Central-Illinois-Romeoville
+587,East,United States,Massachusetts,Marlborough,East-Massachusetts-Marlborough
+588,East,United States,Maryland,Laurel,East-Maryland-Laurel
+589,Central,United States,Texas,Bryan,Central-Texas-Bryan
+590,South,United States,Arkansas,Pine Bluff,South-Arkansas-Pine Bluff
+591,Central,United States,South Dakota,Aberdeen,Central-South Dakota-Aberdeen
+592,East,United States,Maryland,Hagerstown,East-Maryland-Hagerstown
+593,East,United States,New Jersey,East Orange,East-New Jersey-East Orange
+594,Central,United States,Illinois,Arlington Heights,Central-Illinois-Arlington Heights
+595,Central,United States,Illinois,Oswego,Central-Illinois-Oswego
+596,Central,United States,Minnesota,Coon Rapids,Central-Minnesota-Coon Rapids
+597,West,United States,California,San Clemente,West-California-San Clemente
+598,West,United States,California,Dublin,West-California-Dublin
+599,West,United States,California,San Luis Obispo,West-California-San Luis Obispo
+600,South,United States,Arkansas,Springdale,South-Arkansas-Springdale
