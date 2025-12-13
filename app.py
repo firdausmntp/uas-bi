@@ -7,137 +7,296 @@ import os
 
 # Konfigurasi halaman
 st.set_page_config(
-    page_title="Sales Analytics Dashboard",
-    page_icon="📊",
+    page_title="Super Store Sales Dashboard",
+    page_icon="💎",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # Load Font Awesome CDN dan Custom CSS
 st.markdown("""
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.2/font/bootstrap-icons.min.css" integrity="sha512-D3/Ob7k6hPVcsMzQuGdMc5eE0fLU1TqQUz7pBIyFjuEHpzN9CSWi8X75k9pEvHD2LOWg3eWFVfhgeQQ+PKyv0A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
     /* === GLOBAL STYLES === */
     * {
         font-family: 'Poppins', sans-serif !important;
     }
     
-    /* Main container styling */
-    .main {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
+    /* === RESPONSIVE DESIGN === */
+    @media screen and (max-width: 1200px) {
+        .dashboard-header h1 {
+            font-size: 1.8rem !important;
+        }
+        [data-testid="stMetricValue"] {
+            font-size: 1.5rem !important;
+        }
+        .section-header {
+            font-size: 1.2rem !important;
+        }
+        .sub-header {
+            font-size: 1rem !important;
+        }
     }
     
-    .stApp {
-        background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    @media screen and (max-width: 992px) {
+        .dashboard-header {
+            padding: 20px 25px;
+        }
+        .dashboard-header h1 {
+            font-size: 1.5rem !important;
+        }
+        [data-testid="stMetric"] {
+            padding: 15px 18px;
+        }
+        [data-testid="stMetricValue"] {
+            font-size: 1.3rem !important;
+        }
+        [data-testid="stMetricLabel"] {
+            font-size: 0.8rem !important;
+        }
+        .region-card {
+            padding: 15px;
+        }
     }
     
-    /* Hide streamlit branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
+    @media screen and (max-width: 768px) {
+        .block-container {
+            padding: 1rem 0.5rem;
+        }
+        .dashboard-header {
+            padding: 15px 20px;
+            border-radius: 12px;
+        }
+        .dashboard-header h1 {
+            font-size: 1.2rem !important;
+            flex-wrap: wrap;
+        }
+        .dashboard-header p {
+            font-size: 0.9rem !important;
+        }
+        [data-testid="stMetric"] {
+            padding: 12px 15px;
+            border-radius: 12px;
+        }
+        [data-testid="stMetricValue"] {
+            font-size: 1.1rem !important;
+        }
+        .section-header {
+            font-size: 1rem !important;
+            flex-wrap: wrap;
+        }
+        .sub-header {
+            font-size: 0.9rem !important;
+            padding: 10px 12px;
+        }
+        .stTabs [data-baseweb="tab"] {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+        .region-card {
+            padding: 12px;
+        }
+        .region-card h4 {
+            font-size: 0.95rem;
+        }
+        .region-card p {
+            font-size: 0.8rem !important;
+        }
+    }
+    
+    @media screen and (max-width: 576px) {
+        .dashboard-header h1 {
+            font-size: 1rem !important;
+        }
+        [data-testid="stMetricValue"] {
+            font-size: 1rem !important;
+        }
+        [data-testid="stMetricLabel"] {
+            font-size: 0.7rem !important;
+        }
+        .stTabs [data-baseweb="tab-list"] {
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .stTabs [data-baseweb="tab"] {
+            padding: 6px 10px;
+            font-size: 0.75rem;
+        }
+    }
+    
+    /* Font Awesome Icons Fix */
+    .fa, .fas, .far, .fab, .fal, .fad, [class*="fa-"] {
+        font-family: 'Font Awesome 6 Free' !important;
+        font-style: normal !important;
+        font-variant: normal !important;
+        text-rendering: auto !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        display: inline-block !important;
+        width: auto !important;
+        height: auto !important;
+        line-height: 1 !important;
+        vertical-align: -0.125em !important;
+    }
+    
+    .fas, .fa-solid {
+        font-weight: 900 !important;
+        font-family: 'Font Awesome 6 Free' !important;
+    }
+    
+    .far, .fa-regular {
+        font-weight: 400 !important;
+        font-family: 'Font Awesome 6 Free' !important;
+    }
+    
+    .fab, .fa-brands {
+        font-family: 'Font Awesome 6 Brands' !important;
+        font-weight: 400 !important;
+    }
+    
+    /* Sidebar icons visible */
+    section[data-testid="stSidebar"] i {
+        display: inline-block !important;
+        width: auto !important;
+        margin-right: 5px !important;
+        color: inherit !important;
+    }
+    
+    /* Main container styling - White & Blue Theme */
+    .main, .stApp {
+        background: linear-gradient(135deg, #f0f4f8 0%, #e8f4fc 50%, #f5f9ff 100%) !important;
+    }
+    
+    .block-container {
+        padding-top: 2rem;
+    }
     
     /* === METRIC CARDS === */
     [data-testid="stMetricValue"] {
-        font-size: 2.2rem !important;
+        font-size: 2rem !important;
         font-weight: 700 !important;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #1e3a5f !important;
     }
     
     [data-testid="stMetricLabel"] {
-        font-size: 1rem !important;
+        font-size: 0.95rem !important;
         font-weight: 600 !important;
-        color: #e2e8f0 !important;
+        color: #4a6fa5 !important;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
     
     [data-testid="stMetricDelta"] {
         font-size: 0.85rem !important;
-        color: #4ade80 !important;
+        color: #2e7d32 !important;
         font-weight: 500;
     }
     
     /* Metric container background */
     [data-testid="stMetric"] {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        background: linear-gradient(145deg, #ffffff 0%, #f8fbff 100%);
+        border: 1px solid #d0e3f7;
         padding: 20px 25px;
-        border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.08);
         transition: all 0.3s ease;
     }
     
     [data-testid="stMetric"]:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-        border-color: rgba(102, 126, 234, 0.5);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(30, 58, 95, 0.15);
+        border-color: #3b82f6;
     }
     
     /* === SIDEBAR STYLING === */
-    [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
-        border-right: 1px solid rgba(102, 126, 234, 0.3);
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #1e3a5f 0%, #2c5282 50%, #3b6ca8 100%) !important;
+        width: 300px !important;
     }
     
-    [data-testid="stSidebar"] > div:first-child {
+    section[data-testid="stSidebar"] > div {
         background: transparent !important;
     }
     
-    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-        color: #e2e8f0 !important;
+    section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
+        color: #ffffff !important;
         font-weight: 500;
     }
     
-    [data-testid="stSidebar"] .stSelectbox label,
-    [data-testid="stSidebar"] .stMultiSelect label {
-        color: #c7d2fe !important;
+    section[data-testid="stSidebar"] .stSelectbox label,
+    section[data-testid="stSidebar"] .stMultiSelect label {
+        color: #e0f0ff !important;
         font-weight: 600 !important;
         font-size: 0.9rem !important;
     }
     
-    [data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
-        color: #c7d2fe !important;
+    section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
+        color: #e0f0ff !important;
     }
     
     /* Sidebar multiselect styling */
-    [data-testid="stSidebar"] .stMultiSelect > div > div {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(102, 126, 234, 0.4) !important;
-        border-radius: 12px !important;
-        color: #e2e8f0 !important;
+    section[data-testid="stSidebar"] .stMultiSelect > div > div {
+        background: #ffffff !important;
+        border: 1px solid #d0e3f7 !important;
+        border-radius: 10px !important;
+        color: #1e3a5f !important;
+        transition: box-shadow 0.2s ease, border-color 0.2s ease;
     }
     
-    [data-testid="stSidebar"] .stMultiSelect span[data-baseweb="tag"] {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-        color: white !important;
+    section[data-testid="stSidebar"] .stMultiSelect > div > div:hover {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+    
+    section[data-testid="stSidebar"] .stMultiSelect input {
+        color: #1e3a5f !important;
+    }
+    
+    section[data-testid="stSidebar"] .stMultiSelect span[data-baseweb="tag"] {
+        background: #ffffff !important;
+        color: #1e3a5f !important;
+        border: 1px solid #3b82f6 !important;
         border-radius: 8px !important;
-        font-weight: 500;
+        font-weight: 600;
+        box-shadow: 0 2px 6px rgba(30, 58, 95, 0.12);
+        transition: background 0.15s ease, color 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    
+    section[data-testid="stSidebar"] .stMultiSelect span[data-baseweb="tag"]:hover {
+        background: #e8f4fc !important;
+        color: #1e3a5f !important;
+        border-color: #1e3a5f !important;
+        box-shadow: 0 3px 8px rgba(59, 130, 246, 0.2);
+    }
+    
+    section[data-testid="stSidebar"] .stMultiSelect span[data-baseweb="tag"] svg path {
+        fill: #1e3a5f !important;
     }
     
     /* Sidebar selectbox */
-    [data-testid="stSidebar"] .stSelectbox > div > div {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(102, 126, 234, 0.4) !important;
-        border-radius: 12px !important;
-        color: #e2e8f0 !important;
+    section[data-testid="stSidebar"] .stSelectbox > div > div {
+        background: #ffffff !important;
+        border: 1px solid #d0e3f7 !important;
+        border-radius: 10px !important;
+        color: #1e3a5f !important;
+    }
+    
+    section[data-testid="stSidebar"] .stSelectbox input {
+        color: #1e3a5f !important;
     }
     
     /* === HEADER STYLING === */
     .dashboard-header {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
-        backdrop-filter: blur(20px);
-        padding: 35px 45px;
-        border-radius: 24px;
-        margin-bottom: 35px;
-        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 50%, #3b82f6 100%);
+        padding: 30px 40px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 40px rgba(30, 58, 95, 0.25);
+        border: none;
         position: relative;
         overflow: hidden;
     }
@@ -146,261 +305,402 @@ st.markdown("""
         content: '';
         position: absolute;
         top: -50%;
-        right: -50%;
-        width: 100%;
+        right: -30%;
+        width: 80%;
         height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
         pointer-events: none;
     }
     
     .dashboard-header h1 {
         color: #ffffff !important;
-        font-size: 2.5rem !important;
-        font-weight: 800 !important;
+        font-size: 2.3rem !important;
+        font-weight: 700 !important;
         margin: 0 !important;
         display: flex;
         align-items: center;
-        gap: 18px;
-        text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        gap: 15px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
     
     .dashboard-header p {
-        color: rgba(255,255,255,0.95) !important;
-        font-size: 1.15rem !important;
-        margin: 12px 0 0 0 !important;
+        color: rgba(255,255,255,0.9) !important;
+        font-size: 1.1rem !important;
+        margin: 10px 0 0 0 !important;
         font-weight: 400;
-    }
-    
-    .dashboard-header i {
-        font-size: 2.5rem;
-        filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
     }
     
     /* === SECTION HEADERS === */
     .section-header {
-        color: #e2e8f0 !important;
-        font-size: 1.5rem !important;
+        color: #1e3a5f !important;
+        font-size: 1.4rem !important;
         font-weight: 700 !important;
-        margin: 30px 0 25px 0 !important;
-        padding-bottom: 15px;
-        border-bottom: 2px solid rgba(102, 126, 234, 0.5);
+        margin: 25px 0 20px 0 !important;
+        padding-bottom: 12px;
+        border-bottom: 3px solid #3b82f6;
         display: flex;
         align-items: center;
         gap: 12px;
     }
     
     .section-header i {
-        color: #a78bfa;
-        font-size: 1.4rem;
+        color: #3b82f6;
+        font-size: 1.3rem;
     }
     
     /* === SUB HEADERS === */
     .sub-header {
-        color: #c7d2fe !important;
-        font-size: 1.25rem !important;
+        color: #1e3a5f !important;
+        font-size: 1.15rem !important;
         font-weight: 600 !important;
-        margin: 25px 0 18px 0 !important;
+        margin: 20px 0 15px 0 !important;
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 12px 18px;
-        background: rgba(102, 126, 234, 0.15);
-        border-radius: 14px;
-        border-left: 4px solid #667eea;
+        gap: 10px;
+        padding: 12px 16px;
+        background: linear-gradient(135deg, #e8f4fc 0%, #f0f7ff 100%);
+        border-radius: 12px;
+        border-left: 4px solid #3b82f6;
     }
     
     .sub-header i {
-        color: #a78bfa;
-        font-size: 1.1rem;
+        color: #3b82f6;
+        font-size: 1rem;
     }
     
     /* === REGION CARDS === */
     .region-card {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(20px);
-        padding: 22px;
-        border-radius: 16px;
-        margin-bottom: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease;
+        background: linear-gradient(145deg, #ffffff 0%, #f8fbff 100%);
+        padding: 20px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+        border: 1px solid #d0e3f7;
+        box-shadow: 0 4px 12px rgba(30, 58, 95, 0.08);
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .region-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.08), transparent);
+        transition: left 0.5s ease;
     }
     
     .region-card:hover {
-        transform: translateX(8px);
-        border-color: rgba(102, 126, 234, 0.6);
-        box-shadow: 0 12px 35px rgba(102, 126, 234, 0.3);
+        transform: translateY(-5px) scale(1.02);
+        border-color: #3b82f6;
+        box-shadow: 0 12px 28px rgba(59, 130, 246, 0.22);
+        background: linear-gradient(145deg, #ffffff 0%, #eef6ff 100%);
+    }
+    
+    .region-card:hover::before {
+        left: 100%;
     }
     
     .region-card h4 {
-        color: #ffffff !important;
-        margin: 0 0 15px 0 !important;
+        color: #1e3a5f !important;
+        margin: 0 0 12px 0 !important;
         font-weight: 700 !important;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
     }
     
     .region-card h4::before {
         content: '';
         width: 8px;
         height: 8px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #3b82f6, #60a5fa);
         border-radius: 50%;
     }
     
     .region-card p {
-        color: #cbd5e1 !important;
-        margin: 8px 0 !important;
-        font-size: 0.95rem !important;
+        color: #4a6fa5 !important;
+        margin: 6px 0 !important;
+        font-size: 0.9rem !important;
         display: flex;
         align-items: center;
-        gap: 10px;
-        font-weight: 400;
+        gap: 8px;
+        font-weight: 500;
     }
     
     .region-card i {
-        color: #a78bfa;
-        width: 20px;
-        font-size: 0.9rem;
+        color: #3b82f6;
+        width: 18px;
+        font-size: 0.85rem;
     }
     
     /* === DIVIDER STYLING === */
     hr {
         border: none !important;
         height: 2px !important;
-        background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.5), transparent) !important;
-        margin: 40px 0 !important;
+        background: linear-gradient(90deg, transparent, #3b82f6, transparent) !important;
+        margin: 35px 0 !important;
     }
     
     /* === TAB STYLING === */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 10px;
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(20px);
-        padding: 12px;
-        border-radius: 18px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 8px;
+        background: #ffffff;
+        padding: 10px;
+        border-radius: 14px;
+        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.08);
+        border: 1px solid #e0e8f0;
     }
     
     .stTabs [data-baseweb="tab"] {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 12px;
-        padding: 14px 28px;
+        background: #f0f4f8;
+        border-radius: 10px;
+        padding: 12px 24px;
         border: 1px solid transparent;
-        color: #a5b4fc !important;
+        color: #4a6fa5 !important;
         font-weight: 600;
         transition: all 0.3s ease;
     }
     
     .stTabs [data-baseweb="tab"]:hover {
-        background: rgba(102, 126, 234, 0.2);
-        border-color: rgba(102, 126, 234, 0.3);
+        background: #e8f4fc;
+        border-color: #3b82f6;
     }
     
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        background: linear-gradient(135deg, #1e3a5f 0%, #3b82f6 100%) !important;
         color: #ffffff !important;
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         border-color: transparent;
     }
     
     /* Tab panel background */
     .stTabs [data-baseweb="tab-panel"] {
         background: transparent;
-        padding-top: 25px;
+        padding-top: 20px;
     }
     
     /* === SIDEBAR COMPONENTS === */
     .sidebar-header {
         color: #ffffff !important;
-        font-size: 1.4rem !important;
+        font-size: 1.3rem !important;
         font-weight: 700 !important;
-        margin-bottom: 25px !important;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 18px;
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
-        border-radius: 16px;
-        border: 1px solid rgba(102, 126, 234, 0.4);
-    }
-    
-    .sidebar-header i {
-        color: #a78bfa;
-        font-size: 1.3rem;
-    }
-    
-    .filter-label {
-        color: #e2e8f0 !important;
-        font-weight: 600 !important;
+        margin-bottom: 20px !important;
         display: flex;
         align-items: center;
         gap: 10px;
-        margin: 18px 0 10px 0 !important;
-        font-size: 0.95rem;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .sidebar-header i {
+        color: #60a5fa;
+        font-size: 1.2rem;
+        display: inline-block !important;
+        width: auto !important;
+    }
+    
+    .filter-label {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px;
+        margin: 15px 0 8px 0 !important;
+        font-size: 0.9rem;
         padding-left: 5px;
     }
     
     .filter-label i {
-        color: #a78bfa;
-        font-size: 1rem;
+        color: #60a5fa;
+        font-size: 0.95rem;
+        display: inline-block !important;
+        width: auto !important;
+    }
+    
+    .filter-label .fa, .filter-label .fas, .filter-label .far, .filter-label .fab {
+        display: inline-block !important;
+        width: auto !important;
+        font-size: 0.95rem !important;
     }
     
     /* === FOOTER STYLING === */
     .footer {
         text-align: center;
-        color: #cbd5e1;
-        padding: 30px;
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(20px);
-        border-radius: 20px;
-        margin-top: 40px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #4a6fa5;
+        padding: 25px;
+        background: linear-gradient(145deg, #ffffff 0%, #f8fbff 100%);
+        border-radius: 16px;
+        margin-top: 35px;
+        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.08);
+        border: 1px solid #d0e3f7;
     }
     
     .footer p {
-        color: #cbd5e1 !important;
-        margin: 8px 0;
+        color: #4a6fa5 !important;
+        margin: 6px 0;
     }
     
     .footer i {
-        color: #a78bfa;
-        margin-right: 10px;
+        color: #3b82f6;
+        margin-right: 8px;
     }
     
     /* === DATAFRAME STYLING === */
-    .stDataFrame {
-        background: rgba(255, 255, 255, 0.08) !important;
-        border-radius: 16px !important;
+    [data-testid="stDataFrame"] {
+        background: #ffffff !important;
+        border-radius: 14px !important;
         overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid #d0e3f7 !important;
+        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.08);
     }
     
-    [data-testid="stDataFrame"] > div {
-        background: transparent !important;
+    [data-testid="stDataFrameResizable"] {
+        background: #ffffff !important;
+    }
+    
+    .stDataFrame {
+        background: #ffffff !important;
+    }
+    
+    /* Fix Glide Data Editor (dataframe renderer) */
+    .dvn-scroller,
+    .dvn-scroll-inner,
+    .dvn-stack,
+    .dvn-container {
+        background: #ffffff !important;
+        color: #1e3a5f !important;
+    }
+    
+    .dvn-scroller,
+    .dvn-scroll-inner,
+    .dvn-stack {
+        overflow: visible !important;
+    }
+    
+    /* DataFrame cell styling */
+    .dvn-cell,
+    .dvn-text,
+    .dvn-cell span,
+    .dvn-cell div,
+    .dvn-stack div,
+    .dvn-stack span {
+        background: #ffffff !important;
+        color: #1e3a5f !important;
+        fill: #1e3a5f !important;
+    }
+    
+    /* Force SVG text (Glide uses SVG for text sometimes) */
+    .dvn-container svg text {
+        fill: #1e3a5f !important;
+        color: #1e3a5f !important;
+    }
+    
+    /* Final safeguard for dataframe text visibility */
+    [data-testid="stDataFrame"] * {
+        color: #1e3a5f !important;
+        fill: #1e3a5f !important;
+    }
+    
+    /* Aggressive fix for Glide DataEditor canvas text */
+    canvas {
+        filter: none !important;
+    }
+    
+    [data-testid="stDataFrame"] canvas + div,
+    [data-testid="stDataFrame"] canvas ~ div {
+        color: #1e3a5f !important;
+    }
+    
+    /* Override any Streamlit dark theme remnants */
+    .stDataFrame div[data-testid="glideDataEditor"],
+    .stDataFrame [class*="glide"],
+    div[data-glide-id] {
+        background: #ffffff !important;
+        color: #1e3a5f !important;
+    }
+    
+    /* Force all text in data grid */
+    [data-testid="stDataFrame"] span,
+    [data-testid="stDataFrame"] div,
+    [data-testid="stDataFrame"] p,
+    [data-testid="stDataFrame"] td,
+    [data-testid="stDataFrame"] th {
+        color: #1e3a5f !important;
+        background-color: transparent !important;
+    }
+    
+    /* Glide cell text rendering */
+    .gdg-cell,
+    .gdg-header,
+    .gdg-text {
+        color: #1e3a5f !important;
+        fill: #1e3a5f !important;
+    }
+    
+    /* DataFrame header cell */
+    .dvn-header {
+        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+    
+    /* DataFrame Table Styling */
+    [role="grid"] {
+        background: #ffffff !important;
+    }
+    
+    [role="rowheader"] {
+        background: #ffffff !important;
+        color: #1e3a5f !important;
+    }
+    
+    /* Fix black background in dataframe */
+    div[data-testid="stDataFrame"] > div {
+        background: #ffffff !important;
+    }
+    
+    div[data-testid="stDataFrame"] table {
+        background: #ffffff !important;
+    }
+    
+    /* DataFrame header */
+    thead {
+        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%) !important;
+    }
+    
+    thead th {
+        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+    
+    /* DataFrame rows */
+    tbody td {
+        color: #1e3a5f !important;
+        background: #ffffff !important;
+        border-color: #e0e8f0 !important;
+    }
+    
+    tbody tr:nth-child(even) td {
+        background: #f8fbff !important;
     }
     
     /* === PLOTLY CHART CONTAINERS === */
     .js-plotly-plot {
-        border-radius: 16px;
+        border-radius: 14px;
         overflow: hidden;
-    }
-    
-    /* === EXPANDER STYLING === */
-    .streamlit-expanderHeader {
-        background: rgba(102, 126, 234, 0.15) !important;
-        border-radius: 12px !important;
-        color: #e2e8f0 !important;
-        font-weight: 600 !important;
+        background: white;
     }
     
     /* === COLUMNS GAP === */
     [data-testid="column"] {
-        padding: 8px;
+        padding: 6px;
     }
     
     /* === SCROLLBAR STYLING === */
@@ -410,24 +710,24 @@ st.markdown("""
     }
     
     ::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
+        background: #f0f4f8;
         border-radius: 10px;
     }
     
     ::-webkit-scrollbar-thumb {
-        background: linear-gradient(135deg, #667eea, #764ba2);
+        background: linear-gradient(135deg, #3b82f6, #60a5fa);
         border-radius: 10px;
     }
     
     ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(135deg, #764ba2, #667eea);
+        background: linear-gradient(135deg, #1e3a5f, #3b82f6);
     }
     
     /* === ANIMATION KEYFRAMES === */
     @keyframes fadeInUp {
         from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(15px);
         }
         to {
             opacity: 1;
@@ -436,7 +736,263 @@ st.markdown("""
     }
     
     .dashboard-header, .region-card, [data-testid="stMetric"] {
-        animation: fadeInUp 0.5s ease-out;
+        animation: fadeInUp 0.4s ease-out;
+    }
+    
+    /* Hover polish */
+    [data-testid="stMetric"]:hover,
+    .region-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(30, 58, 95, 0.18);
+    }
+    
+    [data-testid="stSidebar"] .stSelectbox > div > div:hover {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+    
+    tbody tr:hover td {
+        background: #eaf3ff !important;
+    }
+    
+    /* === SIDEBAR TOGGLE BUTTON FIX === */
+    button[kind="header"],
+    button[kind="headerNoPadding"],
+    [data-testid="stSidebarCollapseButton"],
+    [data-testid="stSidebarCollapseButton"] button,
+    [data-testid="collapsedControl"],
+    [data-testid="collapsedControl"] button {
+        background: #ffffff !important;
+        border: 2px solid #3b82f6 !important;
+        border-radius: 10px !important;
+        box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2) !important;
+        padding: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    button[kind="header"]:hover,
+    button[kind="headerNoPadding"]:hover,
+    [data-testid="stSidebarCollapseButton"]:hover,
+    [data-testid="stSidebarCollapseButton"] button:hover,
+    [data-testid="collapsedControl"]:hover,
+    [data-testid="collapsedControl"] button:hover {
+        background: linear-gradient(135deg, #e8f4fc 0%, #dbeafe 100%) !important;
+        border-color: #1e3a5f !important;
+        transform: scale(1.05) !important;
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3) !important;
+    }
+    
+    /* Material Icons Fix for Streamlit */
+    [data-testid="stIconMaterial"],
+    .st-emotion-cache-ujm5ma,
+    span[data-testid="stIconMaterial"] {
+        font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
+        font-weight: normal !important;
+        font-style: normal !important;
+        font-size: 24px !important;
+        line-height: 1 !important;
+        letter-spacing: normal !important;
+        text-transform: none !important;
+        display: inline-block !important;
+        white-space: nowrap !important;
+        word-wrap: normal !important;
+        direction: ltr !important;
+        -webkit-font-feature-settings: 'liga' !important;
+        -webkit-font-smoothing: antialiased !important;
+        color: #1e3a5f !important;
+    }
+    
+    /* Sidebar toggle icon color */
+    [data-testid="stSidebarCollapseButton"] span,
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
+    [data-testid="collapsedControl"] span,
+    [data-testid="collapsedControl"] [data-testid="stIconMaterial"] {
+        color: #1e3a5f !important;
+        font-size: 22px !important;
+    }
+    
+    /* SVG fallback */
+    button[kind="header"] svg,
+    button[kind="headerNoPadding"] svg,
+    [data-testid="stSidebarCollapseButton"] svg,
+    [data-testid="collapsedControl"] svg {
+        fill: #1e3a5f !important;
+        color: #1e3a5f !important;
+        stroke: #1e3a5f !important;
+        width: 22px !important;
+        height: 22px !important;
+    }
+    
+    /* BaseWeb icon styling */
+    [data-baseweb="icon"] {
+        color: inherit !important;
+    }
+    
+    section[data-testid="stSidebar"] [data-baseweb="icon"] svg {
+        fill: #ffffff !important;
+    }
+    
+    /* === CUSTOM TABLE STYLING === */
+    .custom-table-container {
+        background: #ffffff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.1);
+        border: 1px solid #d0e3f7;
+        margin: 10px 0;
+    }
+    
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'Poppins', sans-serif;
+        background: #ffffff;
+    }
+    
+    .custom-table thead {
+        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
+    }
+    
+    .custom-table thead th {
+        padding: 14px 16px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #ffffff !important;
+        border: none;
+        white-space: nowrap;
+    }
+    
+    .custom-table tbody tr {
+        transition: background 0.2s ease;
+    }
+    
+    .custom-table tbody tr:nth-child(even) {
+        background: #f8fbff;
+    }
+    
+    .custom-table tbody tr:nth-child(odd) {
+        background: #ffffff;
+    }
+    
+    .custom-table tbody tr:hover {
+        background: linear-gradient(135deg, #eef6ff 0%, #e0f0ff 100%) !important;
+    }
+    
+    .custom-table tbody td {
+        padding: 12px 16px;
+        color: #1e3a5f !important;
+        font-size: 0.875rem;
+        border-bottom: 1px solid #e8f0f8;
+        font-weight: 500;
+    }
+    
+    .custom-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    /* Scrollable table wrapper */
+    .table-scroll-wrapper {
+        max-height: 400px;
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+    
+    .table-scroll-wrapper::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    
+    .table-scroll-wrapper::-webkit-scrollbar-thumb {
+        background: #3b82f6;
+        border-radius: 10px;
+    }
+    
+    /* === PLOTLY HOVER IMPROVEMENTS === */
+    .js-plotly-plot .plotly .hoverlayer {
+        pointer-events: none;
+    }
+    
+    .js-plotly-plot {
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff !important;
+        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.08);
+        border: 1px solid #e0e8f0;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    
+    .js-plotly-plot:hover {
+        box-shadow: 0 8px 25px rgba(30, 58, 95, 0.12);
+        transform: translateY(-2px);
+    }
+    
+    /* Search input in multiselect */
+    section[data-testid="stSidebar"] .stMultiSelect input::placeholder {
+        color: #94a3b8 !important;
+        font-style: italic;
+    }
+    
+    section[data-testid="stSidebar"] .stMultiSelect [data-baseweb="popover"] {
+        background: #ffffff !important;
+        border: 1px solid #3b82f6 !important;
+        border-radius: 10px !important;
+        box-shadow: 0 8px 20px rgba(30, 58, 95, 0.15) !important;
+    }
+    
+    section[data-testid="stSidebar"] .stMultiSelect [role="listbox"] {
+        background: #ffffff !important;
+    }
+    
+    section[data-testid="stSidebar"] .stMultiSelect [role="option"] {
+        color: #1e3a5f !important;
+        background: #ffffff !important;
+        padding: 10px 14px !important;
+        transition: background 0.15s ease;
+    }
+    
+    section[data-testid="stSidebar"] .stMultiSelect [role="option"]:hover {
+        background: linear-gradient(135deg, #e8f4fc 0%, #dbeafe 100%) !important;
+    }
+    
+    section[data-testid="stSidebar"] .stMultiSelect [aria-selected="true"] {
+        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
+        color: #ffffff !important;
+    }
+    
+    /* Search/Text input styling in sidebar */
+    section[data-testid="stSidebar"] .stTextInput > div > div {
+        background: #ffffff !important;
+        border: 1px solid #d0e3f7 !important;
+        border-radius: 10px !important;
+        color: #1e3a5f !important;
+        transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    
+    section[data-testid="stSidebar"] .stTextInput > div > div:hover,
+    section[data-testid="stSidebar"] .stTextInput > div > div:focus-within {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    }
+    
+    section[data-testid="stSidebar"] .stTextInput input {
+        color: #1e3a5f !important;
+        font-weight: 500 !important;
+    }
+    
+    section[data-testid="stSidebar"] .stTextInput input::placeholder {
+        color: #94a3b8 !important;
+        font-style: italic;
+    }
+    
+    /* Sidebar info text */
+    .sidebar-info {
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-size: 0.8rem !important;
+        padding: 10px;
+        margin-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        text-align: center;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -530,6 +1086,22 @@ selected_categories = st.sidebar.multiselect(
     label_visibility="collapsed"
 )
 
+# Search product
+st.sidebar.markdown('<p class="filter-label"><i class="fas fa-search"></i> Cari Produk</p>', unsafe_allow_html=True)
+product_search = st.sidebar.text_input(
+    "Search",
+    placeholder="Ketik nama produk...",
+    label_visibility="collapsed"
+)
+
+# Sidebar info
+st.sidebar.markdown('''
+<div class="sidebar-info">
+    <p><i class="fas fa-info-circle"></i> Gunakan filter untuk menyaring data</p>
+    <p>💡 Klik tombol ▶ untuk menutup sidebar</p>
+</div>
+''', unsafe_allow_html=True)
+
 # Apply filters
 filtered_df = df[
     (df['order_year'].isin(selected_years)) &
@@ -537,6 +1109,10 @@ filtered_df = df[
     (df['segment'].isin(selected_segments)) &
     (df['category'].isin(selected_categories))
 ]
+
+# Apply product search filter
+if product_search:
+    filtered_df = filtered_df[filtered_df['product_name'].str.contains(product_search, case=False, na=False)]
 
 # KPI Metrics Row
 st.markdown('<p class="section-header"><i class="fas fa-tachometer-alt"></i> Key Performance Indicators</p>', unsafe_allow_html=True)
@@ -595,8 +1171,8 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 ])
 
 # Warna untuk chart (Blue theme)
-blue_colors = ['#1e40af', '#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe']
-blue_scale = [[0, '#bfdbfe'], [0.5, '#3b82f6'], [1, '#1e40af']]
+blue_colors = ['#1e3a5f', '#2c5282', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe']
+gradient_scale = [[0, '#bfdbfe'], [0.5, '#3b82f6'], [1, '#1e3a5f']]
 
 # Tab 1: Overview
 with tab1:
@@ -611,20 +1187,22 @@ with tab1:
             values='sales', 
             names='category',
             color_discrete_sequence=blue_colors,
-            hole=0.4
+            hole=0.45
         )
         fig_category.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1e293b'),
+            paper_bgcolor='rgba(255,255,255,0.9)',
+            plot_bgcolor='rgba(255,255,255,0.9)',
+            font=dict(color='#1e3a5f', family='Poppins'),
             legend=dict(
                 orientation="h",
                 yanchor="bottom",
                 y=-0.2,
                 xanchor="center",
-                x=0.5
+                x=0.5,
+                font=dict(color='#1e3a5f')
             )
         )
+        fig_category.update_traces(textfont=dict(color='#ffffff'))
         st.plotly_chart(fig_category, use_container_width=True)
     
     with col2:
@@ -635,21 +1213,23 @@ with tab1:
             segment_sales, 
             values='sales', 
             names='segment',
-            color_discrete_sequence=['#0ea5e9', '#38bdf8', '#7dd3fc'],
-            hole=0.4
+            color_discrete_sequence=['#2c5282', '#3b82f6', '#93c5fd'],
+            hole=0.45
         )
         fig_segment.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1e293b'),
+            paper_bgcolor='rgba(255,255,255,0.9)',
+            plot_bgcolor='rgba(255,255,255,0.9)',
+            font=dict(color='#1e3a5f', family='Poppins'),
             legend=dict(
                 orientation="h",
                 yanchor="bottom",
                 y=-0.2,
                 xanchor="center",
-                x=0.5
+                x=0.5,
+                font=dict(color='#1e3a5f')
             )
         )
+        fig_segment.update_traces(textfont=dict(color='#ffffff'))
         st.plotly_chart(fig_segment, use_container_width=True)
     
     # Sales by Region Bar Chart
@@ -664,11 +1244,11 @@ with tab1:
         color_continuous_scale='Blues'
     )
     fig_region.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#1e293b'),
-        xaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)'),
-        yaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)'),
+        paper_bgcolor='rgba(255,255,255,0.9)',
+        plot_bgcolor='rgba(255,255,255,0.9)',
+        font=dict(color='#1e3a5f', family='Poppins'),
+        xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
+        yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
         showlegend=False,
         coloraxis_showscale=False,
         height=300
@@ -689,17 +1269,17 @@ with tab2:
         x='year_month',
         y='sales',
         markers=True,
-        color_discrete_sequence=['#1e40af']
+        color_discrete_sequence=['#3b82f6']
     )
     fig_trend.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#1e293b'),
-        xaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Bulan'),
-        yaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Total Sales'),
+        paper_bgcolor='rgba(255,255,255,0.9)',
+        plot_bgcolor='rgba(255,255,255,0.9)',
+        font=dict(color='#1e3a5f', family='Poppins'),
+        xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Bulan', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
+        yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
         height=400
     )
-    fig_trend.update_traces(line=dict(width=3), marker=dict(size=8))
+    fig_trend.update_traces(line=dict(width=4, color='#3b82f6'), marker=dict(size=10, color='#1e3a5f', line=dict(width=2, color='#ffffff')))
     st.plotly_chart(fig_trend, use_container_width=True)
     
     col1, col2 = st.columns(2)
@@ -719,12 +1299,13 @@ with tab2:
             color_discrete_sequence=blue_colors
         )
         fig_quarterly.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1e293b'),
-            xaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Quarter'),
-            yaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Total Sales'),
-            legend_title="Tahun"
+            paper_bgcolor='rgba(255,255,255,0.9)',
+            plot_bgcolor='rgba(255,255,255,0.9)',
+            font=dict(color='#1e3a5f', family='Poppins'),
+            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Quarter', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
+            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
+            legend_title="Tahun",
+            legend=dict(font=dict(color='#1e3a5f'))
         )
         st.plotly_chart(fig_quarterly, use_container_width=True)
     
@@ -742,15 +1323,15 @@ with tab2:
             text='sales'
         )
         fig_yearly.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1e293b'),
-            xaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Tahun'),
-            yaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Total Sales'),
+            paper_bgcolor='rgba(255,255,255,0.9)',
+            plot_bgcolor='rgba(255,255,255,0.9)',
+            font=dict(color='#1e3a5f', family='Poppins'),
+            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Tahun', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
+            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
             showlegend=False,
             coloraxis_showscale=False
         )
-        fig_yearly.update_traces(texttemplate='$%{text:,.0f}', textposition='outside')
+        fig_yearly.update_traces(texttemplate='$%{text:,.0f}', textposition='outside', textfont=dict(color='#1e3a5f'))
         st.plotly_chart(fig_yearly, use_container_width=True)
     
     # Day of Week Analysis
@@ -768,11 +1349,11 @@ with tab2:
         color_continuous_scale='Blues'
     )
     fig_day.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#1e293b'),
-        xaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Hari'),
-        yaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Total Sales'),
+        paper_bgcolor='rgba(255,255,255,0.9)',
+        plot_bgcolor='rgba(255,255,255,0.9)',
+        font=dict(color='#1e3a5f', family='Poppins'),
+        xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Hari', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
+        yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
         coloraxis_showscale=False,
         height=350
     )
@@ -796,11 +1377,11 @@ with tab3:
             color_continuous_scale='Blues'
         )
         fig_states.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1e293b'),
-            xaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Total Sales'),
-            yaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='State', categoryorder='total ascending'),
+            paper_bgcolor='rgba(255,255,255,0.9)',
+            plot_bgcolor='rgba(255,255,255,0.9)',
+            font=dict(color='#1e3a5f', family='Poppins'),
+            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
+            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='State', categoryorder='total ascending', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
             coloraxis_showscale=False,
             height=500
         )
@@ -834,17 +1415,48 @@ with tab3:
     city_sales['city_state'] = city_sales['city'] + ', ' + city_sales['state']
     city_sales = city_sales.sort_values('sales', ascending=False).head(10)
     
-    fig_cities = px.treemap(
+    fig_cities = px.bar(
         city_sales,
-        path=['city_state'],
-        values='sales',
+        x='sales',
+        y='city_state',
+        orientation='h',
         color='sales',
-        color_continuous_scale='Blues'
+        color_continuous_scale='Blues',
+        text=city_sales['sales'].apply(lambda x: f'${x:,.0f}')
     )
     fig_cities.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#1e293b'),
-        height=400
+        paper_bgcolor='#ffffff',
+        plot_bgcolor='#ffffff',
+        font=dict(color='#1e3a5f', family='Poppins'),
+        xaxis=dict(
+            gridcolor='rgba(59, 130, 246, 0.15)',
+            title='Total Sales',
+            title_font=dict(color='#1e3a5f'),
+            tickfont=dict(color='#4a6fa5')
+        ),
+        yaxis=dict(
+            gridcolor='rgba(59, 130, 246, 0.15)',
+            title='',
+            categoryorder='total ascending',
+            title_font=dict(color='#1e3a5f'),
+            tickfont=dict(color='#1e3a5f', size=11)
+        ),
+        coloraxis_showscale=False,
+        height=400,
+        margin=dict(l=10, r=10, t=10, b=10),
+        hoverlabel=dict(
+            bgcolor='#1e3a5f',
+            font_size=13,
+            font_family='Poppins',
+            font_color='white',
+            bordercolor='#3b82f6'
+        )
+    )
+    fig_cities.update_traces(
+        textposition='inside',
+        textfont=dict(color='white', size=11, family='Poppins'),
+        hovertemplate='<b>%{y}</b><br>Sales: $%{x:,.2f}<extra></extra>',
+        marker=dict(line=dict(color='#1e3a5f', width=1))
     )
     st.plotly_chart(fig_cities, use_container_width=True)
 
@@ -867,11 +1479,11 @@ with tab4:
             color_continuous_scale='Blues'
         )
         fig_subcat.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1e293b'),
-            xaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Total Sales'),
-            yaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Sub-Category', categoryorder='total ascending'),
+            paper_bgcolor='rgba(255,255,255,0.9)',
+            plot_bgcolor='rgba(255,255,255,0.9)',
+            font=dict(color='#1e3a5f', family='Poppins'),
+            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
+            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Sub-Category', categoryorder='total ascending', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
             coloraxis_showscale=False,
             height=400
         )
@@ -890,9 +1502,22 @@ with tab4:
             color_continuous_scale='Blues'
         )
         fig_sunburst.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1e293b'),
-            height=400
+            paper_bgcolor='#ffffff',
+            font=dict(color='#1e3a5f', family='Poppins'),
+            height=400,
+            margin=dict(t=10, b=10, l=10, r=10),
+            coloraxis_showscale=False,
+            hoverlabel=dict(
+                bgcolor='#1e3a5f',
+                font_size=13,
+                font_family='Poppins',
+                font_color='white'
+            )
+        )
+        fig_sunburst.update_traces(
+            textfont=dict(color='#ffffff', size=12, family='Poppins'),
+            hovertemplate='<b>%{label}</b><br>Sales: $%{value:,.2f}<extra></extra>',
+            insidetextorientation='radial'
         )
         st.plotly_chart(fig_sunburst, use_container_width=True)
     
@@ -903,12 +1528,18 @@ with tab4:
     top_products['sales'] = top_products['sales'].apply(lambda x: f"${x:,.2f}")
     top_products.columns = ['Product Name', 'Category', 'Sub-Category', 'Total Sales']
     
-    st.dataframe(
-        top_products,
-        use_container_width=True,
-        hide_index=True,
-        height=400
-    )
+    # Custom HTML table
+    table_html = '<div class="custom-table-container"><div class="table-scroll-wrapper"><table class="custom-table"><thead><tr>'
+    for col in top_products.columns:
+        table_html += f'<th>{col}</th>'
+    table_html += '</tr></thead><tbody>'
+    for _, row in top_products.iterrows():
+        table_html += '<tr>'
+        for val in row:
+            table_html += f'<td>{val}</td>'
+        table_html += '</tr>'
+    table_html += '</tbody></table></div></div>'
+    st.markdown(table_html, unsafe_allow_html=True)
 
 # Tab 5: Customer Analysis
 with tab5:
@@ -929,12 +1560,13 @@ with tab5:
             color_discrete_sequence=blue_colors
         )
         fig_customers.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1e293b'),
-            xaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Total Sales'),
-            yaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Customer', categoryorder='total ascending'),
+            paper_bgcolor='rgba(255,255,255,0.9)',
+            plot_bgcolor='rgba(255,255,255,0.9)',
+            font=dict(color='#1e3a5f', family='Poppins'),
+            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
+            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Customer', categoryorder='total ascending', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
             legend_title="Segment",
+            legend=dict(font=dict(color='#1e3a5f')),
             height=400
         )
         st.plotly_chart(fig_customers, use_container_width=True)
@@ -954,15 +1586,16 @@ with tab5:
             x='Segment',
             y=['Customers', 'Orders'],
             barmode='group',
-            color_discrete_sequence=['#1e40af', '#3b82f6']
+            color_discrete_sequence=['#1e3a5f', '#3b82f6']
         )
         fig_seg_dist.update_layout(
-            paper_bgcolor='rgba(0,0,0,0)',
-            plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(color='#1e293b'),
-            xaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)'),
-            yaxis=dict(gridcolor='rgba(30, 64, 175, 0.1)', title='Count'),
+            paper_bgcolor='rgba(255,255,255,0.9)',
+            plot_bgcolor='rgba(255,255,255,0.9)',
+            font=dict(color='#1e3a5f', family='Poppins'),
+            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
+            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Count', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
             legend_title="Metric",
+            legend=dict(font=dict(color='#1e3a5f')),
             height=400
         )
         st.plotly_chart(fig_seg_dist, use_container_width=True)
@@ -984,11 +1617,18 @@ with tab5:
     segment_analysis['Avg Sale'] = segment_analysis['Avg Sale'].apply(lambda x: f"${x:,.2f}")
     segment_analysis['Sales per Customer'] = segment_analysis['Sales per Customer'].apply(lambda x: f"${x:,.2f}")
     
-    st.dataframe(
-        segment_analysis,
-        use_container_width=True,
-        hide_index=True
-    )
+    # Custom HTML table
+    table_html2 = '<div class="custom-table-container"><div class="table-scroll-wrapper"><table class="custom-table"><thead><tr>'
+    for col in segment_analysis.columns:
+        table_html2 += f'<th>{col}</th>'
+    table_html2 += '</tr></thead><tbody>'
+    for _, row in segment_analysis.iterrows():
+        table_html2 += '<tr>'
+        for val in row:
+            table_html2 += f'<td>{val}</td>'
+        table_html2 += '</tr>'
+    table_html2 += '</tbody></table></div></div>'
+    st.markdown(table_html2, unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
