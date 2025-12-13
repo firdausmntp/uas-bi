@@ -61,6 +61,15 @@ st.markdown("""
         .region-card {
             padding: 15px;
         }
+        div[data-testid="stHorizontalBlock"] {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+        }
+        div[data-testid="column"] {
+            width: 100% !important;
+            min-width: 100% !important;
+        }
     }
     
     @media screen and (max-width: 768px) {
@@ -106,213 +115,103 @@ st.markdown("""
         .region-card p {
             font-size: 0.8rem !important;
         }
-        .stTabs [data-baseweb="tab-list"] {
-            flex-wrap: wrap;
-            gap: 6px;
+        .live-stats-row {
+            flex-direction: column;
+            align-items: stretch;
         }
-        .stTabs [data-baseweb="tab"] {
-            flex: 1 1 45%;
-            text-align: center;
+        .live-stats-row .live-pill {
+            width: 100%;
+            justify-content: center;
         }
-    }
-
-    @media screen and (max-width: 576px) {
-        .block-container {
-            padding: 0.75rem 0.35rem;
+        .insight-grid {
+            grid-template-columns: 1fr;
         }
-        .dashboard-header h1 {
-            font-size: 1rem !important;
+        .insight-card {
+            width: 100%;
         }
-        [data-testid="stMetricValue"] {
-            font-size: 1rem !important;
-        }
-        [data-testid="stMetricLabel"] {
-            font-size: 0.7rem !important;
-        }
-        .stTabs [data-baseweb="tab-list"] {
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .stTabs [data-baseweb="tab"] {
-            padding: 6px 10px;
-            font-size: 0.75rem;
-            flex: 1 1 100%;
-            text-align: center;
+        div[data-testid="stHorizontalBlock"] {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 0 !important;
         }
         div[data-testid="column"] {
+            width: 100% !important;
             min-width: 100% !important;
-        }
-        .table-scroll-wrapper {
-            max-width: 100%;
         }
     }
-
-    /* === MOBILE SPECIFIC FIXES === */
-    @media screen and (max-width: 768px) {
-        /* Fix sidebar on mobile */
-        section[data-testid="stSidebar"] {
-            width: 280px !important;
-            max-width: 85vw !important;
+    
+    @media screen and (max-width: 576px) {
+        .block-container {
+            padding: 0.75rem 0.4rem;
+            margin-top: 10px;
         }
-        
-        section[data-testid="stSidebar"][aria-expanded="false"] {
-            transform: translateX(-100%) !important;
-            width: 0 !important;
-            min-width: 0 !important;
-            visibility: hidden !important;
-        }
-        
-        /* Fix main content on mobile */
-        .main .block-container {
-            padding-left: 0.5rem !important;
-            padding-right: 0.5rem !important;
-            max-width: 100vw !important;
-            overflow-x: hidden !important;
-        }
-        
-        /* Fix horizontal overflow */
-        [data-testid="stAppViewContainer"],
-        [data-testid="stAppViewBlockContainer"],
-        .element-container,
-        .stMarkdown {
-            max-width: 100% !important;
-            overflow-x: hidden !important;
-        }
-        
-        /* Charts responsive */
-        .js-plotly-plot,
-        .plotly {
-            max-width: 100% !important;
-            overflow-x: auto !important;
-        }
-        
-        /* Table responsive */
-        .custom-table-container {
-            overflow-x: auto !important;
-            -webkit-overflow-scrolling: touch !important;
-        }
-        
-        /* Cards stack vertically */
-        [data-testid="stHorizontalBlock"] {
-            flex-wrap: wrap !important;
-        }
-        
-        [data-testid="stHorizontalBlock"] > [data-testid="column"] {
-            flex: 1 1 100% !important;
-            min-width: 100% !important;
-        }
-        
-        /* Fix dashboard header padding */
         .dashboard-header {
-            padding: 15px !important;
-            margin: 0 0.25rem 20px 0.25rem !important;
+            padding: 12px 16px;
+            text-align: center;
         }
-        
-        /* Metric cards padding */
-        [data-testid="stMetric"] {
-            padding: 10px 12px !important;
+        .dashboard-header::before {
+            display: none;
         }
-        
-        /* Hide live indicator text on very small screens */
-        .live-indicator span:not(.pulse-dot) {
-            font-size: 0.7rem !important;
-        }
-        
-        /* Quick insights cards */
-        .insight-card {
-            padding: 12px !important;
-        }
-        
-        /* Export buttons stack */
-        .main .stDownloadButton {
-            width: 100% !important;
-        }
-        
-        .main .stDownloadButton button {
-            width: 100% !important;
-            margin-bottom: 8px !important;
-        }
-    }
-
-    @media screen and (max-width: 480px) {
-        /* Extra small mobile screens */
         .dashboard-header h1 {
-            font-size: 0.9rem !important;
-            gap: 8px !important;
+            font-size: 1rem !important;
+            justify-content: center;
         }
-        
         .dashboard-header p {
-            font-size: 0.75rem !important;
-        }
-        
-        [data-testid="stMetricValue"] {
-            font-size: 0.9rem !important;
-        }
-        
-        [data-testid="stMetricLabel"] {
-            font-size: 0.65rem !important;
-        }
-        
-        .section-header {
-            font-size: 0.9rem !important;
-            padding-bottom: 8px !important;
-        }
-        
-        .sub-header {
-            font-size: 0.8rem !important;
-            padding: 8px 10px !important;
-        }
-        
-        .region-card {
-            padding: 10px !important;
-        }
-        
-        .region-card h4 {
             font-size: 0.85rem !important;
         }
-        
-        .region-card p {
-            font-size: 0.75rem !important;
+        [data-testid="stMetricValue"] {
+            font-size: 1rem !important;
         }
-        
-        /* Footer */
-        .footer {
-            padding: 15px 10px !important;
+        [data-testid="stMetricLabel"] {
+            font-size: 0.7rem !important;
         }
-        
-        .footer p {
-            font-size: 0.75rem !important;
+        [data-testid="stMetric"] {
+            width: 100% !important;
+            margin-bottom: 10px;
         }
-        
-        /* Custom table smaller text */
-        .custom-table thead th {
-            padding: 10px 8px !important;
-            font-size: 0.75rem !important;
+        .section-header {
+            font-size: 0.95rem !important;
         }
-        
+        .sub-header {
+            font-size: 0.85rem !important;
+        }
+        .live-stats-row {
+            gap: 10px;
+        }
+        .stTabs [data-baseweb="tab-list"] {
+            flex-wrap: nowrap;
+            gap: 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .stTabs [data-baseweb="tab-list"]::-webkit-scrollbar {
+            display: none;
+        }
+        .stTabs [data-baseweb="tab"] {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            flex: 0 0 auto;
+        }
+        .insight-grid {
+            grid-template-columns: 1fr;
+        }
+        .insight-card {
+            text-align: center;
+            min-height: auto;
+        }
+        .insight-label {
+            justify-content: center;
+        }
+        .insight-value {
+            font-size: 1.1rem;
+        }
+        .custom-table thead th,
         .custom-table tbody td {
-            padding: 8px !important;
-            font-size: 0.75rem !important;
+            font-size: 0.75rem;
         }
     }
-
-    /* === PREVENT HORIZONTAL SCROLL GLOBALLY === */
-    html, body {
-        overflow-x: hidden !important;
-        max-width: 100vw !important;
-        position: relative !important;
-    }
     
-    [data-testid="stAppViewContainer"] {
-        overflow-x: hidden !important;
-        max-width: 100% !important;
-    }
-    
-    .main {
-        overflow-x: hidden !important;
-        max-width: 100% !important;
-    }
-
+    /* Font Awesome Icons Fix */
     .fa, .fas, .far, .fab, .fal, .fad, [class*="fa-"] {
         font-family: 'Font Awesome 6 Free' !important;
         font-style: normal !important;
@@ -353,16 +252,60 @@ st.markdown("""
     /* Main container styling - White & Blue Theme */
     .main, .stApp {
         background: linear-gradient(135deg, #f0f4f8 0%, #e8f4fc 50%, #f5f9ff 100%) !important;
+        overflow-x: hidden !important;
     }
 
-    /* Kill unwanted horizontal scroll */
-    html, body, [data-testid="stAppViewContainer"], .main {
+    body {
         overflow-x: hidden !important;
     }
     
     .block-container {
         padding-top: 4rem;
         margin-top: 20px;
+    }
+
+    .live-stats-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .live-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 20px;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #e0e8f0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        color: #4a6fa5;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .live-pill strong {
+        color: #1e3a5f;
+    }
+
+    .live-pill--badge {
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        border: none;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        color: #ffffff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .live-dot {
+        width: 10px;
+        height: 10px;
+        background: #ffffff;
+        border-radius: 50%;
+        animation: pulse 1.5s infinite;
     }
     
     /* === METRIC CARDS === */
@@ -408,67 +351,17 @@ st.markdown("""
         width: 320px !important;
         box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        overflow: hidden !important;
-        position: fixed !important;
-        left: 0 !important;
-        top: 0 !important;
-        height: 100vh !important;
-        z-index: 999 !important;
     }
     
-    /* Sidebar expanded state */
-    section[data-testid="stSidebar"][aria-expanded="true"] {
-        transform: translateX(0) !important;
-        width: 320px !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-    
-    /* Sidebar collapsed state - COMPLETE FIX for scroll visible when closed */
+    /* Sidebar collapsed state */
     section[data-testid="stSidebar"][aria-expanded="false"] {
-        transform: translateX(-320px) !important;
+        transform: translateX(-100%) !important;
         width: 0 !important;
         min-width: 0 !important;
-        max-width: 0 !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        box-shadow: none !important;
-    }
-    
-    section[data-testid="stSidebar"][aria-expanded="false"] * {
-        visibility: hidden !important;
-        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
         opacity: 0 !important;
         pointer-events: none !important;
-    }
-    
-    /* Sidebar content wrapper */
-    [data-testid="stSidebarContent"] {
-        overflow-x: hidden !important;
-        overflow-y: auto !important;
-        max-height: 100vh !important;
-        scrollbar-width: thin !important;
-    }
-    
-    /* Hide sidebar scrollbar when collapsed */
-    section[data-testid="stSidebar"][aria-expanded="false"]::-webkit-scrollbar,
-    section[data-testid="stSidebar"][aria-expanded="false"] *::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-    }
-    
-    /* Hide sidebar user content when collapsed */
-    section[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarContent"],
-    section[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarUserContent"],
-    section[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarHeader"] {
-        display: none !important;
-        visibility: hidden !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-        opacity: 0 !important;
     }
     
     section[data-testid="stSidebar"] > div {
@@ -1054,6 +947,17 @@ st.markdown("""
     }
     
     /* === ANIMATION KEYFRAMES === */
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.5;
+            transform: scale(1.2);
+        }
+    }
+
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -1446,220 +1350,108 @@ st.markdown("""
         opacity: 0.9 !important;
     }
     
-    /* Insight cards hover effect */
+    /* Insight cards */
+    .insight-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        width: 100%;
+    }
+
     .insight-card {
-        transition: all 0.3s ease !important;
+        border-radius: 16px;
+        padding: 20px;
+        border-left: 4px solid transparent;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-height: 130px;
+        width: 100%;
+        box-sizing: border-box;
     }
-    
+
     .insight-card:hover {
-        transform: translateY(-5px) !important;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }
-    
-    /* === ADDITIONAL SIDEBAR COLLAPSED FIX === */
-    /* Hide sidebar completely when collapsed - Ultimate Fix */
-    section[data-testid="stSidebar"]:not([aria-expanded="true"]) {
-        transform: translateX(-350px) !important;
-        width: 0 !important;
-        min-width: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        overflow: hidden !important;
-        pointer-events: none !important;
-        box-shadow: none !important;
-        border: none !important;
-        display: block !important;
+
+    .insight-label {
+        color: #64748b;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
-    
-    section[data-testid="stSidebar"]:not([aria-expanded="true"]) > * {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        overflow: hidden !important;
+
+    .insight-value {
+        color: #1e3a5f;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin: 0;
     }
-    
-    /* Ensure no scrollbar leaks when sidebar is closed */
-    section[data-testid="stSidebar"]:not([aria-expanded="true"])::-webkit-scrollbar,
-    section[data-testid="stSidebar"]:not([aria-expanded="true"]) *::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-        background: transparent !important;
+
+    .insight-sub {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin: 0;
     }
-    
-    section[data-testid="stSidebar"]:not([aria-expanded="true"]) {
-        scrollbar-width: none !important;
-        -ms-overflow-style: none !important;
+
+    .insight-card--category {
+        border-left-color: #3b82f6;
+        background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
     }
-    
-    /* === ENHANCED MOBILE RESPONSIVE === */
-    @media screen and (max-width: 768px) {
-        /* Fix main content area on mobile */
-        [data-testid="stAppViewContainer"] > .main {
-            margin-left: 0 !important;
-            width: 100% !important;
-        }
-        
-        /* Better sidebar behavior on mobile */
-        section[data-testid="stSidebar"][aria-expanded="true"] {
-            width: 280px !important;
-            max-width: 90vw !important;
-            z-index: 9999 !important;
-            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.3) !important;
-        }
-        
-        /* Overlay when sidebar is open on mobile */
-        section[data-testid="stSidebar"][aria-expanded="true"]::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 280px;
-            width: calc(100vw - 280px);
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 998;
-        }
-        
-        /* Fix metric cards on mobile */
-        [data-testid="stHorizontalBlock"] {
-            gap: 10px !important;
-        }
-        
-        [data-testid="column"] {
-            padding: 0 4px !important;
-        }
-        
-        /* Fix charts container */
-        .stPlotlyChart {
-            width: 100% !important;
-            max-width: 100% !important;
-        }
-        
-        /* Tabs responsive fix */
-        .stTabs [data-baseweb="tab-list"] {
-            overflow-x: auto !important;
-            -webkit-overflow-scrolling: touch !important;
-            scrollbar-width: none !important;
-        }
-        
-        .stTabs [data-baseweb="tab-list"]::-webkit-scrollbar {
-            display: none !important;
-        }
-        
-        /* Region cards grid on mobile */
-        .region-cards-container {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            gap: 10px !important;
-        }
-        
-        /* Footer mobile */
-        .footer {
-            padding: 12px 8px !important;
-        }
-        
-        /* Live stats row - wrap better */
-        [style*="display: flex"][style*="gap: 15px"] {
-            flex-wrap: wrap !important;
-            gap: 8px !important;
-        }
-        
-        [style*="display: flex"][style*="gap: 15px"] > div {
-            flex: 1 1 auto !important;
-            min-width: fit-content !important;
-        }
+
+    .insight-card--category .insight-label i {
+        color: #f59e0b;
     }
-    
-    @media screen and (max-width: 576px) {
-        /* Very narrow screens - stack everything */
-        [data-testid="column"] {
-            min-width: 100% !important;
-            flex: 1 1 100% !important;
-        }
-        
-        /* Smaller padding everywhere */
-        .block-container {
-            padding-left: 0.25rem !important;
-            padding-right: 0.25rem !important;
-        }
-        
-        /* Sidebar full width on very small screens */
-        section[data-testid="stSidebar"][aria-expanded="true"] {
-            width: 100vw !important;
-            max-width: 100vw !important;
-        }
-        
-        section[data-testid="stSidebar"][aria-expanded="true"]::after {
-            display: none !important;
-        }
-        
-        /* Tab buttons full width */
-        .stTabs [data-baseweb="tab"] {
-            flex: 1 1 100% !important;
-        }
-        
-        /* Hide some text on mobile to save space */
-        .live-indicator-text {
-            display: none !important;
-        }
+
+    .insight-card--category .insight-sub {
+        color: #3b82f6;
     }
-    
-    @media screen and (max-width: 400px) {
-        /* Extra small phones */
-        .dashboard-header h1 {
-            font-size: 0.85rem !important;
-        }
-        
-        .dashboard-header h1 i {
-            font-size: 0.9rem !important;
-        }
-        
-        [data-testid="stMetric"] {
-            padding: 10px !important;
-        }
-        
-        [data-testid="stMetricValue"] {
-            font-size: 0.85rem !important;
-        }
-        
-        [data-testid="stMetricLabel"] {
-            font-size: 0.6rem !important;
-        }
-        
-        /* Section headers smaller */
-        .section-header {
-            font-size: 0.85rem !important;
-        }
-        
-        .sub-header {
-            font-size: 0.75rem !important;
-        }
+
+    .insight-card--region {
+        border-left-color: #10b981;
+        background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
     }
-    
-    /* === FIX MAIN CONTENT MARGIN WHEN SIDEBAR CLOSED === */
-    section[data-testid="stSidebar"]:not([aria-expanded="true"]) ~ [data-testid="stAppViewContainer"],
-    section[data-testid="stSidebar"][aria-expanded="false"] ~ [data-testid="stAppViewContainer"] {
-        margin-left: 0 !important;
-        width: 100% !important;
+
+    .insight-card--region .insight-label i {
+        color: #10b981;
     }
-    
-    /* Touch-friendly interactions for mobile */
-    @media (hover: none) and (pointer: coarse) {
-        /* Larger touch targets */
-        .stButton button,
-        .stDownloadButton button,
-        [data-baseweb="select"] {
-            min-height: 48px !important;
-        }
-        
-        /* Remove hover effects that don't work on touch */
-        [data-testid="stMetric"]:hover,
-        .region-card:hover,
-        .insight-card:hover {
-            transform: none !important;
-        }
+
+    .insight-card--region .insight-sub {
+        color: #10b981;
+    }
+
+    .insight-card--segment {
+        border-left-color: #ef4444;
+        background: linear-gradient(135deg, #ffffff 0%, #fef3f2 100%);
+    }
+
+    .insight-card--segment .insight-label i {
+        color: #ef4444;
+    }
+
+    .insight-card--segment .insight-sub {
+        color: #ef4444;
+    }
+
+    .insight-card--month {
+        border-left-color: #f59e0b;
+        background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%);
+    }
+
+    .insight-card--month .insight-label i {
+        color: #f59e0b;
+    }
+
+    .insight-card--month .insight-sub {
+        color: #f59e0b;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -1857,24 +1649,18 @@ st.markdown('<p class="section-header"><i class="fas fa-tachometer-alt"></i> Key
 
 # Quick Stats Row dengan Live Indicator
 st.markdown(f'''
-<div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
-    <div style="display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #10b981 0%, #34d399 100%); padding: 8px 16px; border-radius: 20px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
-        <span style="width: 10px; height: 10px; background: #ffffff; border-radius: 50%; animation: pulse 1.5s infinite;"></span>
-        <span style="color: white; font-weight: 600; font-size: 0.85rem;">Live Data</span>
+<div class="live-stats-row">
+    <div class="live-pill live-pill--badge">
+        <span class="live-dot"></span>
+        <span>Live Data</span>
     </div>
-    <div style="background: rgba(255, 255, 255, 0.9); padding: 8px 16px; border-radius: 20px; border: 1px solid #e0e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-        <span style="color: #4a6fa5; font-size: 0.85rem;"><i class="fas fa-filter"></i> Showing <strong style="color: #1e3a5f;">{len(filtered_df):,}</strong> of <strong style="color: #3b82f6;">{len(df):,}</strong> records</span>
+    <div class="live-pill">
+        <span><i class="fas fa-filter"></i> Showing <strong>{len(filtered_df):,}</strong> of <strong style="color: #3b82f6;">{len(df):,}</strong> records</span>
     </div>
-    <div style="background: rgba(255, 255, 255, 0.9); padding: 8px 16px; border-radius: 20px; border: 1px solid #e0e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-        <span style="color: #4a6fa5; font-size: 0.85rem;"><i class="fas fa-calendar-check"></i> Last Updated: <strong style="color: #1e3a5f;">Real-time</strong></span>
+    <div class="live-pill">
+        <span><i class="fas fa-calendar-check"></i> Last Updated: <strong>Real-time</strong></span>
     </div>
 </div>
-<style>
-@keyframes pulse {{
-    0%, 100% {{ opacity: 1; transform: scale(1); }}
-    50% {{ opacity: 0.5; transform: scale(1.2); }}
-}}
-</style>
 ''', unsafe_allow_html=True)
 
 col1, col2, col3, col4, col5 = st.columns(5)
@@ -1932,43 +1718,31 @@ top_region_sales = filtered_df.groupby('region')['sales'].sum().max() if len(fil
 top_segment = filtered_df.groupby('segment')['sales'].sum().idxmax() if len(filtered_df) > 0 else "N/A"
 best_month = filtered_df.groupby('order_month_name')['sales'].sum().idxmax() if len(filtered_df) > 0 else "N/A"
 
-insight_col1, insight_col2, insight_col3, insight_col4 = st.columns(4)
-
-with insight_col1:
-    st.markdown(f'''
-    <div class="insight-card" style="background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #3b82f6; box-shadow: 0 4px 15px rgba(0,0,0,0.08); height: 130px;">
-        <p style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;"><i class="fas fa-trophy" style="color: #f59e0b;"></i> Top Category</p>
-        <h3 style="color: #1e3a5f; font-size: 1.3rem; margin-bottom: 5px; font-weight: 700;">{top_category}</h3>
-        <p style="color: #3b82f6; font-size: 0.9rem; font-weight: 600;">${top_category_sales:,.0f}</p>
+insights_html = f'''
+<div class="insight-grid">
+    <div class="insight-card insight-card--category">
+        <p class="insight-label"><i class="fas fa-trophy"></i> Top Category</p>
+        <h3 class="insight-value">{top_category}</h3>
+        <p class="insight-sub">${top_category_sales:,.0f}</p>
     </div>
-    ''', unsafe_allow_html=True)
-
-with insight_col2:
-    st.markdown(f'''
-    <div class="insight-card" style="background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #10b981; box-shadow: 0 4px 15px rgba(0,0,0,0.08); height: 130px;">
-        <p style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;"><i class="fas fa-map-marker-alt" style="color: #10b981;"></i> Top Region</p>
-        <h3 style="color: #1e3a5f; font-size: 1.3rem; margin-bottom: 5px; font-weight: 700;">{top_region}</h3>
-        <p style="color: #10b981; font-size: 0.9rem; font-weight: 600;">${top_region_sales:,.0f}</p>
+    <div class="insight-card insight-card--region">
+        <p class="insight-label"><i class="fas fa-map-marker-alt"></i> Top Region</p>
+        <h3 class="insight-value">{top_region}</h3>
+        <p class="insight-sub">${top_region_sales:,.0f}</p>
     </div>
-    ''', unsafe_allow_html=True)
-
-with insight_col3:
-    st.markdown(f'''
-    <div class="insight-card" style="background: linear-gradient(135deg, #ffffff 0%, #fef3f2 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #ef4444; box-shadow: 0 4px 15px rgba(0,0,0,0.08); height: 130px;">
-        <p style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;"><i class="fas fa-users" style="color: #ef4444;"></i> Top Segment</p>
-        <h3 style="color: #1e3a5f; font-size: 1.3rem; margin-bottom: 5px; font-weight: 700;">{top_segment}</h3>
-        <p style="color: #ef4444; font-size: 0.9rem; font-weight: 600;">Best Performer</p>
+    <div class="insight-card insight-card--segment">
+        <p class="insight-label"><i class="fas fa-users"></i> Top Segment</p>
+        <h3 class="insight-value">{top_segment}</h3>
+        <p class="insight-sub">Best Performer</p>
     </div>
-    ''', unsafe_allow_html=True)
-
-with insight_col4:
-    st.markdown(f'''
-    <div class="insight-card" style="background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #f59e0b; box-shadow: 0 4px 15px rgba(0,0,0,0.08); height: 130px;">
-        <p style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;"><i class="fas fa-calendar-star" style="color: #f59e0b;"></i> Peak Month</p>
-        <h3 style="color: #1e3a5f; font-size: 1.3rem; margin-bottom: 5px; font-weight: 700;">{best_month}</h3>
-        <p style="color: #f59e0b; font-size: 0.9rem; font-weight: 600;">Highest Sales</p>
+    <div class="insight-card insight-card--month">
+        <p class="insight-label"><i class="fas fa-calendar-star"></i> Peak Month</p>
+        <h3 class="insight-value">{best_month}</h3>
+        <p class="insight-sub">Highest Sales</p>
     </div>
-    ''', unsafe_allow_html=True)
+</div>
+'''
+st.markdown(insights_html, unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -1984,6 +1758,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 # Warna untuk chart (Blue theme)
 blue_colors = ['#1e3a5f', '#2c5282', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe']
 gradient_scale = [[0, '#bfdbfe'], [0.5, '#3b82f6'], [1, '#1e3a5f']]
+
 # Tab 1: Overview
 with tab1:
     col1, col2 = st.columns(2)
