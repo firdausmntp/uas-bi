@@ -172,7 +172,8 @@ st.markdown("""
     }
     
     .block-container {
-        padding-top: 2rem;
+        padding-top: 4rem;
+        margin-top: 20px;
     }
     
     /* === METRIC CARDS === */
@@ -214,17 +215,101 @@ st.markdown("""
     
     /* === SIDEBAR STYLING === */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #1e3a5f 0%, #2c5282 50%, #3b6ca8 100%) !important;
-        width: 300px !important;
+        background: linear-gradient(180deg, #0f172a 0%, #1e3a5f 40%, #2c5282 100%) !important;
+        width: 320px !important;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    /* Sidebar collapsed state */
+    section[data-testid="stSidebar"][aria-expanded="false"] {
+        transform: translateX(-100%) !important;
     }
     
     section[data-testid="stSidebar"] > div {
         background: transparent !important;
+        padding: 1rem !important;
     }
     
     section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
         color: #ffffff !important;
         font-weight: 500;
+    }
+    
+    /* === APP HEADER STYLING === */
+    header[data-testid="stHeader"] {
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%) !important;
+        backdrop-filter: blur(10px) !important;
+        border-bottom: 1px solid rgba(59, 130, 246, 0.3) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Toolbar buttons - HIGHLY VISIBLE */
+    [data-testid="stToolbar"] button,
+    [data-testid="stToolbarActions"] button,
+    header[data-testid="stHeader"] button {
+        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
+        border: 2px solid #60a5fa !important;
+        border-radius: 10px !important;
+        color: #ffffff !important;
+        transition: all 0.3s ease !important;
+        padding: 8px 12px !important;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
+    }
+    
+    [data-testid="stToolbar"] button:hover,
+    [data-testid="stToolbarActions"] button:hover,
+    header[data-testid="stHeader"] button:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+        border-color: #93c5fd !important;
+        transform: scale(1.1) translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5) !important;
+    }
+    
+    /* Main menu button */
+    [data-testid="stMainMenu"] button {
+        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
+        border: 2px solid #60a5fa !important;
+        border-radius: 10px !important;
+        padding: 8px !important;
+    }
+    
+    [data-testid="stMainMenu"] svg {
+        fill: #ffffff !important;
+    }
+    
+    /* Share button and other toolbar text */
+    [data-testid="stToolbarActionButtonLabel"] {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+    
+    /* All header icons/svgs */
+    header[data-testid="stHeader"] svg {
+        fill: #ffffff !important;
+        color: #ffffff !important;
+    }
+    
+    /* Expand sidebar button styling */
+    [data-testid="stExpandSidebarButton"],
+    button[data-testid="stExpandSidebarButton"] {
+        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 10px !important;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    [data-testid="stExpandSidebarButton"]:hover {
+        transform: scale(1.1) !important;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5) !important;
+    }
+    
+    [data-testid="stExpandSidebarButton"] span,
+    [data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"] {
+        color: #ffffff !important;
+        font-size: 20px !important;
     }
     
     section[data-testid="stSidebar"] .stSelectbox label,
@@ -994,6 +1079,137 @@ st.markdown("""
         border-top: 1px solid rgba(255, 255, 255, 0.2);
         text-align: center;
     }
+    
+    /* Sidebar section divider */
+    .sidebar-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        margin: 20px 0;
+    }
+    
+    /* Sidebar filter section */
+    .filter-section {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .filter-section-title {
+        color: #60a5fa !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px !important;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .filter-section-title i {
+        font-size: 0.7rem;
+    }
+    
+    /* Sidebar info box styling */
+    .sidebar-info {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(96, 165, 250, 0.1) 100%) !important;
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 0.8rem !important;
+        padding: 15px !important;
+        margin-top: 20px !important;
+        border-radius: 12px !important;
+        border: 1px solid rgba(96, 165, 250, 0.3) !important;
+        text-align: left !important;
+    }
+    
+    .sidebar-info p {
+        margin: 8px 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+    
+    .sidebar-info strong {
+        color: #60a5fa !important;
+    }
+    
+    /* Sidebar reset button */
+    section[data-testid="stSidebar"] .stButton button {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 12px 20px !important;
+        font-weight: 600 !important;
+        font-size: 0.85rem !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3) !important;
+        margin-top: 10px !important;
+    }
+    
+    section[data-testid="stSidebar"] .stButton button:hover {
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4) !important;
+    }
+    
+    section[data-testid="stSidebar"] .stButton button:active {
+        transform: translateY(0) !important;
+    }
+    
+    /* Download button styling - Main content (Blue theme) */
+    .main .stDownloadButton button {
+        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
+        color: #ffffff !important;
+        border: 2px solid #60a5fa !important;
+        border-radius: 12px !important;
+        padding: 14px 22px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.2px !important;
+        font-size: 0.92rem !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease !important;
+        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.35) !important;
+    }
+    
+    .main .stDownloadButton button:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
+        border-color: #93c5fd !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 10px 28px rgba(59, 130, 246, 0.45) !important;
+    }
+    
+    .main .stDownloadButton button:active {
+        transform: translateY(0) scale(0.98) !important;
+        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.35) !important;
+    }
+    
+    .main .stDownloadButton button:focus {
+        outline: none !important;
+        box-shadow: 0 0 0 4px rgba(147, 197, 253, 0.4) !important;
+    }
+    
+    /* Disabled state */
+    .main .stDownloadButton button:disabled,
+    .main .stDownloadButton button[disabled] {
+        background: linear-gradient(135deg, #cbd5e1 0%, #e2e8f0 100%) !important;
+        color: #1f2937 !important;
+        border: 2px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        cursor: not-allowed !important;
+        opacity: 0.9 !important;
+    }
+    
+    /* Insight cards hover effect */
+    .insight-card {
+        transition: all 0.3s ease !important;
+    }
+    
+    .insight-card:hover {
+        transform: translateY(-5px) !important;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -1044,10 +1260,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Sidebar untuk filter
-st.sidebar.markdown('<div class="sidebar-header"><i class="fas fa-filter"></i> Filter Data</div>', unsafe_allow_html=True)
+st.sidebar.markdown('''
+<div class="sidebar-header">
+    <i class="fas fa-sliders-h"></i> Control Panel
+</div>
+''', unsafe_allow_html=True)
+
+# === TIME FILTERS SECTION ===
+st.sidebar.markdown('''
+<div class="filter-section">
+    <p class="filter-section-title"><i class="fas fa-clock"></i> Time Filters</p>
+</div>
+''', unsafe_allow_html=True)
 
 # Filter tahun
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-calendar"></i> Pilih Tahun</p>', unsafe_allow_html=True)
+st.sidebar.markdown('<p class="filter-label"><i class="fas fa-calendar-alt"></i> Tahun</p>', unsafe_allow_html=True)
 years = sorted(df['order_year'].dropna().unique())
 selected_years = st.sidebar.multiselect(
     "Tahun",
@@ -1056,8 +1283,18 @@ selected_years = st.sidebar.multiselect(
     label_visibility="collapsed"
 )
 
+# Divider
+st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
+
+# === GEOGRAPHIC FILTERS SECTION ===
+st.sidebar.markdown('''
+<div class="filter-section">
+    <p class="filter-section-title"><i class="fas fa-map-marked-alt"></i> Geographic Filters</p>
+</div>
+''', unsafe_allow_html=True)
+
 # Filter region
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-globe"></i> Pilih Region</p>', unsafe_allow_html=True)
+st.sidebar.markdown('<p class="filter-label"><i class="fas fa-globe-americas"></i> Region</p>', unsafe_allow_html=True)
 regions = sorted(df['region'].dropna().unique())
 selected_regions = st.sidebar.multiselect(
     "Region",
@@ -1066,8 +1303,28 @@ selected_regions = st.sidebar.multiselect(
     label_visibility="collapsed"
 )
 
+# Filter state
+st.sidebar.markdown('<p class="filter-label"><i class="fas fa-map"></i> State</p>', unsafe_allow_html=True)
+states = sorted(df['state'].dropna().unique())
+selected_states = st.sidebar.multiselect(
+    "State",
+    options=states,
+    default=states,
+    label_visibility="collapsed"
+)
+
+# Divider
+st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
+
+# === CUSTOMER FILTERS SECTION ===
+st.sidebar.markdown('''
+<div class="filter-section">
+    <p class="filter-section-title"><i class="fas fa-user-friends"></i> Customer Filters</p>
+</div>
+''', unsafe_allow_html=True)
+
 # Filter segment
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-users"></i> Pilih Segment</p>', unsafe_allow_html=True)
+st.sidebar.markdown('<p class="filter-label"><i class="fas fa-users"></i> Segment</p>', unsafe_allow_html=True)
 segments = sorted(df['segment'].dropna().unique())
 selected_segments = st.sidebar.multiselect(
     "Segment",
@@ -1076,13 +1333,33 @@ selected_segments = st.sidebar.multiselect(
     label_visibility="collapsed"
 )
 
+# Divider
+st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
+
+# === PRODUCT FILTERS SECTION ===
+st.sidebar.markdown('''
+<div class="filter-section">
+    <p class="filter-section-title"><i class="fas fa-box-open"></i> Product Filters</p>
+</div>
+''', unsafe_allow_html=True)
+
 # Filter category
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-boxes"></i> Pilih Category</p>', unsafe_allow_html=True)
+st.sidebar.markdown('<p class="filter-label"><i class="fas fa-layer-group"></i> Category</p>', unsafe_allow_html=True)
 categories = sorted(df['category'].dropna().unique())
 selected_categories = st.sidebar.multiselect(
     "Category",
     options=categories,
     default=categories,
+    label_visibility="collapsed"
+)
+
+# Filter sub-category
+st.sidebar.markdown('<p class="filter-label"><i class="fas fa-tags"></i> Sub-Category</p>', unsafe_allow_html=True)
+subcategories = sorted(df['sub_category'].dropna().unique())
+selected_subcategories = st.sidebar.multiselect(
+    "Sub-Category",
+    options=subcategories,
+    default=subcategories,
     label_visibility="collapsed"
 )
 
@@ -1094,20 +1371,30 @@ product_search = st.sidebar.text_input(
     label_visibility="collapsed"
 )
 
-# Sidebar info
-st.sidebar.markdown('''
+# Divider
+st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
+
+# Sidebar stats info
+st.sidebar.markdown(f'''
 <div class="sidebar-info">
-    <p><i class="fas fa-info-circle"></i> Gunakan filter untuk menyaring data</p>
-    <p>💡 Klik tombol ▶ untuk menutup sidebar</p>
+    <p><i class="fas fa-database"></i> Total Records: <strong>{len(df):,}</strong></p>
+    <p><i class="fas fa-chart-pie"></i> Categories: <strong>{len(categories)}</strong></p>
+    <p><i class="fas fa-globe"></i> Regions: <strong>{len(regions)}</strong></p>
 </div>
 ''', unsafe_allow_html=True)
+
+# Quick reset button
+if st.sidebar.button("🔄 Reset All Filters", use_container_width=True):
+    st.rerun()
 
 # Apply filters
 filtered_df = df[
     (df['order_year'].isin(selected_years)) &
     (df['region'].isin(selected_regions)) &
+    (df['state'].isin(selected_states)) &
     (df['segment'].isin(selected_segments)) &
-    (df['category'].isin(selected_categories))
+    (df['category'].isin(selected_categories)) &
+    (df['sub_category'].isin(selected_subcategories))
 ]
 
 # Apply product search filter
@@ -1116,6 +1403,28 @@ if product_search:
 
 # KPI Metrics Row
 st.markdown('<p class="section-header"><i class="fas fa-tachometer-alt"></i> Key Performance Indicators</p>', unsafe_allow_html=True)
+
+# Quick Stats Row dengan Live Indicator
+st.markdown(f'''
+<div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+    <div style="display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #10b981 0%, #34d399 100%); padding: 8px 16px; border-radius: 20px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+        <span style="width: 10px; height: 10px; background: #ffffff; border-radius: 50%; animation: pulse 1.5s infinite;"></span>
+        <span style="color: white; font-weight: 600; font-size: 0.85rem;">Live Data</span>
+    </div>
+    <div style="background: rgba(255, 255, 255, 0.9); padding: 8px 16px; border-radius: 20px; border: 1px solid #e0e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <span style="color: #4a6fa5; font-size: 0.85rem;"><i class="fas fa-filter"></i> Showing <strong style="color: #1e3a5f;">{len(filtered_df):,}</strong> of <strong style="color: #3b82f6;">{len(df):,}</strong> records</span>
+    </div>
+    <div style="background: rgba(255, 255, 255, 0.9); padding: 8px 16px; border-radius: 20px; border: 1px solid #e0e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <span style="color: #4a6fa5; font-size: 0.85rem;"><i class="fas fa-calendar-check"></i> Last Updated: <strong style="color: #1e3a5f;">Real-time</strong></span>
+    </div>
+</div>
+<style>
+@keyframes pulse {{
+    0%, 100% {{ opacity: 1; transform: scale(1); }}
+    50% {{ opacity: 0.5; transform: scale(1.2); }}
+}}
+</style>
+''', unsafe_allow_html=True)
 
 col1, col2, col3, col4, col5 = st.columns(5)
 
@@ -1158,6 +1467,57 @@ with col5:
         value=f"{total_orders:,}",
         delta="unique orders"
     )
+
+st.markdown("---")
+
+# === QUICK INSIGHTS SECTION ===
+st.markdown('<p class="section-header"><i class="fas fa-lightbulb"></i> Quick Insights</p>', unsafe_allow_html=True)
+
+# Calculate insights
+top_category = filtered_df.groupby('category')['sales'].sum().idxmax() if len(filtered_df) > 0 else "N/A"
+top_category_sales = filtered_df.groupby('category')['sales'].sum().max() if len(filtered_df) > 0 else 0
+top_region = filtered_df.groupby('region')['sales'].sum().idxmax() if len(filtered_df) > 0 else "N/A"
+top_region_sales = filtered_df.groupby('region')['sales'].sum().max() if len(filtered_df) > 0 else 0
+top_segment = filtered_df.groupby('segment')['sales'].sum().idxmax() if len(filtered_df) > 0 else "N/A"
+best_month = filtered_df.groupby('order_month_name')['sales'].sum().idxmax() if len(filtered_df) > 0 else "N/A"
+
+insight_col1, insight_col2, insight_col3, insight_col4 = st.columns(4)
+
+with insight_col1:
+    st.markdown(f'''
+    <div class="insight-card" style="background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #3b82f6; box-shadow: 0 4px 15px rgba(0,0,0,0.08); height: 130px;">
+        <p style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;"><i class="fas fa-trophy" style="color: #f59e0b;"></i> Top Category</p>
+        <h3 style="color: #1e3a5f; font-size: 1.3rem; margin-bottom: 5px; font-weight: 700;">{top_category}</h3>
+        <p style="color: #3b82f6; font-size: 0.9rem; font-weight: 600;">${top_category_sales:,.0f}</p>
+    </div>
+    ''', unsafe_allow_html=True)
+
+with insight_col2:
+    st.markdown(f'''
+    <div class="insight-card" style="background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #10b981; box-shadow: 0 4px 15px rgba(0,0,0,0.08); height: 130px;">
+        <p style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;"><i class="fas fa-map-marker-alt" style="color: #10b981;"></i> Top Region</p>
+        <h3 style="color: #1e3a5f; font-size: 1.3rem; margin-bottom: 5px; font-weight: 700;">{top_region}</h3>
+        <p style="color: #10b981; font-size: 0.9rem; font-weight: 600;">${top_region_sales:,.0f}</p>
+    </div>
+    ''', unsafe_allow_html=True)
+
+with insight_col3:
+    st.markdown(f'''
+    <div class="insight-card" style="background: linear-gradient(135deg, #ffffff 0%, #fef3f2 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #ef4444; box-shadow: 0 4px 15px rgba(0,0,0,0.08); height: 130px;">
+        <p style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;"><i class="fas fa-users" style="color: #ef4444;"></i> Top Segment</p>
+        <h3 style="color: #1e3a5f; font-size: 1.3rem; margin-bottom: 5px; font-weight: 700;">{top_segment}</h3>
+        <p style="color: #ef4444; font-size: 0.9rem; font-weight: 600;">Best Performer</p>
+    </div>
+    ''', unsafe_allow_html=True)
+
+with insight_col4:
+    st.markdown(f'''
+    <div class="insight-card" style="background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%); padding: 20px; border-radius: 16px; border-left: 4px solid #f59e0b; box-shadow: 0 4px 15px rgba(0,0,0,0.08); height: 130px;">
+        <p style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;"><i class="fas fa-calendar-star" style="color: #f59e0b;"></i> Peak Month</p>
+        <h3 style="color: #1e3a5f; font-size: 1.3rem; margin-bottom: 5px; font-weight: 700;">{best_month}</h3>
+        <p style="color: #f59e0b; font-size: 0.9rem; font-weight: 600;">Highest Sales</p>
+    </div>
+    ''', unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -1630,11 +1990,74 @@ with tab5:
     table_html2 += '</tbody></table></div></div>'
     st.markdown(table_html2, unsafe_allow_html=True)
 
+# === EXPORT & DOWNLOAD SECTION ===
+st.markdown("---")
+st.markdown('<p class="section-header"><i class="fas fa-download"></i> Export Data</p>', unsafe_allow_html=True)
+
+export_col1, export_col2, export_col3 = st.columns(3)
+
+with export_col1:
+    # Download filtered data as CSV
+    csv_data = filtered_df.to_csv(index=False).encode('utf-8')
+    st.download_button(
+        label="📥 Download Filtered Data (CSV)",
+        data=csv_data,
+        file_name="filtered_sales_data.csv",
+        mime="text/csv",
+        use_container_width=True
+    )
+
+with export_col2:
+    # Summary statistics
+    summary_data = filtered_df.describe().to_csv().encode('utf-8')
+    st.download_button(
+        label="📊 Download Summary Statistics",
+        data=summary_data,
+        file_name="sales_summary_stats.csv",
+        mime="text/csv",
+        use_container_width=True
+    )
+
+with export_col3:
+    # Category summary
+    cat_summary = filtered_df.groupby('category').agg({
+        'sales': ['sum', 'mean', 'count'],
+        'sk_customer': 'nunique'
+    }).round(2)
+    cat_summary.columns = ['Total Sales', 'Avg Sale', 'Transactions', 'Unique Customers']
+    cat_data = cat_summary.to_csv().encode('utf-8')
+    st.download_button(
+        label="📁 Download Category Summary",
+        data=cat_data,
+        file_name="category_summary.csv",
+        mime="text/csv",
+        use_container_width=True
+    )
+
 # Footer
 st.markdown("---")
-st.markdown("""
-<div class="footer">
-    <p><i class="fas fa-chart-line"></i> Sales Analytics Dashboard | Built with Streamlit & Plotly</p>
-    <p><i class="fas fa-database"></i> Data: 2015-2018 Sales Data</p>
+st.markdown(f"""
+<div class="footer" style="background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%); padding: 30px; border-radius: 16px; margin-top: 30px; text-align: center; box-shadow: 0 -4px 20px rgba(30, 58, 95, 0.2);">
+    <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
+        <div style="background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px;">
+            <span style="color: #93c5fd;"><i class="fas fa-database"></i></span>
+            <span style="color: white; font-weight: 600;"> {len(df):,} Total Records</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px;">
+            <span style="color: #93c5fd;"><i class="fas fa-calendar"></i></span>
+            <span style="color: white; font-weight: 600;"> 2015-2018 Data</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px;">
+            <span style="color: #93c5fd;"><i class="fas fa-code"></i></span>
+            <span style="color: white; font-weight: 600;"> Streamlit + Plotly</span>
+        </div>
+    </div>
+    <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin: 0;">
+        <i class="fas fa-chart-line" style="color: #60a5fa;"></i> Sales Analytics Dashboard | 
+        <i class="fas fa-graduation-cap" style="color: #60a5fa;"></i> Business Intelligence Project
+    </p>
+    <p style="color: rgba(255,255,255,0.5); font-size: 0.75rem; margin-top: 10px;">
+        Built with ❤️ for UAS Business Intelligence
+    </p>
 </div>
 """, unsafe_allow_html=True)
