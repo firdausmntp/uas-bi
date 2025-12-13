@@ -106,9 +106,20 @@ st.markdown("""
         .region-card p {
             font-size: 0.8rem !important;
         }
+        .stTabs [data-baseweb="tab-list"] {
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .stTabs [data-baseweb="tab"] {
+            flex: 1 1 45%;
+            text-align: center;
+        }
     }
-    
+
     @media screen and (max-width: 576px) {
+        .block-container {
+            padding: 0.75rem 0.35rem;
+        }
         .dashboard-header h1 {
             font-size: 1rem !important;
         }
@@ -120,15 +131,188 @@ st.markdown("""
         }
         .stTabs [data-baseweb="tab-list"] {
             flex-wrap: wrap;
-            gap: 4px;
+            gap: 6px;
         }
         .stTabs [data-baseweb="tab"] {
             padding: 6px 10px;
             font-size: 0.75rem;
+            flex: 1 1 100%;
+            text-align: center;
+        }
+        div[data-testid="column"] {
+            min-width: 100% !important;
+        }
+        .table-scroll-wrapper {
+            max-width: 100%;
         }
     }
+
+    /* === MOBILE SPECIFIC FIXES === */
+    @media screen and (max-width: 768px) {
+        /* Fix sidebar on mobile */
+        section[data-testid="stSidebar"] {
+            width: 280px !important;
+            max-width: 85vw !important;
+        }
+        
+        section[data-testid="stSidebar"][aria-expanded="false"] {
+            transform: translateX(-100%) !important;
+            width: 0 !important;
+            min-width: 0 !important;
+            visibility: hidden !important;
+        }
+        
+        /* Fix main content on mobile */
+        .main .block-container {
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+            max-width: 100vw !important;
+            overflow-x: hidden !important;
+        }
+        
+        /* Fix horizontal overflow */
+        [data-testid="stAppViewContainer"],
+        [data-testid="stAppViewBlockContainer"],
+        .element-container,
+        .stMarkdown {
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
+        
+        /* Charts responsive */
+        .js-plotly-plot,
+        .plotly {
+            max-width: 100% !important;
+            overflow-x: auto !important;
+        }
+        
+        /* Table responsive */
+        .custom-table-container {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+        
+        /* Cards stack vertically */
+        [data-testid="stHorizontalBlock"] {
+            flex-wrap: wrap !important;
+        }
+        
+        [data-testid="stHorizontalBlock"] > [data-testid="column"] {
+            flex: 1 1 100% !important;
+            min-width: 100% !important;
+        }
+        
+        /* Fix dashboard header padding */
+        .dashboard-header {
+            padding: 15px !important;
+            margin: 0 0.25rem 20px 0.25rem !important;
+        }
+        
+        /* Metric cards padding */
+        [data-testid="stMetric"] {
+            padding: 10px 12px !important;
+        }
+        
+        /* Hide live indicator text on very small screens */
+        .live-indicator span:not(.pulse-dot) {
+            font-size: 0.7rem !important;
+        }
+        
+        /* Quick insights cards */
+        .insight-card {
+            padding: 12px !important;
+        }
+        
+        /* Export buttons stack */
+        .main .stDownloadButton {
+            width: 100% !important;
+        }
+        
+        .main .stDownloadButton button {
+            width: 100% !important;
+            margin-bottom: 8px !important;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        /* Extra small mobile screens */
+        .dashboard-header h1 {
+            font-size: 0.9rem !important;
+            gap: 8px !important;
+        }
+        
+        .dashboard-header p {
+            font-size: 0.75rem !important;
+        }
+        
+        [data-testid="stMetricValue"] {
+            font-size: 0.9rem !important;
+        }
+        
+        [data-testid="stMetricLabel"] {
+            font-size: 0.65rem !important;
+        }
+        
+        .section-header {
+            font-size: 0.9rem !important;
+            padding-bottom: 8px !important;
+        }
+        
+        .sub-header {
+            font-size: 0.8rem !important;
+            padding: 8px 10px !important;
+        }
+        
+        .region-card {
+            padding: 10px !important;
+        }
+        
+        .region-card h4 {
+            font-size: 0.85rem !important;
+        }
+        
+        .region-card p {
+            font-size: 0.75rem !important;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 15px 10px !important;
+        }
+        
+        .footer p {
+            font-size: 0.75rem !important;
+        }
+        
+        /* Custom table smaller text */
+        .custom-table thead th {
+            padding: 10px 8px !important;
+            font-size: 0.75rem !important;
+        }
+        
+        .custom-table tbody td {
+            padding: 8px !important;
+            font-size: 0.75rem !important;
+        }
+    }
+
+    /* === PREVENT HORIZONTAL SCROLL GLOBALLY === */
+    html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        position: relative !important;
+    }
     
-    /* Font Awesome Icons Fix */
+    [data-testid="stAppViewContainer"] {
+        overflow-x: hidden !important;
+        max-width: 100% !important;
+    }
+    
+    .main {
+        overflow-x: hidden !important;
+        max-width: 100% !important;
+    }
+
     .fa, .fas, .far, .fab, .fal, .fad, [class*="fa-"] {
         font-family: 'Font Awesome 6 Free' !important;
         font-style: normal !important;
@@ -169,6 +353,11 @@ st.markdown("""
     /* Main container styling - White & Blue Theme */
     .main, .stApp {
         background: linear-gradient(135deg, #f0f4f8 0%, #e8f4fc 50%, #f5f9ff 100%) !important;
+    }
+
+    /* Kill unwanted horizontal scroll */
+    html, body, [data-testid="stAppViewContainer"], .main {
+        overflow-x: hidden !important;
     }
     
     .block-container {
@@ -219,11 +408,67 @@ st.markdown("""
         width: 320px !important;
         box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        overflow: hidden !important;
+        position: fixed !important;
+        left: 0 !important;
+        top: 0 !important;
+        height: 100vh !important;
+        z-index: 999 !important;
     }
     
-    /* Sidebar collapsed state */
+    /* Sidebar expanded state */
+    section[data-testid="stSidebar"][aria-expanded="true"] {
+        transform: translateX(0) !important;
+        width: 320px !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Sidebar collapsed state - COMPLETE FIX for scroll visible when closed */
     section[data-testid="stSidebar"][aria-expanded="false"] {
-        transform: translateX(-100%) !important;
+        transform: translateX(-320px) !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        box-shadow: none !important;
+    }
+    
+    section[data-testid="stSidebar"][aria-expanded="false"] * {
+        visibility: hidden !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+    
+    /* Sidebar content wrapper */
+    [data-testid="stSidebarContent"] {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        max-height: 100vh !important;
+        scrollbar-width: thin !important;
+    }
+    
+    /* Hide sidebar scrollbar when collapsed */
+    section[data-testid="stSidebar"][aria-expanded="false"]::-webkit-scrollbar,
+    section[data-testid="stSidebar"][aria-expanded="false"] *::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+    }
+    
+    /* Hide sidebar user content when collapsed */
+    section[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarContent"],
+    section[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarUserContent"],
+    section[data-testid="stSidebar"][aria-expanded="false"] [data-testid="stSidebarHeader"] {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
     }
     
     section[data-testid="stSidebar"] > div {
@@ -1210,6 +1455,212 @@ st.markdown("""
         transform: translateY(-5px) !important;
         box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
     }
+    
+    /* === ADDITIONAL SIDEBAR COLLAPSED FIX === */
+    /* Hide sidebar completely when collapsed - Ultimate Fix */
+    section[data-testid="stSidebar"]:not([aria-expanded="true"]) {
+        transform: translateX(-350px) !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+        box-shadow: none !important;
+        border: none !important;
+        display: block !important;
+    }
+    
+    section[data-testid="stSidebar"]:not([aria-expanded="true"]) > * {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    /* Ensure no scrollbar leaks when sidebar is closed */
+    section[data-testid="stSidebar"]:not([aria-expanded="true"])::-webkit-scrollbar,
+    section[data-testid="stSidebar"]:not([aria-expanded="true"]) *::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        background: transparent !important;
+    }
+    
+    section[data-testid="stSidebar"]:not([aria-expanded="true"]) {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
+    
+    /* === ENHANCED MOBILE RESPONSIVE === */
+    @media screen and (max-width: 768px) {
+        /* Fix main content area on mobile */
+        [data-testid="stAppViewContainer"] > .main {
+            margin-left: 0 !important;
+            width: 100% !important;
+        }
+        
+        /* Better sidebar behavior on mobile */
+        section[data-testid="stSidebar"][aria-expanded="true"] {
+            width: 280px !important;
+            max-width: 90vw !important;
+            z-index: 9999 !important;
+            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        /* Overlay when sidebar is open on mobile */
+        section[data-testid="stSidebar"][aria-expanded="true"]::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 280px;
+            width: calc(100vw - 280px);
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 998;
+        }
+        
+        /* Fix metric cards on mobile */
+        [data-testid="stHorizontalBlock"] {
+            gap: 10px !important;
+        }
+        
+        [data-testid="column"] {
+            padding: 0 4px !important;
+        }
+        
+        /* Fix charts container */
+        .stPlotlyChart {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+        
+        /* Tabs responsive fix */
+        .stTabs [data-baseweb="tab-list"] {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            scrollbar-width: none !important;
+        }
+        
+        .stTabs [data-baseweb="tab-list"]::-webkit-scrollbar {
+            display: none !important;
+        }
+        
+        /* Region cards grid on mobile */
+        .region-cards-container {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 10px !important;
+        }
+        
+        /* Footer mobile */
+        .footer {
+            padding: 12px 8px !important;
+        }
+        
+        /* Live stats row - wrap better */
+        [style*="display: flex"][style*="gap: 15px"] {
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+        }
+        
+        [style*="display: flex"][style*="gap: 15px"] > div {
+            flex: 1 1 auto !important;
+            min-width: fit-content !important;
+        }
+    }
+    
+    @media screen and (max-width: 576px) {
+        /* Very narrow screens - stack everything */
+        [data-testid="column"] {
+            min-width: 100% !important;
+            flex: 1 1 100% !important;
+        }
+        
+        /* Smaller padding everywhere */
+        .block-container {
+            padding-left: 0.25rem !important;
+            padding-right: 0.25rem !important;
+        }
+        
+        /* Sidebar full width on very small screens */
+        section[data-testid="stSidebar"][aria-expanded="true"] {
+            width: 100vw !important;
+            max-width: 100vw !important;
+        }
+        
+        section[data-testid="stSidebar"][aria-expanded="true"]::after {
+            display: none !important;
+        }
+        
+        /* Tab buttons full width */
+        .stTabs [data-baseweb="tab"] {
+            flex: 1 1 100% !important;
+        }
+        
+        /* Hide some text on mobile to save space */
+        .live-indicator-text {
+            display: none !important;
+        }
+    }
+    
+    @media screen and (max-width: 400px) {
+        /* Extra small phones */
+        .dashboard-header h1 {
+            font-size: 0.85rem !important;
+        }
+        
+        .dashboard-header h1 i {
+            font-size: 0.9rem !important;
+        }
+        
+        [data-testid="stMetric"] {
+            padding: 10px !important;
+        }
+        
+        [data-testid="stMetricValue"] {
+            font-size: 0.85rem !important;
+        }
+        
+        [data-testid="stMetricLabel"] {
+            font-size: 0.6rem !important;
+        }
+        
+        /* Section headers smaller */
+        .section-header {
+            font-size: 0.85rem !important;
+        }
+        
+        .sub-header {
+            font-size: 0.75rem !important;
+        }
+    }
+    
+    /* === FIX MAIN CONTENT MARGIN WHEN SIDEBAR CLOSED === */
+    section[data-testid="stSidebar"]:not([aria-expanded="true"]) ~ [data-testid="stAppViewContainer"],
+    section[data-testid="stSidebar"][aria-expanded="false"] ~ [data-testid="stAppViewContainer"] {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    
+    /* Touch-friendly interactions for mobile */
+    @media (hover: none) and (pointer: coarse) {
+        /* Larger touch targets */
+        .stButton button,
+        .stDownloadButton button,
+        [data-baseweb="select"] {
+            min-height: 48px !important;
+        }
+        
+        /* Remove hover effects that don't work on touch */
+        [data-testid="stMetric"]:hover,
+        .region-card:hover,
+        .insight-card:hover {
+            transform: none !important;
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -1533,7 +1984,6 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 # Warna untuk chart (Blue theme)
 blue_colors = ['#1e3a5f', '#2c5282', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe']
 gradient_scale = [[0, '#bfdbfe'], [0.5, '#3b82f6'], [1, '#1e3a5f']]
-
 # Tab 1: Overview
 with tab1:
     col1, col2 = st.columns(2)
