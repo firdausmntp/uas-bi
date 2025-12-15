@@ -1379,25 +1379,28 @@ st.markdown("""
     }
 
     .insight-label {
-        color: #64748b;
-        font-size: 0.75rem;
+        color: #475569;
+        font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin: 0;
         display: flex;
         align-items: center;
         gap: 6px;
+        font-weight: 600;
     }
 
     .insight-value {
-        color: #1e3a5f;
-        font-size: 1.3rem;
-        font-weight: 700;
+        color: #0f172a !important;
+        font-size: 1.4rem;
+        font-weight: 800;
         margin: 0;
+        line-height: 1.2;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
     .insight-sub {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: 600;
         margin: 0;
     }
