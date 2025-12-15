@@ -32,7 +32,7 @@ st.markdown("""
             font-size: 1.8rem !important;
         }
         [data-testid="stMetricValue"] {
-            font-size: 1.5rem !important;
+            font-size: 1.3rem !important;
         }
         .section-header {
             font-size: 1.2rem !important;
@@ -53,10 +53,10 @@ st.markdown("""
             padding: 15px 18px;
         }
         [data-testid="stMetricValue"] {
-            font-size: 1.3rem !important;
+            font-size: 1.2rem !important;
         }
         [data-testid="stMetricLabel"] {
-            font-size: 0.8rem !important;
+            font-size: 0.75rem !important;
         }
         .region-card {
             padding: 15px;
@@ -92,7 +92,7 @@ st.markdown("""
             border-radius: 12px;
         }
         [data-testid="stMetricValue"] {
-            font-size: 1.1rem !important;
+            font-size: 1rem !important;
         }
         .section-header {
             font-size: 1rem !important;
@@ -160,10 +160,10 @@ st.markdown("""
             font-size: 0.85rem !important;
         }
         [data-testid="stMetricValue"] {
-            font-size: 1rem !important;
+            font-size: 0.95rem !important;
         }
         [data-testid="stMetricLabel"] {
-            font-size: 0.7rem !important;
+            font-size: 0.65rem !important;
         }
         [data-testid="stMetric"] {
             width: 100% !important;
@@ -310,13 +310,13 @@ st.markdown("""
     
     /* === METRIC CARDS === */
     [data-testid="stMetricValue"] {
-        font-size: 2rem !important;
+        font-size: 1.5rem !important;
         font-weight: 700 !important;
         color: #1e3a5f !important;
     }
     
     [data-testid="stMetricLabel"] {
-        font-size: 0.95rem !important;
+        font-size: 0.85rem !important;
         font-weight: 600 !important;
         color: #4a6fa5 !important;
         text-transform: uppercase;
@@ -324,7 +324,7 @@ st.markdown("""
     }
     
     [data-testid="stMetricDelta"] {
-        font-size: 0.85rem !important;
+        font-size: 0.75rem !important;
         color: #2e7d32 !important;
         font-weight: 500;
     }
@@ -1663,46 +1663,84 @@ st.markdown(f'''
 </div>
 ''', unsafe_allow_html=True)
 
+# Calculate all KPI values
+total_sales = filtered_df['sales'].sum()
+avg_order = filtered_df['sales'].mean() if len(filtered_df) > 0 else 0
+total_customers = filtered_df['sk_customer'].nunique()
+total_products = filtered_df['sk_product'].nunique()
+total_orders = filtered_df['order_id'].nunique()
+total_categories = filtered_df['category'].nunique()
+total_subcategories = filtered_df['sub_category'].nunique()
+total_states = filtered_df['state'].nunique()
+total_regions = filtered_df['region'].nunique()
+
+# Row 1: Main KPIs
 col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
-    total_sales = filtered_df['sales'].sum()
     st.metric(
-        label="Total Sales",
+        label="💰 Total Sales",
         value=f"${total_sales:,.2f}",
         delta=f"{len(filtered_df):,} transaksi"
     )
 
 with col2:
-    avg_order = filtered_df['sales'].mean()
     st.metric(
-        label="Rata-rata Order",
+        label="📊 Rata-rata Order",
         value=f"${avg_order:,.2f}",
         delta="per transaksi"
     )
 
 with col3:
-    total_customers = filtered_df['sk_customer'].nunique()
     st.metric(
-        label="Total Customers",
+        label="👥 Total Customers",
         value=f"{total_customers:,}",
         delta="unique customers"
     )
 
 with col4:
-    total_products = filtered_df['sk_product'].nunique()
     st.metric(
-        label="Total Products",
+        label="📦 Total Products",
         value=f"{total_products:,}",
         delta="unique products"
     )
 
 with col5:
-    total_orders = filtered_df['order_id'].nunique()
     st.metric(
-        label="Total Orders",
+        label="🛒 Total Orders",
         value=f"{total_orders:,}",
         delta="unique orders"
+    )
+
+# Row 2: Additional KPIs
+col6, col7, col8, col9 = st.columns(4)
+
+with col6:
+    st.metric(
+        label="📁 Total Categories",
+        value=f"{total_categories:,}",
+        delta="kategori produk"
+    )
+
+with col7:
+    st.metric(
+        label="🏷️ Total Sub-Categories",
+        value=f"{total_subcategories:,}",
+        delta="sub-kategori"
+    )
+
+with col8:
+    st.metric(
+        label="🏙️ Total States",
+        value=f"{total_states:,}",
+        delta="negara bagian"
+    )
+
+with col9:
+    st.metric(
+        label="🌍 Total Regions",
+        value=f"{total_regions:,}",
+        delta="wilayah"
     )
 
 st.markdown("---")
@@ -1743,6 +1781,104 @@ insights_html = f'''
 </div>
 '''
 st.markdown(insights_html, unsafe_allow_html=True)
+
+st.markdown("---")
+
+# === DATA SUMMARY VISUALIZATION ===
+st.markdown('<p class="section-header"><i class="fas fa-chart-pie"></i> Data Distribution Overview</p>', unsafe_allow_html=True)
+
+summary_col1, summary_col2, summary_col3, summary_col4 = st.columns(4)
+
+with summary_col1:
+    # Category distribution
+    category_counts = filtered_df.groupby('category').size().reset_index(name='count')
+    fig_cat_dist = px.pie(
+        category_counts,
+        values='count',
+        names='category',
+        title='Category Distribution',
+        color_discrete_sequence=['#1e3a5f', '#3b82f6', '#60a5fa'],
+        hole=0.4
+    )
+    fig_cat_dist.update_layout(
+        paper_bgcolor='rgba(255,255,255,0.9)',
+        font=dict(color='#1e3a5f', family='Poppins', size=10),
+        title=dict(font=dict(size=12, color='#1e3a5f')),
+        showlegend=False,
+        margin=dict(l=10, r=10, t=40, b=10),
+        height=200
+    )
+    fig_cat_dist.update_traces(textposition='inside', textinfo='percent+label', textfont_size=9)
+    st.plotly_chart(fig_cat_dist, use_container_width=True)
+
+with summary_col2:
+    # Segment distribution
+    segment_counts = filtered_df.groupby('segment').size().reset_index(name='count')
+    fig_seg_dist = px.pie(
+        segment_counts,
+        values='count',
+        names='segment',
+        title='Segment Distribution',
+        color_discrete_sequence=['#2c5282', '#3b82f6', '#93c5fd'],
+        hole=0.4
+    )
+    fig_seg_dist.update_layout(
+        paper_bgcolor='rgba(255,255,255,0.9)',
+        font=dict(color='#1e3a5f', family='Poppins', size=10),
+        title=dict(font=dict(size=12, color='#1e3a5f')),
+        showlegend=False,
+        margin=dict(l=10, r=10, t=40, b=10),
+        height=200
+    )
+    fig_seg_dist.update_traces(textposition='inside', textinfo='percent+label', textfont_size=9)
+    st.plotly_chart(fig_seg_dist, use_container_width=True)
+
+with summary_col3:
+    # Region distribution
+    region_counts = filtered_df.groupby('region').size().reset_index(name='count')
+    fig_reg_dist = px.pie(
+        region_counts,
+        values='count',
+        names='region',
+        title='Region Distribution',
+        color_discrete_sequence=['#1e3a5f', '#2c5282', '#3b82f6', '#60a5fa'],
+        hole=0.4
+    )
+    fig_reg_dist.update_layout(
+        paper_bgcolor='rgba(255,255,255,0.9)',
+        font=dict(color='#1e3a5f', family='Poppins', size=10),
+        title=dict(font=dict(size=12, color='#1e3a5f')),
+        showlegend=False,
+        margin=dict(l=10, r=10, t=40, b=10),
+        height=200
+    )
+    fig_reg_dist.update_traces(textposition='inside', textinfo='percent+label', textfont_size=9)
+    st.plotly_chart(fig_reg_dist, use_container_width=True)
+
+with summary_col4:
+    # Top 5 Sub-Categories by count
+    subcat_counts = filtered_df.groupby('sub_category').size().reset_index(name='count').sort_values('count', ascending=False).head(5)
+    fig_subcat = px.bar(
+        subcat_counts,
+        x='count',
+        y='sub_category',
+        orientation='h',
+        title='Top 5 Sub-Categories',
+        color='count',
+        color_continuous_scale='Blues'
+    )
+    fig_subcat.update_layout(
+        paper_bgcolor='rgba(255,255,255,0.9)',
+        font=dict(color='#1e3a5f', family='Poppins', size=10),
+        title=dict(font=dict(size=12, color='#1e3a5f')),
+        showlegend=False,
+        coloraxis_showscale=False,
+        margin=dict(l=10, r=10, t=40, b=10),
+        height=200,
+        xaxis=dict(title='', tickfont=dict(size=9)),
+        yaxis=dict(title='', tickfont=dict(size=9), categoryorder='total ascending')
+    )
+    st.plotly_chart(fig_subcat, use_container_width=True)
 
 st.markdown("---")
 
