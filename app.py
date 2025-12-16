@@ -18,7 +18,8 @@ from components.kpi_cards import render_kpi_row1, render_kpi_row2, render_insigh
 from components.charts import (
     create_pie_chart, create_pie_chart_large,
     create_bar_chart_horizontal, create_bar_chart_vertical,
-    create_line_chart
+    create_line_chart,
+    create_us_sales_choropleth
 )
 from components.sidebar import create_all_filters
 from utils.data_loader import load_data, filter_data, calculate_kpis, get_top_insights
@@ -216,6 +217,11 @@ with tab2:
 
 # Tab 3: Regional Analysis
 with tab3:
+    st.markdown('<p class="sub-header"><i class="fas fa-map"></i> Sales Map (USA)</p>', unsafe_allow_html=True)
+    state_sales_map = filtered_df.groupby('state')['sales'].sum().reset_index()
+    fig_map = create_us_sales_choropleth(state_sales_map, state_col='state', value_col='sales', title='', height=420)
+    st.plotly_chart(fig_map, use_container_width=True)
+
     col1, col2 = st.columns([2, 1])
     
     with col1:
