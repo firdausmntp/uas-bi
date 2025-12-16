@@ -239,3 +239,103 @@ def create_line_chart(data, x, y, title=None, height=400):
     )
     
     return fig
+
+
+_US_STATE_TO_ABBR = {
+    'Alabama': 'AL',
+    'Alaska': 'AK',
+    'Arizona': 'AZ',
+    'Arkansas': 'AR',
+    'California': 'CA',
+    'Colorado': 'CO',
+    'Connecticut': 'CT',
+    'Delaware': 'DE',
+    'District of Columbia': 'DC',
+    'Florida': 'FL',
+    'Georgia': 'GA',
+    'Hawaii': 'HI',
+    'Idaho': 'ID',
+    'Illinois': 'IL',
+    'Indiana': 'IN',
+    'Iowa': 'IA',
+    'Kansas': 'KS',
+    'Kentucky': 'KY',
+    'Louisiana': 'LA',
+    'Maine': 'ME',
+    'Maryland': 'MD',
+    'Massachusetts': 'MA',
+    'Michigan': 'MI',
+    'Minnesota': 'MN',
+    'Mississippi': 'MS',
+    'Missouri': 'MO',
+    'Montana': 'MT',
+    'Nebraska': 'NE',
+    'Nevada': 'NV',
+    'New Hampshire': 'NH',
+    'New Jersey': 'NJ',
+    'New Mexico': 'NM',
+    'New York': 'NY',
+    'North Carolina': 'NC',
+    'North Dakota': 'ND',
+    'Ohio': 'OH',
+    'Oklahoma': 'OK',
+    'Oregon': 'OR',
+    'Pennsylvania': 'PA',
+    'Rhode Island': 'RI',
+    'South Carolina': 'SC',
+    'South Dakota': 'SD',
+    'Tennessee': 'TN',
+    'Texas': 'TX',
+    'Utah': 'UT',
+    'Vermont': 'VT',
+    'Virginia': 'VA',
+    'Washington': 'WA',
+    'West Virginia': 'WV',
+    'Wisconsin': 'WI',
+    'Wyoming': 'WY',
+}
+
+
+def create_us_sales_choropleth(state_sales, state_col='state', value_col='sales', title='', height=420):
+    """Create a USA choropleth map (sales by state).
+
+    Expects a DataFrame with a state name column (e.g., 'California') and a numeric value column.
+    """
+    df_map = state_sales.copy()
+    df_map['_state_code'] = df_map[state_col].map(_US_STATE_TO_ABBR)
+    df_map = df_map.dropna(subset=['_state_code'])
+
+    fig = px.choropleth(
+        df_map,
+        locations='_state_code',
+        locationmode='USA-states',
+        color=value_col,
+        scope='usa',
+        color_continuous_scale='Blues'
+    )
+
+    fig.update_layout(
+        paper_bgcolor=CHART_LAYOUT['paper_bgcolor'],
+        plot_bgcolor=CHART_LAYOUT['plot_bgcolor'],
+        font=dict(color='#1e3a5f', family='Poppins', size=11),
+        title=dict(text=f'<b>{title}</b>' if title else '', x=0.5, xanchor='center', font=dict(size=14, color='#1e3a5f')),
+        height=height,
+        margin=dict(l=10, r=10, t=40 if title else 20, b=10),
+        coloraxis_colorbar=dict(
+            title=dict(text='Sales', font=dict(color='#1e3a5f', size=11)),
+            tickfont=dict(color='#1e3a5f', size=10)
+        ),
+        geo=dict(
+            bgcolor='rgba(0,0,0,0)',
+            showframe=False,
+            showcoastlines=False,
+        ),
+    )
+
+    fig.update_traces(
+        marker_line_color='#ffffff',
+        marker_line_width=0.6,
+        hovertemplate='<b>%{location}</b><br>Sales: $%{z:,.2f}<extra></extra>'
+    )
+
+    return fig
