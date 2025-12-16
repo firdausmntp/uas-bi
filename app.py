@@ -1,1656 +1,72 @@
+"""
+Super Store Sales Dashboard - Modular Version
+Business Intelligence Project
+"""
+
 import streamlit as st
 import pandas as pd
+import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import os
+import plotly.io as pio
+from sklearn.linear_model import LinearRegression
 
-# Konfigurasi halaman
+# Import modular components
+from components.styles import CSS_STYLES, apply_styles
+from components.icons import SVG_ICONS
+from components.kpi_cards import render_kpi_row1, render_kpi_row2, render_insights_section
+from components.charts import (
+    create_pie_chart, create_pie_chart_large,
+    create_bar_chart_horizontal, create_bar_chart_vertical,
+    create_line_chart
+)
+from components.sidebar import create_all_filters
+from utils.data_loader import load_data, filter_data, calculate_kpis, get_top_insights
+from utils.export_utils import dataframes_to_xlsx_bytes
+from config.settings import CHART_COLORS, CHART_LAYOUT
+
+# Page config
 st.set_page_config(
     page_title="Super Store Sales Dashboard",
-    page_icon="💎",
+    page_icon="🛒",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Load Font Awesome CDN dan Custom CSS
-st.markdown("""
-<meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<style>
-    /* === GLOBAL STYLES === */
-    * {
-        font-family: 'Poppins', sans-serif !important;
-    }
-    
-    /* === RESPONSIVE DESIGN === */
-    @media screen and (max-width: 1200px) {
-        .dashboard-header h1 {
-            font-size: 1.8rem !important;
-        }
-        [data-testid="stMetricValue"] {
-            font-size: 1.3rem !important;
-        }
-        .section-header {
-            font-size: 1.2rem !important;
-        }
-        .sub-header {
-            font-size: 1rem !important;
-        }
-    }
-    
-    @media screen and (max-width: 992px) {
-        .dashboard-header {
-            padding: 20px 25px;
-        }
-        .dashboard-header h1 {
-            font-size: 1.5rem !important;
-        }
-        [data-testid="stMetric"] {
-            padding: 15px 18px;
-        }
-        [data-testid="stMetricValue"] {
-            font-size: 1.2rem !important;
-        }
-        [data-testid="stMetricLabel"] {
-            font-size: 0.75rem !important;
-        }
-        .region-card {
-            padding: 15px;
-        }
-        div[data-testid="stHorizontalBlock"] {
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 12px !important;
-        }
-        div[data-testid="column"] {
-            width: 100% !important;
-            min-width: 100% !important;
-        }
-    }
-    
-    @media screen and (max-width: 768px) {
-        .block-container {
-            padding: 1rem 0.5rem;
-        }
-        .dashboard-header {
-            padding: 15px 20px;
-            border-radius: 12px;
-        }
-        .dashboard-header h1 {
-            font-size: 1.2rem !important;
-            flex-wrap: wrap;
-        }
-        .dashboard-header p {
-            font-size: 0.9rem !important;
-        }
-        [data-testid="stMetric"] {
-            padding: 12px 15px;
-            border-radius: 12px;
-        }
-        [data-testid="stMetricValue"] {
-            font-size: 1rem !important;
-        }
-        .section-header {
-            font-size: 1rem !important;
-            flex-wrap: wrap;
-        }
-        .sub-header {
-            font-size: 0.9rem !important;
-            padding: 10px 12px;
-        }
-        .stTabs [data-baseweb="tab"] {
-            padding: 8px 12px;
-            font-size: 0.85rem;
-        }
-        .region-card {
-            padding: 12px;
-        }
-        .region-card h4 {
-            font-size: 0.95rem;
-        }
-        .region-card p {
-            font-size: 0.8rem !important;
-        }
-        .live-stats-row {
-            flex-direction: column;
-            align-items: stretch;
-        }
-        .live-stats-row .live-pill {
-            width: 100%;
-            justify-content: center;
-        }
-        .insight-grid {
-            grid-template-columns: 1fr;
-        }
-        .insight-card {
-            width: 100%;
-        }
-        div[data-testid="stHorizontalBlock"] {
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 0 !important;
-        }
-        div[data-testid="column"] {
-            width: 100% !important;
-            min-width: 100% !important;
-        }
-    }
-    
-    @media screen and (max-width: 576px) {
-        .block-container {
-            padding: 0.75rem 0.4rem;
-            margin-top: 10px;
-        }
-        .dashboard-header {
-            padding: 12px 16px;
-            text-align: center;
-        }
-        .dashboard-header::before {
-            display: none;
-        }
-        .dashboard-header h1 {
-            font-size: 1rem !important;
-            justify-content: center;
-        }
-        .dashboard-header p {
-            font-size: 0.85rem !important;
-        }
-        [data-testid="stMetricValue"] {
-            font-size: 0.95rem !important;
-        }
-        [data-testid="stMetricLabel"] {
-            font-size: 0.65rem !important;
-        }
-        [data-testid="stMetric"] {
-            width: 100% !important;
-            margin-bottom: 10px;
-        }
-        .section-header {
-            font-size: 0.95rem !important;
-        }
-        .sub-header {
-            font-size: 0.85rem !important;
-        }
-        .live-stats-row {
-            gap: 10px;
-        }
-        .stTabs [data-baseweb="tab-list"] {
-            flex-wrap: nowrap;
-            gap: 6px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .stTabs [data-baseweb="tab-list"]::-webkit-scrollbar {
-            display: none;
-        }
-        .stTabs [data-baseweb="tab"] {
-            padding: 6px 12px;
-            font-size: 0.75rem;
-            flex: 0 0 auto;
-        }
-        .insight-grid {
-            grid-template-columns: 1fr;
-        }
-        .insight-card {
-            text-align: center;
-            min-height: auto;
-        }
-        .insight-label {
-            justify-content: center;
-        }
-        .insight-value {
-            font-size: 1.1rem;
-        }
-        .custom-table thead th,
-        .custom-table tbody td {
-            font-size: 0.75rem;
-        }
-    }
-    
-    /* Font Awesome Icons Fix */
-    .fa, .fas, .far, .fab, .fal, .fad, [class*="fa-"] {
-        font-family: 'Font Awesome 6 Free' !important;
-        font-style: normal !important;
-        font-variant: normal !important;
-        text-rendering: auto !important;
-        -webkit-font-smoothing: antialiased !important;
-        -moz-osx-font-smoothing: grayscale !important;
-        display: inline-block !important;
-        width: auto !important;
-        height: auto !important;
-        line-height: 1 !important;
-        vertical-align: -0.125em !important;
-    }
-    
-    .fas, .fa-solid {
-        font-weight: 900 !important;
-        font-family: 'Font Awesome 6 Free' !important;
-    }
-    
-    .far, .fa-regular {
-        font-weight: 400 !important;
-        font-family: 'Font Awesome 6 Free' !important;
-    }
-    
-    .fab, .fa-brands {
-        font-family: 'Font Awesome 6 Brands' !important;
-        font-weight: 400 !important;
-    }
-    
-    /* Sidebar icons visible */
-    section[data-testid="stSidebar"] i {
-        display: inline-block !important;
-        width: auto !important;
-        margin-right: 5px !important;
-        color: inherit !important;
-    }
-    
-    /* Main container styling - White & Blue Theme */
-    .main, .stApp {
-        background: linear-gradient(135deg, #f0f4f8 0%, #e8f4fc 50%, #f5f9ff 100%) !important;
-        overflow-x: hidden !important;
-    }
+# Set Plotly default template
+pio.templates.default = "plotly_white"
 
-    body {
-        overflow-x: hidden !important;
-    }
-    
-    .block-container {
-        padding-top: 4rem;
-        margin-top: 20px;
-    }
-
-    .live-stats-row {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-    }
-
-    .live-pill {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        border-radius: 20px;
-        padding: 8px 16px;
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid #e0e8f0;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        color: #4a6fa5;
-        font-size: 0.85rem;
-        font-weight: 500;
-    }
-
-    .live-pill strong {
-        color: #1e3a5f;
-    }
-
-    .live-pill--badge {
-        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-        border: none;
-        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        color: #ffffff;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .live-dot {
-        width: 10px;
-        height: 10px;
-        background: #ffffff;
-        border-radius: 50%;
-        animation: pulse 1.5s infinite;
-    }
-    
-    /* === METRIC CARDS === */
-    [data-testid="stMetricValue"] {
-        font-size: 1.5rem !important;
-        font-weight: 700 !important;
-        color: #1e3a5f !important;
-    }
-    
-    [data-testid="stMetricLabel"] {
-        font-size: 0.85rem !important;
-        font-weight: 600 !important;
-        color: #4a6fa5 !important;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    [data-testid="stMetricDelta"] {
-        font-size: 0.75rem !important;
-        color: #2e7d32 !important;
-        font-weight: 500;
-    }
-    
-    /* Metric container background */
-    [data-testid="stMetric"] {
-        background: linear-gradient(145deg, #ffffff 0%, #f8fbff 100%);
-        border: 1px solid #d0e3f7;
-        padding: 20px 25px;
-        border-radius: 16px;
-        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.08);
-        transition: all 0.3s ease;
-    }
-    
-    [data-testid="stMetric"]:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(30, 58, 95, 0.15);
-        border-color: #3b82f6;
-    }
-    
-    /* === SIDEBAR STYLING === */
-    section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0f172a 0%, #1e3a5f 40%, #2c5282 100%) !important;
-        width: 320px !important;
-        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15) !important;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-    
-    /* Sidebar collapsed state */
-    section[data-testid="stSidebar"][aria-expanded="false"] {
-        transform: translateX(-100%) !important;
-        width: 0 !important;
-        min-width: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-    }
-    
-    section[data-testid="stSidebar"] > div {
-        background: transparent !important;
-        padding: 1rem !important;
-    }
-    
-    section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
-        color: #ffffff !important;
-        font-weight: 500;
-    }
-    
-    /* === APP HEADER STYLING === */
-    header[data-testid="stHeader"] {
-        background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%) !important;
-        backdrop-filter: blur(10px) !important;
-        border-bottom: 1px solid rgba(59, 130, 246, 0.3) !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
-    }
-    
-    /* Toolbar buttons - HIGHLY VISIBLE */
-    [data-testid="stToolbar"] button,
-    [data-testid="stToolbarActions"] button,
-    header[data-testid="stHeader"] button {
-        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
-        border: 2px solid #60a5fa !important;
-        border-radius: 10px !important;
-        color: #ffffff !important;
-        transition: all 0.3s ease !important;
-        padding: 8px 12px !important;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
-    }
-    
-    [data-testid="stToolbar"] button:hover,
-    [data-testid="stToolbarActions"] button:hover,
-    header[data-testid="stHeader"] button:hover {
-        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
-        border-color: #93c5fd !important;
-        transform: scale(1.1) translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5) !important;
-    }
-    
-    /* Main menu button */
-    [data-testid="stMainMenu"] button {
-        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
-        border: 2px solid #60a5fa !important;
-        border-radius: 10px !important;
-        padding: 8px !important;
-    }
-    
-    [data-testid="stMainMenu"] svg {
-        fill: #ffffff !important;
-    }
-    
-    /* Share button and other toolbar text */
-    [data-testid="stToolbarActionButtonLabel"] {
-        color: #ffffff !important;
-        font-weight: 600 !important;
-    }
-    
-    /* All header icons/svgs */
-    header[data-testid="stHeader"] svg {
-        fill: #ffffff !important;
-        color: #ffffff !important;
-    }
-    
-    /* Expand sidebar button styling */
-    [data-testid="stExpandSidebarButton"],
-    button[data-testid="stExpandSidebarButton"] {
-        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
-        border: none !important;
-        border-radius: 10px !important;
-        padding: 10px !important;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4) !important;
-        transition: all 0.3s ease !important;
-    }
-    
-    [data-testid="stExpandSidebarButton"]:hover {
-        transform: scale(1.1) !important;
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5) !important;
-    }
-    
-    [data-testid="stExpandSidebarButton"] span,
-    [data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"] {
-        color: #ffffff !important;
-        font-size: 20px !important;
-    }
-    
-    section[data-testid="stSidebar"] .stSelectbox label,
-    section[data-testid="stSidebar"] .stMultiSelect label {
-        color: #e0f0ff !important;
-        font-weight: 600 !important;
-        font-size: 0.9rem !important;
-    }
-    
-    section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
-        color: #e0f0ff !important;
-    }
-    
-    /* Sidebar multiselect styling */
-    section[data-testid="stSidebar"] .stMultiSelect > div > div {
-        background: #ffffff !important;
-        border: 1px solid #d0e3f7 !important;
-        border-radius: 10px !important;
-        color: #1e3a5f !important;
-        transition: box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-    
-    section[data-testid="stSidebar"] .stMultiSelect > div > div:hover {
-        border-color: #3b82f6 !important;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-    }
-    
-    section[data-testid="stSidebar"] .stMultiSelect input {
-        color: #1e3a5f !important;
-    }
-    
-    section[data-testid="stSidebar"] .stMultiSelect span[data-baseweb="tag"] {
-        background: #ffffff !important;
-        color: #1e3a5f !important;
-        border: 1px solid #3b82f6 !important;
-        border-radius: 8px !important;
-        font-weight: 600;
-        box-shadow: 0 2px 6px rgba(30, 58, 95, 0.12);
-        transition: background 0.15s ease, color 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-    
-    section[data-testid="stSidebar"] .stMultiSelect span[data-baseweb="tag"]:hover {
-        background: #e8f4fc !important;
-        color: #1e3a5f !important;
-        border-color: #1e3a5f !important;
-        box-shadow: 0 3px 8px rgba(59, 130, 246, 0.2);
-    }
-    
-    section[data-testid="stSidebar"] .stMultiSelect span[data-baseweb="tag"] svg path {
-        fill: #1e3a5f !important;
-    }
-    
-    /* Sidebar selectbox */
-    section[data-testid="stSidebar"] .stSelectbox > div > div {
-        background: #ffffff !important;
-        border: 1px solid #d0e3f7 !important;
-        border-radius: 10px !important;
-        color: #1e3a5f !important;
-    }
-    
-    section[data-testid="stSidebar"] .stSelectbox input {
-        color: #1e3a5f !important;
-    }
-    
-    /* === HEADER STYLING === */
-    .dashboard-header {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 50%, #3b82f6 100%);
-        padding: 30px 40px;
-        border-radius: 20px;
-        margin-bottom: 30px;
-        box-shadow: 0 10px 40px rgba(30, 58, 95, 0.25);
-        border: none;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .dashboard-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -30%;
-        width: 80%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-        pointer-events: none;
-    }
-    
-    .dashboard-header h1 {
-        color: #ffffff !important;
-        font-size: 2.3rem !important;
-        font-weight: 700 !important;
-        margin: 0 !important;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-    
-    .dashboard-header p {
-        color: rgba(255,255,255,0.9) !important;
-        font-size: 1.1rem !important;
-        margin: 10px 0 0 0 !important;
-        font-weight: 400;
-    }
-    
-    /* === SECTION HEADERS === */
-    .section-header {
-        color: #1e3a5f !important;
-        font-size: 1.4rem !important;
-        font-weight: 700 !important;
-        margin: 25px 0 20px 0 !important;
-        padding-bottom: 12px;
-        border-bottom: 3px solid #3b82f6;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    
-    .section-header i {
-        color: #3b82f6;
-        font-size: 1.3rem;
-    }
-    
-    /* === SUB HEADERS === */
-    .sub-header {
-        color: #1e3a5f !important;
-        font-size: 1.15rem !important;
-        font-weight: 600 !important;
-        margin: 20px 0 15px 0 !important;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 16px;
-        background: linear-gradient(135deg, #e8f4fc 0%, #f0f7ff 100%);
-        border-radius: 12px;
-        border-left: 4px solid #3b82f6;
-    }
-    
-    .sub-header i {
-        color: #3b82f6;
-        font-size: 1rem;
-    }
-    
-    /* === REGION CARDS === */
-    .region-card {
-        background: linear-gradient(145deg, #ffffff 0%, #f8fbff 100%);
-        padding: 20px;
-        border-radius: 14px;
-        margin-bottom: 12px;
-        border: 1px solid #d0e3f7;
-        box-shadow: 0 4px 12px rgba(30, 58, 95, 0.08);
-        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .region-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.08), transparent);
-        transition: left 0.5s ease;
-    }
-    
-    .region-card:hover {
-        transform: translateY(-5px) scale(1.02);
-        border-color: #3b82f6;
-        box-shadow: 0 12px 28px rgba(59, 130, 246, 0.22);
-        background: linear-gradient(145deg, #ffffff 0%, #eef6ff 100%);
-    }
-    
-    .region-card:hover::before {
-        left: 100%;
-    }
-    
-    .region-card h4 {
-        color: #1e3a5f !important;
-        margin: 0 0 12px 0 !important;
-        font-weight: 700 !important;
-        font-size: 1.05rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .region-card h4::before {
-        content: '';
-        width: 8px;
-        height: 8px;
-        background: linear-gradient(135deg, #3b82f6, #60a5fa);
-        border-radius: 50%;
-    }
-    
-    .region-card p {
-        color: #4a6fa5 !important;
-        margin: 6px 0 !important;
-        font-size: 0.9rem !important;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 500;
-    }
-    
-    .region-card i {
-        color: #3b82f6;
-        width: 18px;
-        font-size: 0.85rem;
-    }
-    
-    /* === DIVIDER STYLING === */
-    hr {
-        border: none !important;
-        height: 2px !important;
-        background: linear-gradient(90deg, transparent, #3b82f6, transparent) !important;
-        margin: 35px 0 !important;
-    }
-    
-    /* === TAB STYLING === */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background: #ffffff;
-        padding: 10px;
-        border-radius: 14px;
-        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.08);
-        border: 1px solid #e0e8f0;
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        background: #f0f4f8;
-        border-radius: 10px;
-        padding: 12px 24px;
-        border: 1px solid transparent;
-        color: #4a6fa5 !important;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    
-    .stTabs [data-baseweb="tab"]:hover {
-        background: #e8f4fc;
-        border-color: #3b82f6;
-    }
-    
-    .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #1e3a5f 0%, #3b82f6 100%) !important;
-        color: #ffffff !important;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        border-color: transparent;
-    }
-    
-    /* Tab panel background */
-    .stTabs [data-baseweb="tab-panel"] {
-        background: transparent;
-        padding-top: 20px;
-    }
-    
-    /* === SIDEBAR COMPONENTS === */
-    .sidebar-header {
-        color: #ffffff !important;
-        font-size: 1.3rem !important;
-        font-weight: 700 !important;
-        margin-bottom: 20px !important;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 15px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .sidebar-header i {
-        color: #60a5fa;
-        font-size: 1.2rem;
-        display: inline-block !important;
-        width: auto !important;
-    }
-    
-    .filter-label {
-        color: #ffffff !important;
-        font-weight: 600 !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 8px;
-        margin: 15px 0 8px 0 !important;
-        font-size: 0.9rem;
-        padding-left: 5px;
-    }
-    
-    .filter-label i {
-        color: #60a5fa;
-        font-size: 0.95rem;
-        display: inline-block !important;
-        width: auto !important;
-    }
-    
-    .filter-label .fa, .filter-label .fas, .filter-label .far, .filter-label .fab {
-        display: inline-block !important;
-        width: auto !important;
-        font-size: 0.95rem !important;
-    }
-    
-    /* === FOOTER STYLING === */
-    .footer {
-        text-align: center;
-        color: #4a6fa5;
-        padding: 25px;
-        background: linear-gradient(145deg, #ffffff 0%, #f8fbff 100%);
-        border-radius: 16px;
-        margin-top: 35px;
-        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.08);
-        border: 1px solid #d0e3f7;
-    }
-    
-    .footer p {
-        color: #4a6fa5 !important;
-        margin: 6px 0;
-    }
-    
-    .footer i {
-        color: #3b82f6;
-        margin-right: 8px;
-    }
-    
-    /* === DATAFRAME STYLING === */
-    [data-testid="stDataFrame"] {
-        background: #ffffff !important;
-        border-radius: 14px !important;
-        overflow: hidden;
-        border: 1px solid #d0e3f7 !important;
-        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.08);
-    }
-    
-    [data-testid="stDataFrameResizable"] {
-        background: #ffffff !important;
-    }
-    
-    .stDataFrame {
-        background: #ffffff !important;
-    }
-    
-    /* Fix Glide Data Editor (dataframe renderer) */
-    .dvn-scroller,
-    .dvn-scroll-inner,
-    .dvn-stack,
-    .dvn-container {
-        background: #ffffff !important;
-        color: #1e3a5f !important;
-    }
-    
-    .dvn-scroller,
-    .dvn-scroll-inner,
-    .dvn-stack {
-        overflow: visible !important;
-    }
-    
-    /* DataFrame cell styling */
-    .dvn-cell,
-    .dvn-text,
-    .dvn-cell span,
-    .dvn-cell div,
-    .dvn-stack div,
-    .dvn-stack span {
-        background: #ffffff !important;
-        color: #1e3a5f !important;
-        fill: #1e3a5f !important;
-    }
-    
-    /* Force SVG text (Glide uses SVG for text sometimes) */
-    .dvn-container svg text {
-        fill: #1e3a5f !important;
-        color: #1e3a5f !important;
-    }
-    
-    /* Final safeguard for dataframe text visibility */
-    [data-testid="stDataFrame"] * {
-        color: #1e3a5f !important;
-        fill: #1e3a5f !important;
-    }
-    
-    /* Aggressive fix for Glide DataEditor canvas text */
-    canvas {
-        filter: none !important;
-    }
-    
-    [data-testid="stDataFrame"] canvas + div,
-    [data-testid="stDataFrame"] canvas ~ div {
-        color: #1e3a5f !important;
-    }
-    
-    /* Override any Streamlit dark theme remnants */
-    .stDataFrame div[data-testid="glideDataEditor"],
-    .stDataFrame [class*="glide"],
-    div[data-glide-id] {
-        background: #ffffff !important;
-        color: #1e3a5f !important;
-    }
-    
-    /* Force all text in data grid */
-    [data-testid="stDataFrame"] span,
-    [data-testid="stDataFrame"] div,
-    [data-testid="stDataFrame"] p,
-    [data-testid="stDataFrame"] td,
-    [data-testid="stDataFrame"] th {
-        color: #1e3a5f !important;
-        background-color: transparent !important;
-    }
-    
-    /* Glide cell text rendering */
-    .gdg-cell,
-    .gdg-header,
-    .gdg-text {
-        color: #1e3a5f !important;
-        fill: #1e3a5f !important;
-    }
-    
-    /* DataFrame header cell */
-    .dvn-header {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%) !important;
-        color: #ffffff !important;
-        font-weight: 600 !important;
-    }
-    
-    /* DataFrame Table Styling */
-    [role="grid"] {
-        background: #ffffff !important;
-    }
-    
-    [role="rowheader"] {
-        background: #ffffff !important;
-        color: #1e3a5f !important;
-    }
-    
-    /* Fix black background in dataframe */
-    div[data-testid="stDataFrame"] > div {
-        background: #ffffff !important;
-    }
-    
-    div[data-testid="stDataFrame"] table {
-        background: #ffffff !important;
-    }
-    
-    /* DataFrame header */
-    thead {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%) !important;
-    }
-    
-    thead th {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%) !important;
-        color: #ffffff !important;
-        font-weight: 600 !important;
-    }
-    
-    /* DataFrame rows */
-    tbody td {
-        color: #1e3a5f !important;
-        background: #ffffff !important;
-        border-color: #e0e8f0 !important;
-    }
-    
-    tbody tr:nth-child(even) td {
-        background: #f8fbff !important;
-    }
-    
-    /* === PLOTLY CHART CONTAINERS === */
-    .js-plotly-plot {
-        border-radius: 14px;
-        overflow: hidden;
-        background: white;
-    }
-    
-    /* === COLUMNS GAP === */
-    [data-testid="column"] {
-        padding: 6px;
-    }
-    
-    /* === SCROLLBAR STYLING === */
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-    }
-    
-    ::-webkit-scrollbar-track {
-        background: #f0f4f8;
-        border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-        background: linear-gradient(135deg, #3b82f6, #60a5fa);
-        border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(135deg, #1e3a5f, #3b82f6);
-    }
-    
-    /* === ANIMATION KEYFRAMES === */
-    @keyframes pulse {
-        0%, 100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 0.5;
-            transform: scale(1.2);
-        }
-    }
-
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(15px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .dashboard-header, .region-card, [data-testid="stMetric"] {
-        animation: fadeInUp 0.4s ease-out;
-    }
-    
-    /* Hover polish */
-    [data-testid="stMetric"]:hover,
-    .region-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 30px rgba(30, 58, 95, 0.18);
-    }
-    
-    [data-testid="stSidebar"] .stSelectbox > div > div:hover {
-        border-color: #3b82f6 !important;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-    }
-    
-    tbody tr:hover td {
-        background: #eaf3ff !important;
-    }
-    
-    /* === SIDEBAR TOGGLE BUTTON FIX === */
-    button[kind="header"],
-    button[kind="headerNoPadding"],
-    [data-testid="stSidebarCollapseButton"],
-    [data-testid="stSidebarCollapseButton"] button,
-    [data-testid="collapsedControl"],
-    [data-testid="collapsedControl"] button {
-        background: #ffffff !important;
-        border: 2px solid #3b82f6 !important;
-        border-radius: 10px !important;
-        box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2) !important;
-        padding: 8px !important;
-        transition: all 0.3s ease !important;
-    }
-    
-    button[kind="header"]:hover,
-    button[kind="headerNoPadding"]:hover,
-    [data-testid="stSidebarCollapseButton"]:hover,
-    [data-testid="stSidebarCollapseButton"] button:hover,
-    [data-testid="collapsedControl"]:hover,
-    [data-testid="collapsedControl"] button:hover {
-        background: linear-gradient(135deg, #e8f4fc 0%, #dbeafe 100%) !important;
-        border-color: #1e3a5f !important;
-        transform: scale(1.05) !important;
-        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3) !important;
-    }
-    
-    /* Material Icons Fix for Streamlit */
-    [data-testid="stIconMaterial"],
-    .st-emotion-cache-ujm5ma,
-    span[data-testid="stIconMaterial"] {
-        font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
-        font-weight: normal !important;
-        font-style: normal !important;
-        font-size: 24px !important;
-        line-height: 1 !important;
-        letter-spacing: normal !important;
-        text-transform: none !important;
-        display: inline-block !important;
-        white-space: nowrap !important;
-        word-wrap: normal !important;
-        direction: ltr !important;
-        -webkit-font-feature-settings: 'liga' !important;
-        -webkit-font-smoothing: antialiased !important;
-        color: #1e3a5f !important;
-    }
-    
-    /* Sidebar toggle icon color */
-    [data-testid="stSidebarCollapseButton"] span,
-    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
-    [data-testid="collapsedControl"] span,
-    [data-testid="collapsedControl"] [data-testid="stIconMaterial"] {
-        color: #1e3a5f !important;
-        font-size: 22px !important;
-    }
-    
-    /* SVG fallback */
-    button[kind="header"] svg,
-    button[kind="headerNoPadding"] svg,
-    [data-testid="stSidebarCollapseButton"] svg,
-    [data-testid="collapsedControl"] svg {
-        fill: #1e3a5f !important;
-        color: #1e3a5f !important;
-        stroke: #1e3a5f !important;
-        width: 22px !important;
-        height: 22px !important;
-    }
-    
-    /* BaseWeb icon styling */
-    [data-baseweb="icon"] {
-        color: inherit !important;
-    }
-    
-    section[data-testid="stSidebar"] [data-baseweb="icon"] svg {
-        fill: #ffffff !important;
-    }
-    
-    /* === CUSTOM TABLE STYLING === */
-    .custom-table-container {
-        background: #ffffff;
-        border-radius: 14px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.1);
-        border: 1px solid #d0e3f7;
-        margin: 10px 0;
-    }
-    
-    .custom-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-family: 'Poppins', sans-serif;
-        background: #ffffff;
-    }
-    
-    .custom-table thead {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%);
-    }
-    
-    .custom-table thead th {
-        padding: 14px 16px;
-        text-align: left;
-        font-weight: 600;
-        font-size: 0.9rem;
-        color: #ffffff !important;
-        border: none;
-        white-space: nowrap;
-    }
-    
-    .custom-table tbody tr {
-        transition: background 0.2s ease;
-    }
-    
-    .custom-table tbody tr:nth-child(even) {
-        background: #f8fbff;
-    }
-    
-    .custom-table tbody tr:nth-child(odd) {
-        background: #ffffff;
-    }
-    
-    .custom-table tbody tr:hover {
-        background: linear-gradient(135deg, #eef6ff 0%, #e0f0ff 100%) !important;
-    }
-    
-    .custom-table tbody td {
-        padding: 12px 16px;
-        color: #1e3a5f !important;
-        font-size: 0.875rem;
-        border-bottom: 1px solid #e8f0f8;
-        font-weight: 500;
-    }
-    
-    .custom-table tbody tr:last-child td {
-        border-bottom: none;
-    }
-    
-    /* Scrollable table wrapper */
-    .table-scroll-wrapper {
-        max-height: 400px;
-        overflow-y: auto;
-        overflow-x: auto;
-    }
-    
-    .table-scroll-wrapper::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-    
-    .table-scroll-wrapper::-webkit-scrollbar-thumb {
-        background: #3b82f6;
-        border-radius: 10px;
-    }
-    
-    /* === PLOTLY HOVER IMPROVEMENTS === */
-    .js-plotly-plot .plotly .hoverlayer {
-        pointer-events: none;
-    }
-    
-    .js-plotly-plot {
-        border-radius: 14px;
-        overflow: hidden;
-        background: #ffffff !important;
-        box-shadow: 0 4px 15px rgba(30, 58, 95, 0.08);
-        border: 1px solid #e0e8f0;
-        transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-    
-    .js-plotly-plot:hover {
-        box-shadow: 0 8px 25px rgba(30, 58, 95, 0.12);
-        transform: translateY(-2px);
-    }
-    
-    /* Search input in multiselect */
-    section[data-testid="stSidebar"] .stMultiSelect input::placeholder {
-        color: #94a3b8 !important;
-        font-style: italic;
-    }
-    
-    section[data-testid="stSidebar"] .stMultiSelect [data-baseweb="popover"] {
-        background: #ffffff !important;
-        border: 1px solid #3b82f6 !important;
-        border-radius: 10px !important;
-        box-shadow: 0 8px 20px rgba(30, 58, 95, 0.15) !important;
-    }
-    
-    section[data-testid="stSidebar"] .stMultiSelect [role="listbox"] {
-        background: #ffffff !important;
-    }
-    
-    section[data-testid="stSidebar"] .stMultiSelect [role="option"] {
-        color: #1e3a5f !important;
-        background: #ffffff !important;
-        padding: 10px 14px !important;
-        transition: background 0.15s ease;
-    }
-    
-    section[data-testid="stSidebar"] .stMultiSelect [role="option"]:hover {
-        background: linear-gradient(135deg, #e8f4fc 0%, #dbeafe 100%) !important;
-    }
-    
-    section[data-testid="stSidebar"] .stMultiSelect [aria-selected="true"] {
-        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
-        color: #ffffff !important;
-    }
-    
-    /* Search/Text input styling in sidebar */
-    section[data-testid="stSidebar"] .stTextInput > div > div {
-        background: #ffffff !important;
-        border: 1px solid #d0e3f7 !important;
-        border-radius: 10px !important;
-        color: #1e3a5f !important;
-        transition: box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-    
-    section[data-testid="stSidebar"] .stTextInput > div > div:hover,
-    section[data-testid="stSidebar"] .stTextInput > div > div:focus-within {
-        border-color: #3b82f6 !important;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
-    }
-    
-    section[data-testid="stSidebar"] .stTextInput input {
-        color: #1e3a5f !important;
-        font-weight: 500 !important;
-    }
-    
-    section[data-testid="stSidebar"] .stTextInput input::placeholder {
-        color: #94a3b8 !important;
-        font-style: italic;
-    }
-    
-    /* Sidebar info text */
-    .sidebar-info {
-        color: rgba(255, 255, 255, 0.7) !important;
-        font-size: 0.8rem !important;
-        padding: 10px;
-        margin-top: 20px;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-        text-align: center;
-    }
-    
-    /* Sidebar section divider */
-    .sidebar-divider {
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        margin: 20px 0;
-    }
-    
-    /* Sidebar filter section */
-    .filter-section {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 12px;
-        padding: 15px;
-        margin-bottom: 15px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .filter-section-title {
-        color: #60a5fa !important;
-        font-size: 0.75rem !important;
-        font-weight: 700 !important;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 10px !important;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-    
-    .filter-section-title i {
-        font-size: 0.7rem;
-    }
-    
-    /* Sidebar info box styling */
-    .sidebar-info {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(96, 165, 250, 0.1) 100%) !important;
-        color: rgba(255, 255, 255, 0.9) !important;
-        font-size: 0.8rem !important;
-        padding: 15px !important;
-        margin-top: 20px !important;
-        border-radius: 12px !important;
-        border: 1px solid rgba(96, 165, 250, 0.3) !important;
-        text-align: left !important;
-    }
-    
-    .sidebar-info p {
-        margin: 8px 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-    }
-    
-    .sidebar-info strong {
-        color: #60a5fa !important;
-    }
-    
-    /* Sidebar reset button */
-    section[data-testid="stSidebar"] .stButton button {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 10px !important;
-        padding: 12px 20px !important;
-        font-weight: 600 !important;
-        font-size: 0.85rem !important;
-        transition: all 0.3s ease !important;
-        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3) !important;
-        margin-top: 10px !important;
-    }
-    
-    section[data-testid="stSidebar"] .stButton button:hover {
-        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4) !important;
-    }
-    
-    section[data-testid="stSidebar"] .stButton button:active {
-        transform: translateY(0) !important;
-    }
-    
-    /* Download button styling - Main content (Blue theme) */
-    .main .stDownloadButton button {
-        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%) !important;
-        color: #ffffff !important;
-        border: 2px solid #60a5fa !important;
-        border-radius: 12px !important;
-        padding: 14px 22px !important;
-        font-weight: 700 !important;
-        letter-spacing: 0.2px !important;
-        font-size: 0.92rem !important;
-        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease !important;
-        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.35) !important;
-    }
-    
-    .main .stDownloadButton button:hover {
-        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%) !important;
-        border-color: #93c5fd !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 10px 28px rgba(59, 130, 246, 0.45) !important;
-    }
-    
-    .main .stDownloadButton button:active {
-        transform: translateY(0) scale(0.98) !important;
-        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.35) !important;
-    }
-    
-    .main .stDownloadButton button:focus {
-        outline: none !important;
-        box-shadow: 0 0 0 4px rgba(147, 197, 253, 0.4) !important;
-    }
-    
-    /* Disabled state */
-    .main .stDownloadButton button:disabled,
-    .main .stDownloadButton button[disabled] {
-        background: linear-gradient(135deg, #cbd5e1 0%, #e2e8f0 100%) !important;
-        color: #1f2937 !important;
-        border: 2px solid #cbd5e1 !important;
-        box-shadow: none !important;
-        cursor: not-allowed !important;
-        opacity: 0.9 !important;
-    }
-    
-    /* Insight cards */
-    .insight-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 16px;
-        width: 100%;
-    }
-
-    .insight-card {
-        border-radius: 16px;
-        padding: 20px;
-        border-left: 4px solid transparent;
-        background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        min-height: 130px;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .insight-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    }
-
-    .insight-label {
-        color: #475569;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-weight: 600;
-    }
-
-    .insight-value {
-        color: #0f172a !important;
-        font-size: 1.4rem;
-        font-weight: 800;
-        margin: 0;
-        line-height: 1.2;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    }
-
-    .insight-sub {
-        font-size: 0.95rem;
-        font-weight: 600;
-        margin: 0;
-    }
-
-    .insight-card--category {
-        border-left-color: #3b82f6;
-        background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
-    }
-
-    .insight-card--category .insight-label i {
-        color: #f59e0b;
-    }
-
-    .insight-card--category .insight-sub {
-        color: #3b82f6;
-    }
-
-    .insight-card--region {
-        border-left-color: #10b981;
-        background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
-    }
-
-    .insight-card--region .insight-label i {
-        color: #10b981;
-    }
-
-    .insight-card--region .insight-sub {
-        color: #10b981;
-    }
-
-    .insight-card--segment {
-        border-left-color: #ef4444;
-        background: linear-gradient(135deg, #ffffff 0%, #fef3f2 100%);
-    }
-
-    .insight-card--segment .insight-label i {
-        color: #ef4444;
-    }
-
-    .insight-card--segment .insight-sub {
-        color: #ef4444;
-    }
-
-    .insight-card--month {
-        border-left-color: #f59e0b;
-        background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%);
-    }
-
-    .insight-card--month .insight-label i {
-        color: #f59e0b;
-    }
-
-    .insight-card--month .insight-sub {
-        color: #f59e0b;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# Fungsi untuk memuat data
-@st.cache_data
-def load_data():
-    """Memuat dan menggabungkan semua data CSV"""
-    base_path = os.path.dirname(os.path.abspath(__file__))
-    
-    # Load dimension tables
-    dim_customer = pd.read_csv(os.path.join(base_path, 'dim_customer.csv'))
-    dim_date = pd.read_csv(os.path.join(base_path, 'dim_date.csv'))
-    dim_product = pd.read_csv(os.path.join(base_path, 'dim_product.csv'))
-    dim_region = pd.read_csv(os.path.join(base_path, 'dim_region.csv'))
-    fact_sales = pd.read_csv(os.path.join(base_path, 'fact_sales.csv'))
-    
-    # Merge fact table with dimensions
-    df = fact_sales.merge(dim_customer, on='sk_customer', how='left')
-    df = df.merge(dim_product, on='sk_product', how='left')
-    df = df.merge(dim_region, on='sk_region', how='left')
-    
-    # Merge with date dimension for order date
-    dim_date_order = dim_date.copy()
-    dim_date_order = dim_date_order.rename(columns={
-        'date': 'order_date',
-        'year': 'order_year',
-        'month_num': 'order_month_num',
-        'month_name': 'order_month_name',
-        'quarter': 'order_quarter',
-        'day_of_week': 'order_day_of_week'
-    })
-    df = df.merge(dim_date_order, left_on='sk_order_date', right_on='sk_date', how='left')
-    
-    # Convert order_date to datetime
-    df['order_date'] = pd.to_datetime(df['order_date'])
-    
-    return df, dim_customer, dim_product, dim_region, dim_date
+# Apply CSS styles
+st.markdown(CSS_STYLES, unsafe_allow_html=True)
 
 # Load data
-df, dim_customer, dim_product, dim_region, dim_date = load_data()
+df = load_data()
 
-# Header
-st.markdown("""
-<div class="dashboard-header">
-    <h1><i class="fas fa-chart-line"></i> Sales Analytics Dashboard</h1>
-    <p>Business Intelligence Dashboard untuk Analisis Penjualan</p>
-</div>
-""", unsafe_allow_html=True)
-
-# Sidebar untuk filter
-st.sidebar.markdown('''
-<div class="sidebar-header">
-    <i class="fas fa-sliders-h"></i> Control Panel
-</div>
-''', unsafe_allow_html=True)
-
-# === TIME FILTERS SECTION ===
-st.sidebar.markdown('''
-<div class="filter-section">
-    <p class="filter-section-title"><i class="fas fa-clock"></i> Time Filters</p>
-</div>
-''', unsafe_allow_html=True)
-
-# Filter tahun
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-calendar-alt"></i> Tahun</p>', unsafe_allow_html=True)
-years = sorted(df['order_year'].dropna().unique())
-selected_years = st.sidebar.multiselect(
-    "Tahun",
-    options=years,
-    default=years,
-    label_visibility="collapsed"
-)
-
-# Divider
-st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
-
-# === GEOGRAPHIC FILTERS SECTION ===
-st.sidebar.markdown('''
-<div class="filter-section">
-    <p class="filter-section-title"><i class="fas fa-map-marked-alt"></i> Geographic Filters</p>
-</div>
-''', unsafe_allow_html=True)
-
-# Filter region
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-globe-americas"></i> Region</p>', unsafe_allow_html=True)
-regions = sorted(df['region'].dropna().unique())
-selected_regions = st.sidebar.multiselect(
-    "Region",
-    options=regions,
-    default=regions,
-    label_visibility="collapsed"
-)
-
-# Filter state
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-map"></i> State</p>', unsafe_allow_html=True)
-states = sorted(df['state'].dropna().unique())
-selected_states = st.sidebar.multiselect(
-    "State",
-    options=states,
-    default=states,
-    label_visibility="collapsed"
-)
-
-# Divider
-st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
-
-# === CUSTOMER FILTERS SECTION ===
-st.sidebar.markdown('''
-<div class="filter-section">
-    <p class="filter-section-title"><i class="fas fa-user-friends"></i> Customer Filters</p>
-</div>
-''', unsafe_allow_html=True)
-
-# Filter segment
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-users"></i> Segment</p>', unsafe_allow_html=True)
-segments = sorted(df['segment'].dropna().unique())
-selected_segments = st.sidebar.multiselect(
-    "Segment",
-    options=segments,
-    default=segments,
-    label_visibility="collapsed"
-)
-
-# Divider
-st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
-
-# === PRODUCT FILTERS SECTION ===
-st.sidebar.markdown('''
-<div class="filter-section">
-    <p class="filter-section-title"><i class="fas fa-box-open"></i> Product Filters</p>
-</div>
-''', unsafe_allow_html=True)
-
-# Filter category
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-layer-group"></i> Category</p>', unsafe_allow_html=True)
-categories = sorted(df['category'].dropna().unique())
-selected_categories = st.sidebar.multiselect(
-    "Category",
-    options=categories,
-    default=categories,
-    label_visibility="collapsed"
-)
-
-# Filter sub-category
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-tags"></i> Sub-Category</p>', unsafe_allow_html=True)
-subcategories = sorted(df['sub_category'].dropna().unique())
-selected_subcategories = st.sidebar.multiselect(
-    "Sub-Category",
-    options=subcategories,
-    default=subcategories,
-    label_visibility="collapsed"
-)
-
-# Search product
-st.sidebar.markdown('<p class="filter-label"><i class="fas fa-search"></i> Cari Produk</p>', unsafe_allow_html=True)
-product_search = st.sidebar.text_input(
-    "Search",
-    placeholder="Ketik nama produk...",
-    label_visibility="collapsed"
-)
-
-# Divider
-st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
-
-# Sidebar stats info
-st.sidebar.markdown(f'''
-<div class="sidebar-info">
-    <p><i class="fas fa-database"></i> Total Records: <strong>{len(df):,}</strong></p>
-    <p><i class="fas fa-chart-pie"></i> Categories: <strong>{len(categories)}</strong></p>
-    <p><i class="fas fa-globe"></i> Regions: <strong>{len(regions)}</strong></p>
-</div>
-''', unsafe_allow_html=True)
-
-# Quick reset button
-if st.sidebar.button("🔄 Reset All Filters", use_container_width=True):
-    st.rerun()
+# Create sidebar filters
+filters = create_all_filters(df)
 
 # Apply filters
-filtered_df = df[
-    (df['order_year'].isin(selected_years)) &
-    (df['region'].isin(selected_regions)) &
-    (df['state'].isin(selected_states)) &
-    (df['segment'].isin(selected_segments)) &
-    (df['category'].isin(selected_categories)) &
-    (df['sub_category'].isin(selected_subcategories))
-]
+filtered_df = filter_data(df, filters)
 
-# Apply product search filter
-if product_search:
-    filtered_df = filtered_df[filtered_df['product_name'].str.contains(product_search, case=False, na=False)]
+# === DASHBOARD HEADER ===
+st.markdown('''
+<div class="dashboard-header">
+    <h1>🛒 Super Store Sales Dashboard</h1>
+    <p>Interactive analytics dashboard for comprehensive sales performance monitoring</p>
+</div>
+''', unsafe_allow_html=True)
 
-# KPI Metrics Row
-st.markdown('<p class="section-header"><i class="fas fa-tachometer-alt"></i> Key Performance Indicators</p>', unsafe_allow_html=True)
+# === KPI SECTION ===
+st.markdown(f'''
+<p class="section-header">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#3b82f6" style="vertical-align: middle; margin-right: 8px;">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605" />
+    </svg>
+    Key Performance Indicators
+</p>
+''', unsafe_allow_html=True)
 
-# Quick Stats Row dengan Live Indicator
+# Live stats row
 st.markdown(f'''
 <div class="live-stats-row">
     <div class="live-pill live-pill--badge">
@@ -1666,421 +82,136 @@ st.markdown(f'''
 </div>
 ''', unsafe_allow_html=True)
 
-# Calculate all KPI values
-total_sales = filtered_df['sales'].sum()
-avg_order = filtered_df['sales'].mean() if len(filtered_df) > 0 else 0
-total_customers = filtered_df['sk_customer'].nunique()
-total_products = filtered_df['sk_product'].nunique()
-total_orders = filtered_df['order_id'].nunique()
-total_categories = filtered_df['category'].nunique()
-total_subcategories = filtered_df['sub_category'].nunique()
-total_states = filtered_df['state'].nunique()
-total_regions = filtered_df['region'].nunique()
+# Calculate KPIs
+kpis = calculate_kpis(filtered_df)
 
-# Row 1: Main KPIs
-col1, col2, col3, col4, col5 = st.columns(5)
-
-with col1:
-    st.metric(
-        label="💰 Total Sales",
-        value=f"${total_sales:,.2f}",
-        delta=f"{len(filtered_df):,} transaksi"
-    )
-
-with col2:
-    st.metric(
-        label="📊 Rata-rata Order",
-        value=f"${avg_order:,.2f}",
-        delta="per transaksi"
-    )
-
-with col3:
-    st.metric(
-        label="👥 Total Customers",
-        value=f"{total_customers:,}",
-        delta="unique customers"
-    )
-
-with col4:
-    st.metric(
-        label="📦 Total Products",
-        value=f"{total_products:,}",
-        delta="unique products"
-    )
-
-with col5:
-    st.metric(
-        label="🛒 Total Orders",
-        value=f"{total_orders:,}",
-        delta="unique orders"
-    )
-
-# Row 2: Additional KPIs
-col6, col7, col8, col9 = st.columns(4)
-
-with col6:
-    st.metric(
-        label="📁 Total Categories",
-        value=f"{total_categories:,}",
-        delta="kategori produk"
-    )
-
-with col7:
-    st.metric(
-        label="🏷️ Total Sub-Categories",
-        value=f"{total_subcategories:,}",
-        delta="sub-kategori"
-    )
-
-with col8:
-    st.metric(
-        label="🏙️ Total States",
-        value=f"{total_states:,}",
-        delta="negara bagian"
-    )
-
-with col9:
-    st.metric(
-        label="🌍 Total Regions",
-        value=f"{total_regions:,}",
-        delta="wilayah"
-    )
+# Render KPI rows
+st.markdown(render_kpi_row1(kpis), unsafe_allow_html=True)
+st.markdown(render_kpi_row2(kpis), unsafe_allow_html=True)
 
 st.markdown("---")
 
-# === QUICK INSIGHTS SECTION ===
-st.markdown('<p class="section-header"><i class="fas fa-lightbulb"></i> Quick Insights</p>', unsafe_allow_html=True)
+# === QUICK INSIGHTS ===
+st.markdown(f'''
+<p class="section-header">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#3b82f6" style="vertical-align: middle; margin-right: 8px;">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+    </svg>
+    Quick Insights
+</p>
+''', unsafe_allow_html=True)
 
-# Calculate insights
-top_category = filtered_df.groupby('category')['sales'].sum().idxmax() if len(filtered_df) > 0 else "N/A"
-top_category_sales = filtered_df.groupby('category')['sales'].sum().max() if len(filtered_df) > 0 else 0
-top_region = filtered_df.groupby('region')['sales'].sum().idxmax() if len(filtered_df) > 0 else "N/A"
-top_region_sales = filtered_df.groupby('region')['sales'].sum().max() if len(filtered_df) > 0 else 0
-top_segment = filtered_df.groupby('segment')['sales'].sum().idxmax() if len(filtered_df) > 0 else "N/A"
-best_month = filtered_df.groupby('order_month_name')['sales'].sum().idxmax() if len(filtered_df) > 0 else "N/A"
-
-insights_html = f'''
-<div class="insight-grid">
-    <div class="insight-card insight-card--category">
-        <p class="insight-label"><i class="fas fa-trophy"></i> Top Category</p>
-        <h3 class="insight-value">{top_category}</h3>
-        <p class="insight-sub">${top_category_sales:,.0f}</p>
-    </div>
-    <div class="insight-card insight-card--region">
-        <p class="insight-label"><i class="fas fa-map-marker-alt"></i> Top Region</p>
-        <h3 class="insight-value">{top_region}</h3>
-        <p class="insight-sub">${top_region_sales:,.0f}</p>
-    </div>
-    <div class="insight-card insight-card--segment">
-        <p class="insight-label"><i class="fas fa-users"></i> Top Segment</p>
-        <h3 class="insight-value">{top_segment}</h3>
-        <p class="insight-sub">Best Performer</p>
-    </div>
-    <div class="insight-card insight-card--month">
-        <p class="insight-label"><i class="fas fa-calendar-star"></i> Peak Month</p>
-        <h3 class="insight-value">{best_month}</h3>
-        <p class="insight-sub">Highest Sales</p>
-    </div>
-</div>
-'''
-st.markdown(insights_html, unsafe_allow_html=True)
+insights = get_top_insights(filtered_df)
+st.markdown(render_insights_section(insights), unsafe_allow_html=True)
 
 st.markdown("---")
 
-# === DATA SUMMARY VISUALIZATION ===
-st.markdown('<p class="section-header"><i class="fas fa-chart-pie"></i> Data Distribution Overview</p>', unsafe_allow_html=True)
+# === DATA DISTRIBUTION OVERVIEW ===
+st.markdown(f'''
+<p class="section-header">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#3b82f6" style="vertical-align: middle; margin-right: 8px;">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
+    </svg>
+    Data Distribution Overview
+</p>
+''', unsafe_allow_html=True)
 
 summary_col1, summary_col2, summary_col3, summary_col4 = st.columns(4)
 
 with summary_col1:
-    # Category distribution
     category_counts = filtered_df.groupby('category').size().reset_index(name='count')
-    fig_cat_dist = px.pie(
-        category_counts,
-        values='count',
-        names='category',
-        title='Category Distribution',
-        color_discrete_sequence=['#1e3a5f', '#3b82f6', '#60a5fa'],
-        hole=0.4
-    )
-    fig_cat_dist.update_layout(
-        paper_bgcolor='rgba(255,255,255,0.9)',
-        font=dict(color='#1e3a5f', family='Poppins', size=10),
-        title=dict(font=dict(size=12, color='#1e3a5f')),
-        showlegend=False,
-        margin=dict(l=10, r=10, t=40, b=10),
-        height=200
-    )
-    fig_cat_dist.update_traces(textposition='inside', textinfo='percent+label', textfont_size=9)
-    st.plotly_chart(fig_cat_dist, use_container_width=True)
+    fig_cat = create_pie_chart(category_counts, 'count', 'category', 'Category Distribution')
+    st.plotly_chart(fig_cat, use_container_width=True)
 
 with summary_col2:
-    # Segment distribution
     segment_counts = filtered_df.groupby('segment').size().reset_index(name='count')
-    fig_seg_dist = px.pie(
-        segment_counts,
-        values='count',
-        names='segment',
-        title='Segment Distribution',
-        color_discrete_sequence=['#2c5282', '#3b82f6', '#93c5fd'],
-        hole=0.4
-    )
-    fig_seg_dist.update_layout(
-        paper_bgcolor='rgba(255,255,255,0.9)',
-        font=dict(color='#1e3a5f', family='Poppins', size=10),
-        title=dict(font=dict(size=12, color='#1e3a5f')),
-        showlegend=False,
-        margin=dict(l=10, r=10, t=40, b=10),
-        height=200
-    )
-    fig_seg_dist.update_traces(textposition='inside', textinfo='percent+label', textfont_size=9)
-    st.plotly_chart(fig_seg_dist, use_container_width=True)
+    fig_seg = create_pie_chart(segment_counts, 'count', 'segment', 'Segment Distribution', 
+                               ['#7c3aed', '#f59e0b', '#06b6d4'])
+    st.plotly_chart(fig_seg, use_container_width=True)
 
 with summary_col3:
-    # Region distribution
     region_counts = filtered_df.groupby('region').size().reset_index(name='count')
-    fig_reg_dist = px.pie(
-        region_counts,
-        values='count',
-        names='region',
-        title='Region Distribution',
-        color_discrete_sequence=['#1e3a5f', '#2c5282', '#3b82f6', '#60a5fa'],
-        hole=0.4
-    )
-    fig_reg_dist.update_layout(
-        paper_bgcolor='rgba(255,255,255,0.9)',
-        font=dict(color='#1e3a5f', family='Poppins', size=10),
-        title=dict(font=dict(size=12, color='#1e3a5f')),
-        showlegend=False,
-        margin=dict(l=10, r=10, t=40, b=10),
-        height=200
-    )
-    fig_reg_dist.update_traces(textposition='inside', textinfo='percent+label', textfont_size=9)
-    st.plotly_chart(fig_reg_dist, use_container_width=True)
+    fig_reg = create_pie_chart(region_counts, 'count', 'region', 'Region Distribution',
+                               ['#dc2626', '#2563eb', '#16a34a', '#f59e0b'])
+    st.plotly_chart(fig_reg, use_container_width=True)
 
 with summary_col4:
-    # Top 5 Sub-Categories by count
-    subcat_counts = filtered_df.groupby('sub_category').size().reset_index(name='count').sort_values('count', ascending=False).head(5)
-    fig_subcat = px.bar(
-        subcat_counts,
-        x='count',
-        y='sub_category',
-        orientation='h',
-        title='Top 5 Sub-Categories',
-        color='count',
-        color_continuous_scale='Blues'
-    )
-    fig_subcat.update_layout(
-        paper_bgcolor='rgba(255,255,255,0.9)',
-        font=dict(color='#1e3a5f', family='Poppins', size=10),
-        title=dict(font=dict(size=12, color='#1e3a5f')),
-        showlegend=False,
-        coloraxis_showscale=False,
-        margin=dict(l=10, r=10, t=40, b=10),
-        height=200,
-        xaxis=dict(title='', tickfont=dict(size=9)),
-        yaxis=dict(title='', tickfont=dict(size=9), categoryorder='total ascending')
-    )
+    subcat_counts = filtered_df.groupby('sub_category').size().reset_index(name='count')
+    subcat_counts = subcat_counts.sort_values('count', ascending=False).head(5)
+    fig_subcat = create_bar_chart_horizontal(subcat_counts, 'count', 'sub_category', 'Top 5 Sub-Categories')
     st.plotly_chart(fig_subcat, use_container_width=True)
 
 st.markdown("---")
 
-# Tabs untuk berbagai visualisasi
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "Overview", 
-    "Sales Trend", 
-    "Regional Analysis", 
-    "Product Analysis",
-    "Customer Analysis"
+# === TABS ===
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+    "Overview", "Sales Trend", "Regional Analysis", 
+    "Product Analysis", "Customer Analysis", "Forecasting"
 ])
-
-# Warna untuk chart (Blue theme)
-blue_colors = ['#1e3a5f', '#2c5282', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe']
-gradient_scale = [[0, '#bfdbfe'], [0.5, '#3b82f6'], [1, '#1e3a5f']]
 
 # Tab 1: Overview
 with tab1:
     col1, col2 = st.columns(2)
     
     with col1:
-        # Sales by Category
         st.markdown('<p class="sub-header"><i class="fas fa-box"></i> Sales by Category</p>', unsafe_allow_html=True)
         category_sales = filtered_df.groupby('category')['sales'].sum().reset_index()
-        fig_category = px.pie(
-            category_sales, 
-            values='sales', 
-            names='category',
-            color_discrete_sequence=blue_colors,
-            hole=0.45
-        )
-        fig_category.update_layout(
-            paper_bgcolor='rgba(255,255,255,0.9)',
-            plot_bgcolor='rgba(255,255,255,0.9)',
-            font=dict(color='#1e3a5f', family='Poppins'),
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=-0.2,
-                xanchor="center",
-                x=0.5,
-                font=dict(color='#1e3a5f')
-            )
-        )
-        fig_category.update_traces(textfont=dict(color='#ffffff'))
+        fig_category = create_pie_chart_large(category_sales, 'sales', 'category', '')
         st.plotly_chart(fig_category, use_container_width=True)
     
     with col2:
-        # Sales by Segment
         st.markdown('<p class="sub-header"><i class="fas fa-users"></i> Sales by Segment</p>', unsafe_allow_html=True)
         segment_sales = filtered_df.groupby('segment')['sales'].sum().reset_index()
-        fig_segment = px.pie(
-            segment_sales, 
-            values='sales', 
-            names='segment',
-            color_discrete_sequence=['#2c5282', '#3b82f6', '#93c5fd'],
-            hole=0.45
-        )
-        fig_segment.update_layout(
-            paper_bgcolor='rgba(255,255,255,0.9)',
-            plot_bgcolor='rgba(255,255,255,0.9)',
-            font=dict(color='#1e3a5f', family='Poppins'),
-            legend=dict(
-                orientation="h",
-                yanchor="bottom",
-                y=-0.2,
-                xanchor="center",
-                x=0.5,
-                font=dict(color='#1e3a5f')
-            )
-        )
-        fig_segment.update_traces(textfont=dict(color='#ffffff'))
+        fig_segment = create_pie_chart_large(segment_sales, 'sales', 'segment', '', 
+                                             ['#7c3aed', '#f59e0b', '#06b6d4'])
         st.plotly_chart(fig_segment, use_container_width=True)
     
-    # Sales by Region Bar Chart
+    # Region Bar Chart
     st.markdown('<p class="sub-header"><i class="fas fa-globe-americas"></i> Sales by Region</p>', unsafe_allow_html=True)
     region_sales = filtered_df.groupby('region')['sales'].sum().reset_index().sort_values('sales', ascending=True)
-    fig_region = px.bar(
-        region_sales,
-        x='sales',
-        y='region',
-        orientation='h',
-        color='sales',
-        color_continuous_scale='Blues'
-    )
-    fig_region.update_layout(
-        paper_bgcolor='rgba(255,255,255,0.9)',
-        plot_bgcolor='rgba(255,255,255,0.9)',
-        font=dict(color='#1e3a5f', family='Poppins'),
-        xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-        yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-        showlegend=False,
-        coloraxis_showscale=False,
-        height=300
-    )
+    fig_region = create_bar_chart_horizontal(region_sales, 'sales', 'region', '', height=320, show_text=True)
     st.plotly_chart(fig_region, use_container_width=True)
 
 # Tab 2: Sales Trend
 with tab2:
-    # Monthly Sales Trend
     st.markdown('<p class="sub-header"><i class="fas fa-chart-area"></i> Monthly Sales Trend</p>', unsafe_allow_html=True)
     
     monthly_sales = filtered_df.groupby(['order_year', 'order_month_num', 'order_month_name'])['sales'].sum().reset_index()
     monthly_sales['year_month'] = monthly_sales['order_year'].astype(str) + '-' + monthly_sales['order_month_num'].astype(str).str.zfill(2)
     monthly_sales = monthly_sales.sort_values('year_month')
     
-    fig_trend = px.line(
-        monthly_sales,
-        x='year_month',
-        y='sales',
-        markers=True,
-        color_discrete_sequence=['#3b82f6']
-    )
-    fig_trend.update_layout(
-        paper_bgcolor='rgba(255,255,255,0.9)',
-        plot_bgcolor='rgba(255,255,255,0.9)',
-        font=dict(color='#1e3a5f', family='Poppins'),
-        xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Bulan', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-        yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-        height=400
-    )
-    fig_trend.update_traces(line=dict(width=4, color='#3b82f6'), marker=dict(size=10, color='#1e3a5f', line=dict(width=2, color='#ffffff')))
+    fig_trend = create_line_chart(monthly_sales, 'year_month', 'sales', '')
     st.plotly_chart(fig_trend, use_container_width=True)
     
     col1, col2 = st.columns(2)
     
     with col1:
-        # Quarterly Sales
-        st.markdown('<p class="sub-header"><i class="fas fa-calendar-alt"></i> Quarterly Sales Comparison</p>', unsafe_allow_html=True)
+        st.markdown('<p class="sub-header"><i class="fas fa-calendar-alt"></i> Quarterly Sales</p>', unsafe_allow_html=True)
         quarterly_sales = filtered_df.groupby(['order_year', 'order_quarter'])['sales'].sum().reset_index()
         quarterly_sales['quarter_label'] = 'Q' + quarterly_sales['order_quarter'].astype(str)
         
         fig_quarterly = px.bar(
-            quarterly_sales,
-            x='quarter_label',
-            y='sales',
-            color='order_year',
-            barmode='group',
-            color_discrete_sequence=blue_colors
+            quarterly_sales, x='quarter_label', y='sales', color='order_year',
+            barmode='group', color_discrete_sequence=CHART_COLORS
         )
-        fig_quarterly.update_layout(
-            paper_bgcolor='rgba(255,255,255,0.9)',
-            plot_bgcolor='rgba(255,255,255,0.9)',
-            font=dict(color='#1e3a5f', family='Poppins'),
-            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Quarter', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            legend_title="Tahun",
-            legend=dict(font=dict(color='#1e3a5f'))
-        )
+        fig_quarterly.update_layout(**CHART_LAYOUT, height=380, legend_title="Year")
         st.plotly_chart(fig_quarterly, use_container_width=True)
     
     with col2:
-        # Yearly Sales
-        st.markdown('<p class="sub-header"><i class="fas fa-chart-bar"></i> Yearly Sales Growth</p>', unsafe_allow_html=True)
+        st.markdown('<p class="sub-header"><i class="fas fa-chart-bar"></i> Yearly Sales</p>', unsafe_allow_html=True)
         yearly_sales = filtered_df.groupby('order_year')['sales'].sum().reset_index()
-        
-        fig_yearly = px.bar(
-            yearly_sales,
-            x='order_year',
-            y='sales',
-            color='sales',
-            color_continuous_scale='Blues',
-            text='sales'
-        )
-        fig_yearly.update_layout(
-            paper_bgcolor='rgba(255,255,255,0.9)',
-            plot_bgcolor='rgba(255,255,255,0.9)',
-            font=dict(color='#1e3a5f', family='Poppins'),
-            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Tahun', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            showlegend=False,
-            coloraxis_showscale=False
-        )
-        fig_yearly.update_traces(texttemplate='$%{text:,.0f}', textposition='outside', textfont=dict(color='#1e3a5f'))
+        fig_yearly = create_bar_chart_vertical(yearly_sales, 'order_year', 'sales', '', height=380)
         st.plotly_chart(fig_yearly, use_container_width=True)
     
-    # Day of Week Analysis
+    # Day of Week
     st.markdown('<p class="sub-header"><i class="fas fa-calendar-week"></i> Sales by Day of Week</p>', unsafe_allow_html=True)
     day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     day_sales = filtered_df.groupby('order_day_of_week')['sales'].sum().reset_index()
     day_sales['order_day_of_week'] = pd.Categorical(day_sales['order_day_of_week'], categories=day_order, ordered=True)
     day_sales = day_sales.sort_values('order_day_of_week')
     
-    fig_day = px.bar(
-        day_sales,
-        x='order_day_of_week',
-        y='sales',
-        color='sales',
-        color_continuous_scale='Blues'
-    )
-    fig_day.update_layout(
-        paper_bgcolor='rgba(255,255,255,0.9)',
-        plot_bgcolor='rgba(255,255,255,0.9)',
-        font=dict(color='#1e3a5f', family='Poppins'),
-        xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Hari', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-        yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-        coloraxis_showscale=False,
-        height=350
-    )
+    fig_day = create_bar_chart_vertical(day_sales, 'order_day_of_week', 'sales', '', height=350)
     st.plotly_chart(fig_day, use_container_width=True)
 
 # Tab 3: Regional Analysis
@@ -2088,31 +219,13 @@ with tab3:
     col1, col2 = st.columns([2, 1])
     
     with col1:
-        # Top 15 States by Sales
         st.markdown('<p class="sub-header"><i class="fas fa-building"></i> Top 15 States by Sales</p>', unsafe_allow_html=True)
-        state_sales = filtered_df.groupby('state')['sales'].sum().reset_index().sort_values('sales', ascending=False).head(15)
-        
-        fig_states = px.bar(
-            state_sales,
-            x='sales',
-            y='state',
-            orientation='h',
-            color='sales',
-            color_continuous_scale='Blues'
-        )
-        fig_states.update_layout(
-            paper_bgcolor='rgba(255,255,255,0.9)',
-            plot_bgcolor='rgba(255,255,255,0.9)',
-            font=dict(color='#1e3a5f', family='Poppins'),
-            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='State', categoryorder='total ascending', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            coloraxis_showscale=False,
-            height=500
-        )
+        state_sales = filtered_df.groupby('state')['sales'].sum().reset_index()
+        state_sales = state_sales.sort_values('sales', ascending=False).head(15)
+        fig_states = create_bar_chart_horizontal(state_sales, 'sales', 'state', '', height=520, show_text=True)
         st.plotly_chart(fig_states, use_container_width=True)
     
     with col2:
-        # Region Summary
         st.markdown('<p class="sub-header"><i class="fas fa-info-circle"></i> Region Summary</p>', unsafe_allow_html=True)
         region_summary = filtered_df.groupby('region').agg({
             'sales': 'sum',
@@ -2120,68 +233,25 @@ with tab3:
             'sk_customer': 'nunique'
         }).reset_index()
         region_summary.columns = ['Region', 'Total Sales', 'Orders', 'Customers']
-        region_summary['Avg per Order'] = region_summary['Total Sales'] / region_summary['Orders']
         region_summary = region_summary.sort_values('Total Sales', ascending=False)
         
         for _, row in region_summary.iterrows():
-            st.markdown(f"""
+            st.markdown(f'''
             <div class="region-card">
                 <h4>{row['Region']}</h4>
                 <p><i class="fas fa-dollar-sign"></i> ${row['Total Sales']:,.2f}</p>
                 <p><i class="fas fa-shopping-cart"></i> {row['Orders']:,} orders</p>
                 <p><i class="fas fa-user"></i> {row['Customers']:,} customers</p>
             </div>
-            """, unsafe_allow_html=True)
+            ''', unsafe_allow_html=True)
     
-    # Top 10 Cities
+    # Top Cities
     st.markdown('<p class="sub-header"><i class="fas fa-city"></i> Top 10 Cities by Sales</p>', unsafe_allow_html=True)
     city_sales = filtered_df.groupby(['city', 'state'])['sales'].sum().reset_index()
     city_sales['city_state'] = city_sales['city'] + ', ' + city_sales['state']
     city_sales = city_sales.sort_values('sales', ascending=False).head(10)
     
-    fig_cities = px.bar(
-        city_sales,
-        x='sales',
-        y='city_state',
-        orientation='h',
-        color='sales',
-        color_continuous_scale='Blues',
-        text=city_sales['sales'].apply(lambda x: f'${x:,.0f}')
-    )
-    fig_cities.update_layout(
-        paper_bgcolor='#ffffff',
-        plot_bgcolor='#ffffff',
-        font=dict(color='#1e3a5f', family='Poppins'),
-        xaxis=dict(
-            gridcolor='rgba(59, 130, 246, 0.15)',
-            title='Total Sales',
-            title_font=dict(color='#1e3a5f'),
-            tickfont=dict(color='#4a6fa5')
-        ),
-        yaxis=dict(
-            gridcolor='rgba(59, 130, 246, 0.15)',
-            title='',
-            categoryorder='total ascending',
-            title_font=dict(color='#1e3a5f'),
-            tickfont=dict(color='#1e3a5f', size=11)
-        ),
-        coloraxis_showscale=False,
-        height=400,
-        margin=dict(l=10, r=10, t=10, b=10),
-        hoverlabel=dict(
-            bgcolor='#1e3a5f',
-            font_size=13,
-            font_family='Poppins',
-            font_color='white',
-            bordercolor='#3b82f6'
-        )
-    )
-    fig_cities.update_traces(
-        textposition='inside',
-        textfont=dict(color='white', size=11, family='Poppins'),
-        hovertemplate='<b>%{y}</b><br>Sales: $%{x:,.2f}<extra></extra>',
-        marker=dict(line=dict(color='#1e3a5f', width=1))
-    )
+    fig_cities = create_bar_chart_horizontal(city_sales, 'sales', 'city_state', '', height=400, show_text=True)
     st.plotly_chart(fig_cities, use_container_width=True)
 
 # Tab 4: Product Analysis
@@ -2189,190 +259,222 @@ with tab4:
     col1, col2 = st.columns(2)
     
     with col1:
-        # Sales by Sub-Category
         st.markdown('<p class="sub-header"><i class="fas fa-tags"></i> Top 10 Sub-Categories</p>', unsafe_allow_html=True)
         subcat_sales = filtered_df.groupby('sub_category')['sales'].sum().reset_index()
         subcat_sales = subcat_sales.sort_values('sales', ascending=False).head(10)
-        
-        fig_subcat = px.bar(
-            subcat_sales,
-            x='sales',
-            y='sub_category',
-            orientation='h',
-            color='sales',
-            color_continuous_scale='Blues'
-        )
-        fig_subcat.update_layout(
-            paper_bgcolor='rgba(255,255,255,0.9)',
-            plot_bgcolor='rgba(255,255,255,0.9)',
-            font=dict(color='#1e3a5f', family='Poppins'),
-            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Sub-Category', categoryorder='total ascending', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            coloraxis_showscale=False,
-            height=400
-        )
+        fig_subcat = create_bar_chart_horizontal(subcat_sales, 'sales', 'sub_category', '', height=400, show_text=True)
         st.plotly_chart(fig_subcat, use_container_width=True)
     
     with col2:
-        # Category Sales Breakdown
-        st.markdown('<p class="sub-header"><i class="fas fa-sitemap"></i> Category Sales Breakdown</p>', unsafe_allow_html=True)
+        st.markdown('<p class="sub-header"><i class="fas fa-sitemap"></i> Category Breakdown</p>', unsafe_allow_html=True)
         category_subcat = filtered_df.groupby(['category', 'sub_category'])['sales'].sum().reset_index()
         
         fig_sunburst = px.sunburst(
-            category_subcat,
-            path=['category', 'sub_category'],
-            values='sales',
-            color='sales',
-            color_continuous_scale='Blues'
+            category_subcat, path=['category', 'sub_category'],
+            values='sales', color='sales', color_continuous_scale='Blues'
         )
         fig_sunburst.update_layout(
-            paper_bgcolor='#ffffff',
-            font=dict(color='#1e3a5f', family='Poppins'),
-            height=400,
-            margin=dict(t=10, b=10, l=10, r=10),
-            coloraxis_showscale=False,
-            hoverlabel=dict(
-                bgcolor='#1e3a5f',
-                font_size=13,
-                font_family='Poppins',
-                font_color='white'
-            )
+            paper_bgcolor='#ffffff', height=420,
+            margin=dict(t=20, b=20, l=20, r=20),
+            coloraxis_showscale=False
         )
-        fig_sunburst.update_traces(
-            textfont=dict(color='#ffffff', size=12, family='Poppins'),
-            hovertemplate='<b>%{label}</b><br>Sales: $%{value:,.2f}<extra></extra>',
-            insidetextorientation='radial'
-        )
+        fig_sunburst.update_traces(textfont=dict(color='#ffffff', size=10))
         st.plotly_chart(fig_sunburst, use_container_width=True)
     
     # Top Products Table
-    st.markdown('<p class="sub-header"><i class="fas fa-trophy"></i> Top 20 Products by Sales</p>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-header"><i class="fas fa-trophy"></i> Top 20 Products</p>', unsafe_allow_html=True)
     top_products = filtered_df.groupby(['product_name', 'category', 'sub_category'])['sales'].sum().reset_index()
     top_products = top_products.sort_values('sales', ascending=False).head(20)
     top_products['sales'] = top_products['sales'].apply(lambda x: f"${x:,.2f}")
     top_products.columns = ['Product Name', 'Category', 'Sub-Category', 'Total Sales']
-    
-    # Custom HTML table
-    table_html = '<div class="custom-table-container"><div class="table-scroll-wrapper"><table class="custom-table"><thead><tr>'
-    for col in top_products.columns:
-        table_html += f'<th>{col}</th>'
-    table_html += '</tr></thead><tbody>'
-    for _, row in top_products.iterrows():
-        table_html += '<tr>'
-        for val in row:
-            table_html += f'<td>{val}</td>'
-        table_html += '</tr>'
-    table_html += '</tbody></table></div></div>'
-    st.markdown(table_html, unsafe_allow_html=True)
+    st.dataframe(top_products, use_container_width=True, hide_index=True)
 
 # Tab 5: Customer Analysis
 with tab5:
     col1, col2 = st.columns(2)
     
     with col1:
-        # Top 10 Customers
-        st.markdown('<p class="sub-header"><i class="fas fa-medal"></i> Top 10 Customers by Sales</p>', unsafe_allow_html=True)
+        st.markdown('<p class="sub-header"><i class="fas fa-medal"></i> Top 10 Customers</p>', unsafe_allow_html=True)
         top_customers = filtered_df.groupby(['customer_name', 'segment'])['sales'].sum().reset_index()
         top_customers = top_customers.sort_values('sales', ascending=False).head(10)
         
         fig_customers = px.bar(
-            top_customers,
-            x='sales',
-            y='customer_name',
-            orientation='h',
-            color='segment',
-            color_discrete_sequence=blue_colors
+            top_customers, x='sales', y='customer_name', orientation='h',
+            color='segment', color_discrete_sequence=CHART_COLORS,
+            text=top_customers['sales'].apply(lambda x: f'${x:,.0f}')
         )
-        fig_customers.update_layout(
-            paper_bgcolor='rgba(255,255,255,0.9)',
-            plot_bgcolor='rgba(255,255,255,0.9)',
-            font=dict(color='#1e3a5f', family='Poppins'),
-            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Total Sales', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Customer', categoryorder='total ascending', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            legend_title="Segment",
-            legend=dict(font=dict(color='#1e3a5f')),
-            height=400
-        )
+        fig_customers.update_layout(**CHART_LAYOUT, height=420, legend_title="Segment")
+        fig_customers.update_yaxes(categoryorder='total ascending')
+        fig_customers.update_traces(textposition='inside', textfont=dict(color='white', size=8))
         st.plotly_chart(fig_customers, use_container_width=True)
     
     with col2:
-        # Segment Distribution
-        st.markdown('<p class="sub-header"><i class="fas fa-user-friends"></i> Customer Segment Distribution</p>', unsafe_allow_html=True)
+        st.markdown('<p class="sub-header"><i class="fas fa-user-friends"></i> Segment Distribution</p>', unsafe_allow_html=True)
         segment_dist = filtered_df.groupby('segment').agg({
             'sk_customer': 'nunique',
-            'sales': 'sum',
             'order_id': 'nunique'
         }).reset_index()
-        segment_dist.columns = ['Segment', 'Customers', 'Total Sales', 'Orders']
+        segment_dist.columns = ['Segment', 'Customers', 'Orders']
         
         fig_seg_dist = px.bar(
-            segment_dist,
-            x='Segment',
-            y=['Customers', 'Orders'],
-            barmode='group',
-            color_discrete_sequence=['#1e3a5f', '#3b82f6']
+            segment_dist, x='Segment', y=['Customers', 'Orders'],
+            barmode='group', color_discrete_sequence=['#1e3a5f', '#3b82f6']
         )
-        fig_seg_dist.update_layout(
-            paper_bgcolor='rgba(255,255,255,0.9)',
-            plot_bgcolor='rgba(255,255,255,0.9)',
-            font=dict(color='#1e3a5f', family='Poppins'),
-            xaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            yaxis=dict(gridcolor='rgba(59, 130, 246, 0.15)', title='Count', title_font=dict(color='#1e3a5f'), tickfont=dict(color='#4a6fa5')),
-            legend_title="Metric",
-            legend=dict(font=dict(color='#1e3a5f')),
-            height=400
-        )
+        fig_seg_dist.update_layout(**CHART_LAYOUT, height=420, legend_title="Metric")
         st.plotly_chart(fig_seg_dist, use_container_width=True)
     
-    # Customer Segment Analysis
-    st.markdown('<p class="sub-header"><i class="fas fa-chart-pie"></i> Segment Performance Analysis</p>', unsafe_allow_html=True)
+    # Segment Analysis Table
+    st.markdown('<p class="sub-header"><i class="fas fa-chart-pie"></i> Segment Performance</p>', unsafe_allow_html=True)
     segment_analysis = filtered_df.groupby('segment').agg({
         'sales': ['sum', 'mean', 'count'],
         'sk_customer': 'nunique',
         'order_id': 'nunique'
     }).round(2)
-    segment_analysis.columns = ['Total Sales', 'Avg Sale', 'Transactions', 'Unique Customers', 'Unique Orders']
-    segment_analysis['Sales per Customer'] = (segment_analysis['Total Sales'] / segment_analysis['Unique Customers']).round(2)
-    segment_analysis['Orders per Customer'] = (segment_analysis['Unique Orders'] / segment_analysis['Unique Customers']).round(2)
-    
-    # Reset index dan format
+    segment_analysis.columns = ['Total Sales', 'Avg Sale', 'Transactions', 'Customers', 'Orders']
+    segment_analysis['Sales per Customer'] = (segment_analysis['Total Sales'] / segment_analysis['Customers']).round(2)
     segment_analysis = segment_analysis.reset_index()
     segment_analysis['Total Sales'] = segment_analysis['Total Sales'].apply(lambda x: f"${x:,.2f}")
     segment_analysis['Avg Sale'] = segment_analysis['Avg Sale'].apply(lambda x: f"${x:,.2f}")
     segment_analysis['Sales per Customer'] = segment_analysis['Sales per Customer'].apply(lambda x: f"${x:,.2f}")
-    
-    # Custom HTML table
-    table_html2 = '<div class="custom-table-container"><div class="table-scroll-wrapper"><table class="custom-table"><thead><tr>'
-    for col in segment_analysis.columns:
-        table_html2 += f'<th>{col}</th>'
-    table_html2 += '</tr></thead><tbody>'
-    for _, row in segment_analysis.iterrows():
-        table_html2 += '<tr>'
-        for val in row:
-            table_html2 += f'<td>{val}</td>'
-        table_html2 += '</tr>'
-    table_html2 += '</tbody></table></div></div>'
-    st.markdown(table_html2, unsafe_allow_html=True)
+    st.dataframe(segment_analysis, use_container_width=True, hide_index=True)
 
-# === EXPORT & DOWNLOAD SECTION ===
+# Tab 6: Forecasting
+with tab6:
+    st.markdown('''
+    <div style="background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%); padding: 20px; border-radius: 14px; margin-bottom: 20px; border-left: 4px solid #3b82f6;">
+        <p style="color: #1e3a5f; margin: 0; font-weight: 600;"><i class="fas fa-info-circle" style="color: #3b82f6;"></i> Method: Linear Regression</p>
+        <p style="color: #4a6fa5; margin: 5px 0 0 0; font-size: 0.9rem;">Forecast based on historical monthly sales trends.</p>
+    </div>
+    ''', unsafe_allow_html=True)
+    
+    # Prepare forecast data
+    monthly_forecast = filtered_df.groupby(['order_year', 'order_month_num'])['sales'].sum().reset_index()
+    monthly_forecast['period'] = monthly_forecast['order_year'].astype(str) + '-' + monthly_forecast['order_month_num'].astype(str).str.zfill(2)
+    monthly_forecast = monthly_forecast.sort_values('period').reset_index(drop=True)
+    monthly_forecast['period_num'] = range(1, len(monthly_forecast) + 1)
+    
+    if len(monthly_forecast) >= 3:
+        X = monthly_forecast[['period_num']].values
+        y = monthly_forecast['sales'].values
+        
+        model = LinearRegression()
+        model.fit(X, y)
+        
+        historical_pred = model.predict(X)
+        future_periods = np.array([[i] for i in range(len(X) + 1, len(X) + 7)])
+        future_pred = model.predict(future_periods)
+        
+        # Future labels
+        last_year = monthly_forecast['order_year'].iloc[-1]
+        last_month = monthly_forecast['order_month_num'].iloc[-1]
+        future_labels = []
+        for i in range(1, 7):
+            next_month = last_month + i
+            next_year = last_year
+            while next_month > 12:
+                next_month -= 12
+                next_year += 1
+            future_labels.append(f"{next_year}-{str(next_month).zfill(2)}")
+        
+        # Create forecast chart
+        fig_forecast = go.Figure()
+        
+        fig_forecast.add_trace(go.Scatter(
+            x=monthly_forecast['period'], y=monthly_forecast['sales'],
+            mode='lines+markers', name='Actual Sales',
+            line=dict(color='#3b82f6', width=3),
+            marker=dict(size=8, color='#1e3a5f')
+        ))
+        
+        fig_forecast.add_trace(go.Scatter(
+            x=monthly_forecast['period'], y=historical_pred,
+            mode='lines', name='Trend Line',
+            line=dict(color='#94a3b8', width=2, dash='dash')
+        ))
+        
+        fig_forecast.add_trace(go.Scatter(
+            x=[monthly_forecast['period'].iloc[-1]] + future_labels,
+            y=[historical_pred[-1]] + list(future_pred),
+            mode='lines+markers', name='Forecast',
+            line=dict(color='#10b981', width=3, dash='dot'),
+            marker=dict(size=10, color='#10b981', symbol='diamond')
+        ))
+        
+        fig_forecast.update_layout(
+            title='Sales Forecast - Next 6 Months',
+            **CHART_LAYOUT, height=500, hovermode='x unified',
+            legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='center', x=0.5)
+        )
+        
+        st.plotly_chart(fig_forecast, use_container_width=True)
+        
+        # Metrics
+        st.markdown('<p class="sub-header"><i class="fas fa-chart-pie"></i> Forecast Summary</p>', unsafe_allow_html=True)
+        fc1, fc2, fc3, fc4 = st.columns(4)
+        
+        with fc1:
+            st.metric("Avg Forecast", f"${np.mean(future_pred):,.0f}", "per month")
+        with fc2:
+            st.metric("Total Projected", f"${np.sum(future_pred):,.0f}", "next 6 months")
+        with fc3:
+            growth = ((future_pred[-1] - y[-1]) / y[-1]) * 100 if y[-1] != 0 else 0
+            st.metric("Projected Growth", f"{growth:+.1f}%", "vs last period")
+        with fc4:
+            st.metric("Model Accuracy (R²)", f"{model.score(X, y):.2%}", "confidence")
+        
+        # Forecast table
+        forecast_table = pd.DataFrame({
+            'Period': future_labels,
+            'Predicted Sales': [f"${x:,.2f}" for x in future_pred]
+        })
+        st.dataframe(forecast_table, use_container_width=True, hide_index=True)
+    else:
+        st.warning("⚠️ Insufficient data for forecasting. Need at least 3 periods.")
+
+# === EXPORT SECTION ===
 st.markdown("---")
-st.markdown('<p class="section-header"><i class="fas fa-download"></i> Export Data</p>', unsafe_allow_html=True)
+st.markdown(f'''
+<p class="section-header">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#3b82f6" style="vertical-align: middle; margin-right: 8px;">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+    </svg>
+    Export Data
+</p>
+''', unsafe_allow_html=True)
 
 export_col1, export_col2, export_col3 = st.columns(3)
 
 with export_col1:
-    # Download filtered data as CSV
-    csv_data = filtered_df.to_csv(index=False).encode('utf-8')
+    summary_stats = filtered_df.describe(include='all').reset_index().rename(columns={'index': 'metric'})
+    category_summary = filtered_df.groupby('category').agg(
+        sales_sum=('sales', 'sum'),
+        sales_avg=('sales', 'mean'),
+        transactions=('sales', 'count'),
+        customers=('sk_customer', 'nunique')
+    ).reset_index()
+    category_summary = category_summary.rename(columns={
+        'category': 'Category',
+        'sales_sum': 'Total Sales',
+        'sales_avg': 'Avg Sale',
+        'transactions': 'Transactions',
+        'customers': 'Customers'
+    })
+
+    xlsx_bytes = dataframes_to_xlsx_bytes({
+        'Filtered Data': filtered_df,
+        'Summary Stats': summary_stats,
+        'Category Summary': category_summary,
+    })
+
     st.download_button(
-        label="📥 Download Filtered Data (CSV)",
-        data=csv_data,
-        file_name="filtered_sales_data.csv",
-        mime="text/csv",
+        label="📥 Download Report (Excel)",
+        data=xlsx_bytes,
+        file_name="sales_report.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         use_container_width=True
     )
 
 with export_col2:
-    # Summary statistics
     summary_data = filtered_df.describe().to_csv().encode('utf-8')
     st.download_button(
         label="📊 Download Summary Statistics",
@@ -2383,12 +485,11 @@ with export_col2:
     )
 
 with export_col3:
-    # Category summary
     cat_summary = filtered_df.groupby('category').agg({
         'sales': ['sum', 'mean', 'count'],
         'sk_customer': 'nunique'
     }).round(2)
-    cat_summary.columns = ['Total Sales', 'Avg Sale', 'Transactions', 'Unique Customers']
+    cat_summary.columns = ['Total Sales', 'Avg Sale', 'Transactions', 'Customers']
     cat_data = cat_summary.to_csv().encode('utf-8')
     st.download_button(
         label="📁 Download Category Summary",
@@ -2398,18 +499,18 @@ with export_col3:
         use_container_width=True
     )
 
-# Footer
+# === FOOTER ===
 st.markdown("---")
-st.markdown(f"""
-<div class="footer" style="background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%); padding: 30px; border-radius: 16px; margin-top: 30px; text-align: center; box-shadow: 0 -4px 20px rgba(30, 58, 95, 0.2);">
-    <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
+st.markdown(f'''
+<div class="footer" style="background: linear-gradient(135deg, #1e3a5f 0%, #2c5282 100%); padding: 30px; border-radius: 16px; text-align: center;">
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
         <div style="background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px;">
             <span style="color: #93c5fd;"><i class="fas fa-database"></i></span>
-            <span style="color: white; font-weight: 600;"> {len(df):,} Total Records</span>
+            <span style="color: white; font-weight: 600;"> {len(df):,} Records</span>
         </div>
         <div style="background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px;">
             <span style="color: #93c5fd;"><i class="fas fa-calendar"></i></span>
-            <span style="color: white; font-weight: 600;"> 2015-2018 Data</span>
+            <span style="color: white; font-weight: 600;"> 2015-2018</span>
         </div>
         <div style="background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 30px;">
             <span style="color: #93c5fd;"><i class="fas fa-code"></i></span>
@@ -2417,11 +518,10 @@ st.markdown(f"""
         </div>
     </div>
     <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin: 0;">
-        <i class="fas fa-chart-line" style="color: #60a5fa;"></i> Sales Analytics Dashboard | 
-        <i class="fas fa-graduation-cap" style="color: #60a5fa;"></i> Business Intelligence Project
+        Sales Analytics Dashboard | Business Intelligence Project
     </p>
     <p style="color: rgba(255,255,255,0.5); font-size: 0.75rem; margin-top: 10px;">
         Built with ❤️ for UAS Business Intelligence
     </p>
 </div>
-""", unsafe_allow_html=True)
+''', unsafe_allow_html=True)
